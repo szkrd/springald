@@ -1,0 +1,66 @@
+:root {
+  --main-bg-color: #999;
+  --main-fg-color: #000;
+}
+
+html, body, input {
+  font-family:  Arial, 'Helvetica Neue', Helvetica, sans-serif;
+}
+
+html {
+  font-size: 16px;
+  box-sizing: border-box;
+  height: 100%;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+*:focus {
+  box-shadow: 0 0 .3rem #fff inset;
+}
+
+body {
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--main-bg-color);
+  color: var(--main-fg-color);
+  margin: 0;
+  padding: 0;
+}
+
+input[type=text] {
+  background-color: var(--main-bg-color);
+  color: var(--main-fg-color);
+  border: 0;
+  margin: 0;
+  padding: 0 .5rem;
+  height: 2rem;
+}
+
+.search {
+  width: calc(100% - 10rem);
+}
+
+.app {
+  width: 10rem;
+}
+
+.current, .result {
+  background-color: #fee;
+  padding: 0 .5rem;
+  line-height: 2rem;
+  height: 2rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.result {
+  background-color: #fef;
+  font-size: .8rem;
+}
+
+.results {
+  overflow-y: auto;
+  height: calc(100% - 4rem);
+}
