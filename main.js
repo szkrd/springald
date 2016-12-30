@@ -79,7 +79,9 @@ function setWindowSize () {
   let style = window.getComputedStyle($('current'), null);
   let itemHeight = parseInt(style.height.replace(/px/, ''), 10);
   let itemMax = Math.min(store.found.length, MAX_ITEM_COUNT);
-  win.height = itemHeight + itemHeight * itemMax;
+  let height = itemHeight + itemHeight * itemMax;
+  height += store.found.length ? itemHeight : 0;
+  win.height = height;
 }
 
 function onSearchChange (e) {
