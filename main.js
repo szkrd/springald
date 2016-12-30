@@ -157,7 +157,7 @@ function launch() {
   } else {
     gui.Shell.openItem(item.command);
   }
-  win.minimize();
+  hide();
 }
 
 function setGlobalShortcut () {
