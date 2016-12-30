@@ -1,23 +1,93 @@
-// main must be in the topmost directory, otherwise the require paths will be a bit wonky
+const superchild = require('superchild');
 const gui = require('nw.gui');
 const win = gui.Window.get();
 const template = require('./scripts/template.js');
-const $ = require('./scripts/utils/getElementById')(document); // node context vs browser context
+const config = require('./config.json'); // TODO allow config json overrides
 const parseFluxboxMenu = require('./scripts/parseFluxboxMenu');
 const setResults = require('./scripts/gui/setResults')(document);
 const escapeHtml = require('./scripts/utils/escapeHtml');
-const setupTray = require('./scripts/gui/setupTray')(win);
 const store = require('./scripts/store');
 
+let $ = id => document.getElementById(id);
+
 let searchItems = [];
+
+function hide () {
+  win.hide();
+  store.visible = false;
+}
+
+function show () {
+  win.show();
+  store.visible = true;
+  $('search').select();
+}
+
+function toggle () {
+  if (store.visible) {
+    hide();
+  } else {
+    show();
+  }
+}
+
+function setupTray () {
+  let tray = new nw.Tray({
+    title: 'Tray',
+    icon: 'assets/icon.png'
+  });
+  let menu = new nw.Menu();
+  menu.append(new nw.MenuItem({
+    type: 'normal',
+    label: 'quit',
+    click: () => {
+      win.close();
+    }
+  }));
+  tray.menu = menu;
+  tray.on('click', toggle);
+}
 
 function appLoading (state) {
   document.body.className = state ? 'loading' : '';
 }
 
+function setCurrent () {
+  if (!store.found.length || !store.found[store.current]) {
+    return;
+  }
+  $('current').textContent = store.found[store.current].command;
+}
+
+function markCurrentResult () {
+  let all = document.querySelectorAll('.result');
+  if (store.current < 0) {
+    store.current = 0;
+  }
+  if (store.current > all.length - 1) {
+    store.current = all.length - 1;
+  }
+  let el = $(`result-${store.current}`);
+  if (el) {
+    all.forEach(current => current.className = current.className.replace(/ selected/g, '').trim());
+    el.className += ' selected';
+  }
+}
+
+function setWindowSize () {
+  const MAX_ITEM_COUNT = 6;
+  let style = window.getComputedStyle($('current'), null);
+  let itemHeight = parseInt(style.height.replace(/px/, ''), 10);
+  let itemMax = Math.min(store.found.length, MAX_ITEM_COUNT);
+  win.height = itemHeight + itemHeight * itemMax;
+}
+
 function onSearchChange (e) {
   let val = (e.target.value || '').trim();
-  let found = searchItems.filter(item => {
+  let found = store.found = searchItems.filter(item => {
+    if (!val) {
+      return false;
+    }
     if (item.name.indexOf(val) > -1) {
       return true;
     }
@@ -25,96 +95,92 @@ function onSearchChange (e) {
       return true;
     }
   });
-  $('current').textContent = found && found.length ? found[0].command : '';
-  setResults(found, val);
+  setCurrent();
+  setResults(val);
+  markCurrentResult();
+  setWindowSize();
 }
 
-setupTray();
+function onDocumentKey (e) {
+  if (e.key == 'Enter') {
+    launch();
+    win.minimize();
+  }
+  if (e.key == 'Escape') {
+    hide();
+  }
+  if (e.key == 'q' && e.ctrlKey) {
+    win.close();
+  }
+  if (e.key === 'ArrowUp') {
+    e.stopPropagation();
+    store.current = (store.current - 1) % store.found.length;
+    markCurrentResult();
+    setCurrent();
+  }
+  if (e.key === 'ArrowDown') {
+    e.stopPropagation();
+    store.current = (store.current + 1) % store.found.length;
+    markCurrentResult();
+    setCurrent();
+  }
+}
 
-win.on('minimize', function() {
-  this.hide();
-  store.visible = false;
-});
+function onWinMinimize () {
+  hide();
+}
 
-document.addEventListener('keyup', e => {
-    if (e.keyCode == 27) {
-      win.minimize();
-    }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
+function onDomReady () {
   document.body.innerHTML = template;
+  setWindowSize();
   appLoading(true);
   $('search').focus();
-
   $('search').addEventListener('input', onSearchChange);
 
   parseFluxboxMenu()
     .then(items => {
       searchItems.push.apply(searchItems, items);
       appLoading(false);
-    })
-});
+    });
+}
 
-/*
-// leftovers from a playground
+function launch() {
+  if (!store.found.length) {
+    return false;
+  }
+  let item = store.found[store.current];
+  if (!item) {
+    return false;
+  }
+  if (item.executable) {
+    superchild(item.command);
+  } else {
+    gui.Shell.openItem(item.command);
+  }
+  win.minimize();
+}
 
-const exec = require('child_process').exec;
-var os = require('os');
-document.write('You are running on ', os.platform());
-
-
-
-//tray = null;
-
-var btn = document.getElementById('btn');
-btn.addEventListener('click', () => {
-  gui.Shell.openItem('icon.png')
-  exec('notepad main.js', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`exec error: ${error}`);
-      return;
+function setGlobalShortcut () {
+  let option = {
+    key: config.toggleKey,
+    active: toggle,
+    failed: (msg) => {
+      console.error(`Failed to register hotkey "${config.toggleKey}"`);
     }
-    console.log(`stdout: ${stdout}`);
-    console.log(`stderr: ${stderr}`);
-  });
-})
+  };
+  let shortcut = new nw.Shortcut(option);
+  nw.App.registerGlobalHotKey(shortcut);
+}
+
+function run() {
+  setupTray();
+  setGlobalShortcut();
+  win.on('minimize', onWinMinimize);
+  document.addEventListener('keyup', onDocumentKey);
+  document.addEventListener('DOMContentLoaded', onDomReady);
+  hide();
+}
 
 // ----
-// main.js stuff
 
- var option = {
- key : "Ctrl+Shift+A",
- active : function() {
- console.log("Global desktop keyboard shortcut: " + this.key + " active.");
- },
- failed : function(msg) {
- // :(, fail to register the |key| or couldn't parse the |key|.
- console.log(msg);
- }
- };
-
- // Create a shortcut with |option|.
- var shortcut = new nw.Shortcut(option);
-
- // Register global desktop shortcut, which can work without focus.
- nw.App.registerGlobalHotKey(shortcut);
-
- // If register |shortcut| successfully and user struck "Ctrl+Shift+A", |shortcut|
- // will get an "active" event.
-
- // You can also add listener to shortcut's active and failed event.
- shortcut.on('active', function() {
- console.log("Global desktop keyboard shortcut: " + this.key + " active.");
- });
-
- shortcut.on('failed', function(msg) {
- console.log(msg);
- });
-
- // Unregister the global desktop shortcut.
- //nw.App.unregisterGlobalHotKey(shortcut);
-
- nw.Window.open('index.html', {}, function(win) {});
-
-*/
+run();

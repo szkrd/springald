@@ -1,23 +1,62 @@
+/* variables */
 :root {
-  --main-bg-color: #999;
-  --main-fg-color: #000;
+  --main-bg-color: #353535;
+  --main-fg-color: #fff;
+  --selection-fg-color: #0f0;
 }
 
+/* fancy scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+}
+::-webkit-scrollbar-thumb {
+  background: #656565;
+  border: 0 none #ffffff;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7f7f7f;
+}
+::-webkit-scrollbar-thumb:active {
+  background: var(--main-bg-color);
+}
+::-webkit-scrollbar-track {
+  background: var(--main-bg-color);
+  border: 0 none #ffffff;
+  border-radius: 13px;
+}
+::-webkit-scrollbar-track:hover {
+  background: var(--main-bg-color);
+}
+::-webkit-scrollbar-track:active {
+  background: #333333;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ---- */
 html, body, input {
   font-family:  Arial, 'Helvetica Neue', Helvetica, sans-serif;
 }
 
 html {
-  font-size: 16px;
+  font-size: 20px;
   box-sizing: border-box;
   height: 100%;
 }
+
 *, *:before, *:after {
   box-sizing: inherit;
 }
 
 *:focus {
-  box-shadow: 0 0 .3rem #fff inset;
+  outline: none;
 }
 
 body {
@@ -47,7 +86,6 @@ input[type=text] {
 }
 
 .current, .result {
-  background-color: #fee;
   padding: 0 .5rem;
   line-height: 2rem;
   height: 2rem;
@@ -55,9 +93,16 @@ input[type=text] {
   overflow: hidden;
 }
 
+.current {
+  color: #bde068;
+}
+
 .result {
-  background-color: #fef;
   font-size: .8rem;
+}
+
+.result.selected {
+  font-weight: bold;
 }
 
 .results {

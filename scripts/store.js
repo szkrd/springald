@@ -1,4 +1,6 @@
 let store = {
-  visible: true
+  visible: true,
+  current: 0,
+  found: []
 };
 module.exports = store;

@@ -20,6 +20,7 @@ function parse (s) {
     if (/^\[exec\]/.test(line)) {
       let command = line.replace(/[^{]*\{/, '').replace(/([^\\])}.*/, '$1');
       ret.push({
+        executable: true,
         type: 'FB_MENUITEM',
         path: '/' + itemPath.join('/'),
         name,
