@@ -1,14 +1,23 @@
 {
   "name": "springald",
-  "version": "0.0.1",
-  "description": "WIP",
+  "version": "0.0.2",
+  "description": "Simple application launcher, similar to Launchy.",
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "window": {
+    "show": false,
+    "resizable": false,
+    "icon": "assets/icon.png",
+    "position": "center",
+    "always-on-top": true,
+    "visible-on-all-workspaces": true
+  },
+  "single-instance": true,
+  "author": "Szabolcs Kurdi",
   "license": "ISC",
   "dependencies": {
-    "osenv": "^0.1.4"
+    "osenv": "0.1.4"
   }
 }
