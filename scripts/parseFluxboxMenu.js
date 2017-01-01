@@ -46,6 +46,3 @@ function parseFluxboxMenu (fileName) {
 }
 
 module.exports = parseFluxboxMenu;
-
-// processMenuFile()
-//  .then(console.log);

@@ -1,16 +1,24 @@
 const superchild = require('superchild');
+const path = require('path');
+const osenv = require('osenv');
 const gui = require('nw.gui');
 const win = gui.Window.get();
 const template = require('./scripts/template.js');
 const config = require('./config.json'); // TODO allow config json overrides
-const parseFluxboxMenu = require('./scripts/parseFluxboxMenu');
-const setResults = require('./scripts/gui/setResults')(document);
+const parseAll = require('./scripts/parseAll');
+const setResults = require('./scripts/gui/setResults');
 const escapeHtml = require('./scripts/utils/escapeHtml');
+const readJsonFile = require('./scripts/utils/readJsonFile');
 const store = require('./scripts/store');
+const context = require('./scripts/context');
 
 let $ = id => document.getElementById(id);
+context.window = window;
+context.document = document;
 
-let searchItems = [];
+function getConfig () {
+  Object.assign(config, readJsonFile(path.join(osenv.home(), '.config', 'springald', 'config')) || {});
+}
 
 function hide () {
   win.hide();
@@ -48,10 +56,6 @@ function setupTray () {
   tray.on('click', toggle);
 }
 
-function appLoading (state) {
-  document.body.className = state ? 'loading' : '';
-}
-
 function setCurrent () {
   if (!store.found.length || !store.found[store.current]) {
     return;
@@ -86,7 +90,7 @@ function setWindowSize () {
 
 function onSearchChange (e) {
   let val = (e.target.value || '').trim();
-  let found = store.found = searchItems.filter(item => {
+  let found = store.found = store.searchItems.filter(item => {
     if (!val) {
       return false;
     }
@@ -104,14 +108,17 @@ function onSearchChange (e) {
 }
 
 function onDocumentKey (e) {
-  if (e.key == 'Enter') {
+  if (e.key === 'Enter') {
     launch();
     win.minimize();
   }
-  if (e.key == 'Escape') {
+  if (e.key === config.refreshKey) {
+    parseAll();
+  }
+  if (e.key === 'Escape') {
     hide();
   }
-  if (e.key == 'q' && e.ctrlKey) {
+  if (e.key === 'q' && e.ctrlKey) {
     win.close();
   }
   if (e.key === 'ArrowUp') {
@@ -135,15 +142,9 @@ function onWinMinimize () {
 function onDomReady () {
   document.body.innerHTML = template;
   setWindowSize();
-  appLoading(true);
   $('search').focus();
   $('search').addEventListener('input', onSearchChange);
-
-  parseFluxboxMenu()
-    .then(items => {
-      searchItems.push.apply(searchItems, items);
-      appLoading(false);
-    });
+  parseAll();
 }
 
 function launch() {
@@ -175,6 +176,7 @@ function setGlobalShortcut () {
 }
 
 function run() {
+  getConfig();
   setupTray();
   setGlobalShortcut();
   win.on('minimize', onWinMinimize);

@@ -13,14 +13,19 @@ See `config.json` for settings.
 
 _Esc_ hides, _ctrl + q_ quits, _mod4 + q_ toggles.
 
+## Overrides
+
+* config: create a `~/.config/springald/config.json` file. ([options](./config.json))
+* styles: create a `~/.config/springald/override.css` file. ([variables](./styles/variables.css), [more](./styles/springald.css))
+
 ## TODO
 
 - [X] parse simple fluxbox menu, spawn process
 - [ ] handle includes in fluxbox menu file
-- [ ] allow css overriding
-- [ ] allow configuration overriding
+- [X] allow css overriding
+- [X] allow configuration overriding
 - [ ] break up main.js (refactor)
-- [ ] walk path, collect executables and whitelsited filenames
+- [ ] walk path, collect executables and whitelisted filenames
 - [ ] walk directories
 - [ ] second input field should let you choose an executable
 - [ ] shell open for non executable files

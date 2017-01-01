@@ -1,5 +1,6 @@
 let escapeHtml = require('../utils/escapeHtml');
 let store = require('../store');
+let context = require('../context');
 
 // TODO proper html underline?
 function underline(s, fancy = true) {
@@ -27,24 +28,20 @@ function createName(item, needle) {
   return s;
 }
 
-module.exports = document => {
-  let $ = id => document.getElementById(id);
+module.exports = (needle) => {
+  let items = store.found;
+  let els = context.document.querySelectorAll('.result');
+  els.forEach(el => el.style.display = 'none');
 
-  return (needle) => {
-    let items = store.found;
-    let els = document.querySelectorAll('.result');
-    els.forEach(el => el.style.display = 'none');
-
-    for (let i = 0, l = items.length; i < l; i++) {
-      let item = items[i];
-      let el = $(`result-${i}`);
-      if (!el) {
-        return;
-      }
-      el.style.display = 'block';
-      // el.textContent = createName(item, needle);
-      el.innerHTML = escapeHtml(createName(item, needle));
-      el.dataset.id = i;
+  for (let i = 0, l = items.length; i < l; i++) {
+    let item = items[i];
+    let el = context.document.getElementById(`result-${i}`);
+    if (!el) {
+      return;
     }
+    el.style.display = 'block';
+    // el.textContent = createName(item, needle);
+    el.innerHTML = escapeHtml(createName(item, needle));
+    el.dataset.id = i;
   }
 };

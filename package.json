@@ -4,7 +4,7 @@
   "description": "Simple application launcher, similar to Launchy.",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nw --enable-logging=stderr ."
   },
   "window": {
     "show": false,
