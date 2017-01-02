@@ -1,4 +1,9 @@
-const superchild = require('superchild');
+let superchild;
+try { // win32 not supported
+  superchild = require('superchild');
+} catch (e) {
+  superchild = require('./scripts/utils/superchildFallback');
+}
 const path = require('path');
 const osenv = require('osenv');
 const gui = require('nw.gui');
@@ -17,7 +22,7 @@ context.window = window;
 context.document = document;
 
 function getConfig () {
-  Object.assign(config, readJsonFile(path.join(osenv.home(), '.config', 'springald', 'config')) || {});
+  Object.assign(config, readJsonFile(path.join(osenv.home(), '.config', 'springald', 'config.json')) || {});
 }
 
 function hide () {
