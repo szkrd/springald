@@ -36,6 +36,9 @@ function parseFluxboxMenu (fileName) {
   let homeDir = osenv.home();
   let menuFile = fileName || path.join(homeDir, '.fluxbox', 'menu');
   return new Promise((resolve, reject) => {
+    if (!fs.existsSync(menuFile)) {
+      return [];
+    }
     fs.readFile(menuFile, 'utf8', (err, contents) => {
       if (err) {
         return reject(err);

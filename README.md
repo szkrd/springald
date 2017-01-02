@@ -25,9 +25,11 @@ _Esc_ hides, _ctrl + q_ quits, _mod4 + q_ toggles.
 - [X] allow css overriding
 - [X] allow configuration overriding
 - [ ] break up main.js (refactor)
-- [ ] walk path, collect executables and whitelisted filenames
-- [ ] walk directories
+- [X] walk path, collect executables
+- [ ] walk directories recursively
+- [ ] dir walker: use whitelist (ext) and blacklist (dir)
 - [ ] second input field should let you choose an executable
 - [ ] shell open for non executable files
 - [ ] recursive search / multiple needles
 - [ ] save/reuse search and selection association (aka. learning)
+- [ ] save all results, load on startup

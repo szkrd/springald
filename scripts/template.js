@@ -18,7 +18,12 @@ function overrideCss () {
   if (!fs.existsSync(fileName)) {
     return '';
   }
-  return fs.readFileSync(fileName, 'utf-8');
+  let contents = fs.readFileSync(fileName, 'utf-8');
+  if (contents.indexOf('</') > -1) {
+    console.error('Please refrain from using html-ish tags in the override css.')
+    return '';
+  }
+  return contents;
 }
 
 module.exports = `

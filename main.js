@@ -10,7 +10,7 @@ const gui = require('nw.gui');
 const win = gui.Window.get();
 const template = require('./scripts/template.js');
 const config = require('./config.json'); // TODO allow config json overrides
-const parseAll = require('./scripts/parseAll');
+const parseAll = require('./scripts/parsing/parseAll');
 const setResults = require('./scripts/gui/setResults');
 const escapeHtml = require('./scripts/utils/escapeHtml');
 const readJsonFile = require('./scripts/utils/readJsonFile');
@@ -98,6 +98,11 @@ function onSearchChange (e) {
   let found = store.found = store.searchItems.filter(item => {
     if (!val) {
       return false;
+    }
+    if (item.type === 'PATHITEM') {
+      if (item.command.indexOf(val) > -1) {
+        return true;
+      }
     }
     if (item.name.indexOf(val) > -1) {
       return true;
