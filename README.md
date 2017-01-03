@@ -18,6 +18,8 @@ _Esc_ hides, _ctrl + q_ quits, _mod4 + q_ toggles.
 * config: create a `~/.config/springald/config.json` file. ([options](./config.json))
 * styles: create a `~/.config/springald/override.css` file. ([variables](./styles/variables.css), [more](./styles/springald.css))
 
+On OSX and Windows this is [elsewhere](http://docs.nwjs.io/en/latest/References/App/#appdatapath).
+
 ## TODO
 
 - [X] parse simple fluxbox menu, spawn process
@@ -30,6 +32,7 @@ _Esc_ hides, _ctrl + q_ quits, _mod4 + q_ toggles.
 - [ ] dir walker: use whitelist (ext) and blacklist (dir)
 - [ ] second input field should let you choose an executable
 - [ ] shell open for non executable files
+- [ ] folder open (with 'folder' as openWith)
 - [ ] recursive search / multiple needles
 - [ ] save/reuse search and selection association (aka. learning)
 - [ ] save all results, load on startup

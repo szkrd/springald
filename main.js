@@ -2,7 +2,7 @@ const path = require('path');
 const osenv = require('osenv');
 const gui = require('nw.gui');
 const win = gui.Window.get();
-const template = require('./scripts/template.js');
+const renderTemplate = require('./scripts/renderTemplate.js');
 const config = require('./config.json'); // TODO allow config json overrides
 const parseAll = require('./scripts/parsing/parseAll');
 const setResults = require('./scripts/gui/setResults');
@@ -16,9 +16,10 @@ let $ = id => document.getElementById(id);
 context.window = window;
 context.document = document;
 context.gui = gui;
+context.app = nw.App;
 
 function getConfig () {
-  Object.assign(config, readJsonFile(path.join(osenv.home(), '.config', 'springald', 'config.json')) || {});
+  Object.assign(config, readJsonFile(path.join(context.app.dataPath, 'config.json')) || {});
 }
 
 function hide () {
@@ -146,7 +147,7 @@ function onWinMinimize () {
 }
 
 function onDomReady () {
-  document.body.innerHTML = template;
+  document.body.innerHTML = renderTemplate();
   setWindowSize();
   $('search').focus();
   $('search').addEventListener('input', onSearchChange);
