@@ -1,9 +1,3 @@
-let superchild;
-try { // win32 not supported
-  superchild = require('superchild');
-} catch (e) {
-  superchild = require('./scripts/utils/superchildFallback');
-}
 const path = require('path');
 const osenv = require('osenv');
 const gui = require('nw.gui');
@@ -14,12 +8,14 @@ const parseAll = require('./scripts/parsing/parseAll');
 const setResults = require('./scripts/gui/setResults');
 const escapeHtml = require('./scripts/utils/escapeHtml');
 const readJsonFile = require('./scripts/utils/readJsonFile');
+const openItem = require('./scripts/openItem');
 const store = require('./scripts/store');
 const context = require('./scripts/context');
 
 let $ = id => document.getElementById(id);
 context.window = window;
 context.document = document;
+context.gui = gui;
 
 function getConfig () {
   Object.assign(config, readJsonFile(path.join(osenv.home(), '.config', 'springald', 'config.json')) || {});
@@ -165,11 +161,7 @@ function launch() {
   if (!item) {
     return false;
   }
-  if (item.executable) {
-    superchild(item.command);
-  } else {
-    gui.Shell.openItem(item.command);
-  }
+  openItem(item);
   hide();
 }
 
