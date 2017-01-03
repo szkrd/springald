@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const osenv = require('osenv');
-const context = require('./context');
+const context = require('../context');
 
 const MAX_RESULT_ITEMS = 30;
 

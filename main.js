@@ -2,25 +2,21 @@ const path = require('path');
 const osenv = require('osenv');
 const gui = require('nw.gui');
 const win = gui.Window.get();
-const renderTemplate = require('./scripts/renderTemplate.js');
-const config = require('./config.json'); // TODO allow config json overrides
+const renderTemplate = require('./scripts/gui/renderTemplate');
 const parseAll = require('./scripts/parsing/parseAll');
 const setResults = require('./scripts/gui/setResults');
 const escapeHtml = require('./scripts/utils/escapeHtml');
-const readJsonFile = require('./scripts/utils/readJsonFile');
+const getConfig = require('./scripts/getConfig');
 const openItem = require('./scripts/openItem');
 const store = require('./scripts/store');
 const context = require('./scripts/context');
 
+let config;
 let $ = id => document.getElementById(id);
 context.window = window;
 context.document = document;
 context.gui = gui;
 context.app = nw.App;
-
-function getConfig () {
-  Object.assign(config, readJsonFile(path.join(context.app.dataPath, 'config.json')) || {});
-}
 
 function hide () {
   win.hide();
@@ -179,7 +175,7 @@ function setGlobalShortcut () {
 }
 
 function run() {
-  getConfig();
+  config = getConfig();
   setupTray();
   setGlobalShortcut();
   win.on('minimize', onWinMinimize);
