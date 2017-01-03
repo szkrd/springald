@@ -1,8 +1,10 @@
-let escapeHtml = require('../utils/escapeHtml');
-let store = require('../store');
-let context = require('../context');
+const escapeHtml = require('../utils/escapeHtml');
+const store = require('../store');
+const context = require('../context');
 
-// TODO proper html underline?
+const os = require('os');
+const isWin = /^win/.test(os.platform());
+
 function underline(s, fancy = true) {
   if (fancy) {
     return `<u>${s}</u>`;
@@ -17,10 +19,16 @@ function underline(s, fancy = true) {
 
 function createName(item, needle) {
   let s = '';
-  if (item.type === 'FB_MENUITEM') {
-    s = 'fb:'
+  let separator = isWin ? '\\' : '/';
+  if (item.type === 'FB_MENUITEM') { // WIP should I color it instead?
+    s = 'fb:';
+    separator = '/';
+  } else if (item.type === 'PATHITEM') {
+    s = 'p:';
+  } else if (item.type === 'DIRITEM') {
+    s = 'd:';
   }
-  s += item.path + '/' + item.name;
+  s += item.path + separator + item.name;
   let pos = s.indexOf(needle); // TODO multiple needles?
   if (pos > -1) {
     s = s.substring(0, pos) + underline(s.substring(pos, pos + needle.length)) + s.substring(pos + needle.length);
@@ -28,7 +36,7 @@ function createName(item, needle) {
   return s;
 }
 
-module.exports = (needle) => {
+function setResults (needle) {
   let items = store.found;
   let els = context.document.querySelectorAll('.result');
   els.forEach(el => el.style.display = 'none');
@@ -40,8 +48,9 @@ module.exports = (needle) => {
       return;
     }
     el.style.display = 'block';
-    // el.textContent = createName(item, needle);
     el.innerHTML = escapeHtml(createName(item, needle));
     el.dataset.id = i;
   }
-};
+}
+
+module.exports = setResults;
