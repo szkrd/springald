@@ -1,42 +1,32 @@
 const escapeHtml = require('../utils/escapeHtml');
+const underline = require('./multiHtmlUnderline');
+const multiSplitSearch = require('../utils/multiSplitSearch');
 const store = require('../store');
 const context = require('../context');
 
 const os = require('os');
 const isWin = /^win/.test(os.platform());
 
-function underline(s, fancy = true) {
-  if (fancy) {
-    return `<u>${s}</u>`;
-  }
-  let arr = s.split('');
-  s = arr.join('\u0332');
-  if (s) {
-    return s + '\u0332';
-  }
-  return '';
-}
-
-function createName(item, needle) {
-  let s = '';
+function createName(item, needles) {
+  let prefix = '';
+  let text = '';
   let separator = isWin ? '\\' : '/';
   if (item.type === 'FB_MENUITEM') { // WIP should I color it instead?
-    s = 'fb:';
+    prefix = 'fb:';
     separator = '/';
   } else if (item.type === 'PATHITEM') {
-    s = 'p:';
+    prefix = 'p:';
   } else if (item.type === 'DIRITEM') {
-    s = 'd:';
+    prefix = 'd:';
   }
-  s += item.path + separator + item.name;
-  let pos = s.indexOf(needle); // TODO multiple needles?
-  if (pos > -1) {
-    s = s.substring(0, pos) + underline(s.substring(pos, pos + needle.length)) + s.substring(pos + needle.length);
+  text = item.path + separator + item.name;
+  if (multiSplitSearch(text, needles)) {
+    text = underline(text, needles);
   }
-  return s;
+  return prefix + text;
 }
 
-function setResults (needle) {
+function setResults (needles) {
   let items = store.found;
   let els = context.document.querySelectorAll('.result');
   els.forEach(el => el.style.display = 'none');
@@ -48,7 +38,7 @@ function setResults (needle) {
       return;
     }
     el.style.display = 'block';
-    el.innerHTML = escapeHtml(createName(item, needle));
+    el.innerHTML = escapeHtml(createName(item, needles));
     el.dataset.id = i;
   }
 }

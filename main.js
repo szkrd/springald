@@ -7,6 +7,7 @@ const parseAll = require('./scripts/parsing/parseAll');
 const setResults = require('./scripts/gui/setResults');
 const escapeHtml = require('./scripts/utils/escapeHtml');
 const getConfig = require('./scripts/getConfig');
+const filterSearchItems = require('./scripts/filterSearchItems');
 const openItem = require('./scripts/openItem');
 const store = require('./scripts/store');
 const context = require('./scripts/context');
@@ -88,24 +89,10 @@ function setWindowSize () {
 
 function onSearchChange (e) {
   let val = (e.target.value || '').trim();
-  let found = store.found = store.searchItems.filter(item => {
-    if (!val) {
-      return false;
-    }
-    if (item.type === 'PATHITEM') {
-      if (item.command.indexOf(val) > -1) {
-        return true;
-      }
-    }
-    if (item.name.indexOf(val) > -1) {
-      return true;
-    }
-    if (item.path.indexOf(val) > -1) {
-      return true;
-    }
-  });
+  let needles = val.split(config.logicalAndSeparator);
+  let found = store.found = filterSearchItems(store.searchItems, needles);
   setCurrent();
-  setResults(val);
+  setResults(needles);
   markCurrentResult();
   setWindowSize();
 }
