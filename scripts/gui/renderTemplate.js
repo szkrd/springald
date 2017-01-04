@@ -2,12 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const osenv = require('osenv');
 const context = require('../context');
-
-const MAX_RESULT_ITEMS = 30;
+const consts = require('../consts');
 
 function resultItems () {
   let ret = '';
-  for (let i = 0; i < MAX_RESULT_ITEMS; i++) {
+  for (let i = 0; i < consts.MAX_RESULT_ITEMS; i++) {
     ret += `<div class="result" id="result-${i}" style="display:none">${i}</div>`
   }
   return ret;

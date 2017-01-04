@@ -33,7 +33,7 @@ On OSX and Windows this is [elsewhere](http://docs.nwjs.io/en/latest/References/
 - [ ] second input field should let you choose an executable
 - [ ] shell open for non executable files
 - [ ] folder open (with 'folder' as openWith)
-- [ ] recursive search / multiple needles
-- [ ] case insensitive search
+- [X] recursive search / multiple needles
+- [X] case insensitive search (when there are no uppercase chars in the search string)
 - [ ] save/reuse search and selection association (aka. learning)
 - [ ] save all results, load on startup

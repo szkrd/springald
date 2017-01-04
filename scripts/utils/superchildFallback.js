@@ -1,8 +1,7 @@
-// will we need this?
 const spawn = require('child_process').spawn;
 
+// right now not needed, it's just a dummy
 function superchildFallback (command) {
-  console.error('Superchild fallback NYI');
   spawn(command);
 }
 

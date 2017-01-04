@@ -1,35 +1,15 @@
-const PREFIX = '<u>';
-const POSTFIX = '</u>';
+const escapeRex = require('../utils/escapeRex');
+const consts = require('../consts');
 
-function escapeRegExp(str) {
-  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-}
-
-function multiHtmlUnderlineUnique (text, needles, step = 0) {
-  // this incorrectly nests tags, plus ehm, it is not so good
-  // maybe some weird utf marker would be fine... like an nbspish thing
-  needles.forEach(needle => {
-    text = text.replace(new RegExp(escapeRegExp(needle), 'g'), PREFIX + needle + POSTFIX);
-  });
-  return text;
-  /*
-  // this is really broken
-  let needle = needles[step];
-  if (text.indexOf(needle) > -1) {
-    let split = text.split(needle);
-    if (needles[step + 1]) {
-      split = split.map(sub => multiHtmlUnderlineUnique(sub, needles, step + 1));
-    }
-    return split.join(PREFIX + needle + POSTFIX);
-  } else {
-    return text;
-  }
-  */
-}
 
 function multiHtmlUnderline (text, needles) {
+  const prefix = consts.U_PREFIX;
+  const postfix = consts.U_POSTFIX;
   needles = Array.isArray(needles) ? [...new Set(needles)] : [needles];
-  return multiHtmlUnderlineUnique(text, needles);
+  needles.forEach(needle => {
+    text = text.replace(new RegExp(escapeRex(needle), 'gi'), match => prefix + match + postfix);
+  });
+  return text;
 }
 
 module.exports = multiHtmlUnderline;
