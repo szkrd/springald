@@ -1,7 +1,19 @@
 const PREFIX = '<u>';
 const POSTFIX = '</u>';
 
+function escapeRegExp(str) {
+  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+}
+
 function multiHtmlUnderlineUnique (text, needles, step = 0) {
+  // this incorrectly nests tags, plus ehm, it is not so good
+  // maybe some weird utf marker would be fine... like an nbspish thing
+  needles.forEach(needle => {
+    text = text.replace(new RegExp(escapeRegExp(needle), 'g'), PREFIX + needle + POSTFIX);
+  });
+  return text;
+  /*
+  // this is really broken
   let needle = needles[step];
   if (text.indexOf(needle) > -1) {
     let split = text.split(needle);
@@ -12,6 +24,7 @@ function multiHtmlUnderlineUnique (text, needles, step = 0) {
   } else {
     return text;
   }
+  */
 }
 
 function multiHtmlUnderline (text, needles) {

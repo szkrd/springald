@@ -1,3 +1,6 @@
+// FIXME this is serious overengineering :(
+// probably a simple count with match count sum would be fine
+// where all needles found would have a heavily boosted score
 function multiSplitSearchUnique (text, needles, step = 0, sum = 0) {
   let needle = needles[step];
   if (text.indexOf(needle) > -1) {
@@ -5,13 +8,17 @@ function multiSplitSearchUnique (text, needles, step = 0, sum = 0) {
     sum += split.length - 1;
     if (needles[step + 1]) {
       split.forEach(sub => {
-        sum += multiSplitSearchUnique(sub, needles, step + 1, 0);
+        for (let i = 0, l = needles.length; i < l; i++) {
+          if (i !== step) {
+            sum += multiSplitSearchUnique(sub, needles, i, 0);
+          }
+        }
       });
     }
   } else {
     return 0;
   }
-  return sum;
+  return sum; // how about sum * (step + 10)?
 }
 
 function multiSplitSearch (text, needles) {

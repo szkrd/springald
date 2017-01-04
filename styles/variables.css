@@ -2,4 +2,6 @@
 :root {
   --main-bg-color: #353535;
   --main-fg-color: #fff;
+  --selected-fg-color: #bde068;
+  --underline-fg-color: #729fcf;
 }

@@ -34,5 +34,6 @@ On OSX and Windows this is [elsewhere](http://docs.nwjs.io/en/latest/References/
 - [ ] shell open for non executable files
 - [ ] folder open (with 'folder' as openWith)
 - [ ] recursive search / multiple needles
+- [ ] case insensitive search
 - [ ] save/reuse search and selection association (aka. learning)
 - [ ] save all results, load on startup

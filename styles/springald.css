@@ -87,11 +87,15 @@ input[type=text] {
 }
 
 .current {
-  color: #bde068;
+  color: var(--selected-fg-color);
 }
 
 .result {
   font-size: .8rem;
+}
+
+.result u {
+  color: var(--underline-fg-color);
 }
 
 .result.selected {

@@ -3,6 +3,8 @@ const fs = require('fs');
 const os = require('os');
 const isWin = /^win/.test(os.platform());
 
+let counter = 0;
+
 function isExec (extension, mode) {
   let ox = !!((mode << 6) >> 6 & 1);
   let gx = !!((mode << 3) >> 6 & 1);
@@ -35,6 +37,7 @@ function readDir (location) {
             // on the path non executables are not interesting
             if (isExec(parsed.ext, stats.mode)) {
               results.push({
+                id: `p${counter++}`,
                 executable: true,
                 type: 'PATHITEM',
                 path: parsed.dir,

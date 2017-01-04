@@ -2,6 +2,8 @@ const osenv = require('osenv');
 const path = require('path');
 const fs = require('fs');
 
+let counter = 0;
+
 // TODO proper escaping
 function parse (s) {
   s = s.replace(/\r\n/g, '\n');
@@ -20,6 +22,7 @@ function parse (s) {
     if (/^\[exec\]/.test(line)) {
       let command = line.replace(/[^{]*\{/, '').replace(/([^\\])}.*/, '$1');
       ret.push({
+        id: `f${counter++}`,
         executable: true,
         type: 'FB_MENUITEM',
         path: '/' + itemPath.join('/'),

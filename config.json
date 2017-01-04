@@ -1,7 +1,7 @@
 {
   "toggleKey": "Command+Q",
   "refreshKey": "F5",
-  "logicalAndSeparator": "  ",
+  "logicalAndSeparator": " ",
   "filePostfix": [ ".txt", ".md", ".html", ".docx", ".pdf", ".jpg", ".png", ".avi", ".mkv", ".mp4" ],
   "excludedFolders": [ "node_modules" ],
   "terminalCommand": "xterm -e %CMD%",

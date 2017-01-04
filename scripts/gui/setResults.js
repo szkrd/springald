@@ -4,26 +4,12 @@ const multiSplitSearch = require('../utils/multiSplitSearch');
 const store = require('../store');
 const context = require('../context');
 
-const os = require('os');
-const isWin = /^win/.test(os.platform());
-
 function createName(item, needles) {
-  let prefix = '';
-  let text = '';
-  let separator = isWin ? '\\' : '/';
-  if (item.type === 'FB_MENUITEM') { // WIP should I color it instead?
-    prefix = 'fb:';
-    separator = '/';
-  } else if (item.type === 'PATHITEM') {
-    prefix = 'p:';
-  } else if (item.type === 'DIRITEM') {
-    prefix = 'd:';
-  }
-  text = item.path + separator + item.name;
+  let text = item.searchableText;
   if (multiSplitSearch(text, needles)) {
     text = underline(text, needles);
   }
-  return prefix + text;
+  return text;
 }
 
 function setResults (needles) {
@@ -39,7 +25,7 @@ function setResults (needles) {
     }
     el.style.display = 'block';
     el.innerHTML = escapeHtml(createName(item, needles));
-    el.dataset.id = i;
+    el.dataset.id = item.id;
   }
 }
 
