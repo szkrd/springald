@@ -1,11 +1,10 @@
-const os = require('os');
-const isWin = /^win/.test(os.platform());
+const path = require('path');
 
 // this will be the text we can search against
 function getSearchableText (item) {
   let prefix = '';
   let text = '';
-  let separator = isWin ? '\\' : '/';
+  let separator = path.sep;
   if (item.type === 'FB_MENUITEM') {
     prefix = 'fb:';
     separator = '/';
