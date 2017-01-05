@@ -7,6 +7,7 @@ const store = require('../store');
 
 function parseAll () {
   appLoading(true);
+  let startedAt = Date.now();
   store.searchItems.length = 0;
   return Promise.all([parseFluxboxMenu(), parsePath(), parseDirs()])
     .then((itemPacks) => {
@@ -15,6 +16,8 @@ function parseAll () {
       // add the searchable text, which shall be unified for all item types
       // (and it must be available for the search AND the gui)
       store.searchItems.forEach(item => item.searchableText = getSearchableText(item));
+      let endedAt = Date.now();
+      console.info(`Parsed ${store.searchItems.length} items in ${endedAt - startedAt} ms.`);
       appLoading(false);
     });
 }

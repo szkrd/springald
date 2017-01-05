@@ -7,7 +7,7 @@ let parsed = false;
 
 function getConfig () {
   if (!parsed) {
-    Object.assign(config, readJsonFile(path.join(context.app.dataPath, 'config.json')) || {});
+    Object.assign(config, readJsonFile(path.join(context.dataPath, 'config.json')) || {});
     parsed = true;
   }
   return config;

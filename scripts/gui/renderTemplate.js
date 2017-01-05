@@ -13,7 +13,7 @@ function resultItems () {
 }
 
 function overrideCss () {
-  let fileName = path.join(context.app.dataPath, 'override.css');
+  let fileName = path.join(context.dataPath, 'override.css');
   if (!fs.existsSync(fileName)) {
     return '';
   }

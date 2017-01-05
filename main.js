@@ -18,6 +18,7 @@ context.window = window;
 context.document = document;
 context.gui = gui;
 context.app = nw.App;
+context.dataPath = nw.App.dataPath.replace(/\/Default\/?$/, '');
 
 function hide () {
   win.hide();
@@ -25,6 +26,9 @@ function hide () {
 }
 
 function show () {
+  if (config.centerOnShow) {
+    win.setPosition('center');
+  }
   win.show();
   store.visible = true;
   $('search').select();
@@ -85,12 +89,14 @@ function setWindowSize () {
   let height = itemHeight + itemHeight * itemMax;
   height += store.found.length ? itemHeight : 0;
   win.height = height;
+  win.width = config.winWidth || 600;
 }
 
 function onSearchChange (e) {
   let val = (e.target.value || '').trim();
-  let needles = val.split(config.logicalAndSeparator);
+  let needles = val ? val.split(config.logicalAndSeparator) : [];
   let found = store.found = filterSearchItems(store.searchItems, needles);
+  store.current = 0;
   setCurrent();
   setResults(needles);
   markCurrentResult();
@@ -104,6 +110,9 @@ function onDocumentKey (e) {
   }
   if (e.key === config.refreshKey) {
     parseAll();
+  }
+  if (e.key === config.centerKey) {
+    win.setPosition('center');
   }
   if (e.key === 'Escape') {
     hide();

@@ -1,10 +1,13 @@
 const path = require('path');
+const osenv = require('osenv');
 
 // this will be the text we can search against
 function getSearchableText (item) {
   let prefix = '';
   let text = '';
   let separator = path.sep;
+  let homeDir = osenv.home();
+  let itemPath = item.path;
   if (item.type === 'FB_MENUITEM') {
     prefix = 'fb:';
     separator = '/';
@@ -13,7 +16,10 @@ function getSearchableText (item) {
   } else if (item.type === 'DIRITEM') {
     prefix = 'd:';
   }
-  return (prefix + item.path + separator + item.name)
+  if (item.type === 'PATHITEM' || item.type === 'DIRITEM') {
+    itemPath = itemPath.replace(homeDir, '~');
+  }
+  return (prefix + itemPath + separator + item.name)
     .replace(/\/+/g, '/'); // fb root level and extra separator
 }
 

@@ -14,13 +14,13 @@ function compare (a, b) {
 
 function filterSearchItems (items, needles) {
   let getScore = text => multiSplitSearch(text, needles);
+  if (!needles || !needles.length) {
+    return [];
+  }
   let filtered = items.filter(item => {
-    if (!needles || !needles.length) {
-      return false;
-    }
     let score = getScore(item.searchableText);
     if (score) {
-      item.score = score; // yay, a kitten died here
+      item.score = score; // yay, a mutant kitten died here
       return true;
     }
   });
