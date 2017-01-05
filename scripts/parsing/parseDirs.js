@@ -2,6 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const osenv = require('osenv');
 const getConfig = require('../getConfig');
+const isExec = require('../utils/isExec');
+
+let counter = 0;
 
 function isAllowedFile (name) {
   let config = getConfig();
@@ -48,7 +51,15 @@ function walk (dir, done) {
           }
         } else {
           if (isAllowedFile(file)) {
-            results.push(file); // TODO structure!
+            let parsed = path.parse(file);
+            results.push({
+              id: `d${counter++}`,
+              executable: false, // isExec(parsed.ext, stats.mode), <-- shouldn't be, isn't it annoying w samba?
+              type: 'DIRITEM',
+              path: parsed.dir,
+              name: parsed.base,
+              command: file // full path
+            });
           }
           mayEnd();
         }

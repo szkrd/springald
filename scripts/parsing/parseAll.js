@@ -8,7 +8,7 @@ const store = require('../store');
 function parseAll () {
   appLoading(true);
   store.searchItems.length = 0;
-  return Promise.all([parseFluxboxMenu(), parsePath()/*, parseDirs()*/])
+  return Promise.all([parseFluxboxMenu(), parsePath(), parseDirs()])
     .then((itemPacks) => {
       itemPacks.forEach(items => store.searchItems.push.apply(store.searchItems, items));
 
