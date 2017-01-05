@@ -28,8 +28,8 @@ On OSX and Windows this is [elsewhere](http://docs.nwjs.io/en/latest/References/
 - [X] allow configuration overriding
 - [ ] break up main.js (refactor)
 - [X] walk path, collect executables
-- [ ] walk directories recursively
-- [ ] dir walker: use whitelist (ext) and blacklist (dir)
+- [X] walk directories recursively
+- [X] dir walker: use whitelist (ext) and blacklist (dir)
 - [ ] dir walker: skip hidden and system on windows (both files and dirs)
 - [ ] second input field should let you choose an executable
 - [ ] shell open for non executable files
