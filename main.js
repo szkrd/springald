@@ -18,7 +18,7 @@ context.window = window;
 context.document = document;
 context.gui = gui;
 context.app = nw.App;
-context.dataPath = nw.App.dataPath.replace(/\/Default\/?$/, '');
+context.dataPath = nw.App.dataPath.replace(/[\/\\]Default[\/\\]?$/, '');
 
 function hide () {
   win.hide();
