@@ -29,12 +29,13 @@ On OSX and Windows this is [elsewhere](http://docs.nwjs.io/en/latest/References/
 - [x] walk path, collect executables
 - [x] walk directories recursively
 - [x] dir walker: use whitelist (ext) and blacklist (dir)
-- [ ] dir walker: skip hidden and system on windows (both files and dirs)
-- [ ] second input field should let you choose an executable
-- [ ] shell open for non executable files
-- [ ] folder open (with 'folder' as openWith)
+- [x] use .desktop files for autocomplete in app field
+- [x] folder open (with 'folder' or 'F' as openWith)
 - [x] recursive search / multiple needles
 - [x] case insensitive search (when there are no uppercase chars in the search string)
+- [ ] dir walker: skip hidden and system on windows (both files and dirs)
+- [ ] second input field should let you choose an executable [WIP]
+- [ ] shell open for non executable files
 - [ ] save/reuse search and selection association (aka. learning)
 - [ ] save all results, load on startup
 - [ ] break up main.js (refactor)

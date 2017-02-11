@@ -3,5 +3,6 @@ module.exports = Object.freeze({
   U_PREFIX: '[\u00a0u\u00a0]',
   U_POSTFIX: '[/\u00a0u\u00a0]',
   // on the ui
-  MAX_RESULT_ITEMS: 30
+  MAX_RESULT_ITEMS: 30,
+  DESKTOP_FILES_LOCATION: '/usr/share/applications/'
 });

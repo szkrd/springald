@@ -1,5 +1,4 @@
-const path = require('path');
-const osenv = require('osenv');
+/* global nw:false */
 const gui = require('nw.gui');
 const win = gui.Window.get();
 const renderTemplate = require('./scripts/gui/renderTemplate');
@@ -18,7 +17,7 @@ context.window = window;
 context.document = document;
 context.gui = gui;
 context.app = nw.App;
-context.dataPath = nw.App.dataPath.replace(/[\/\\]Default[\/\\]?$/, '');
+context.dataPath = nw.App.dataPath.replace(/[/\\]Default[/\\]?$/, '');
 
 function hide () {
   win.hide();
@@ -76,7 +75,9 @@ function markCurrentResult () {
   }
   let el = $(`result-${store.current}`);
   if (el) {
-    all.forEach(current => current.className = current.className.replace(/ selected/g, '').trim());
+    all.forEach(current => {
+      current.className = current.className.replace(/ selected/g, '').trim();
+    });
     el.className += ' selected';
   }
 }
@@ -95,12 +96,29 @@ function setWindowSize () {
 function onSearchChange (e) {
   let val = (e.target.value || '').trim();
   let needles = val ? val.split(config.logicalAndSeparator) : [];
-  let found = store.found = filterSearchItems(store.searchItems, needles);
+  store.found = filterSearchItems(store.searchItems, needles);
   store.current = 0;
   setCurrent();
   setResults(needles);
   markCurrentResult();
   setWindowSize();
+}
+
+function onAppChange (e) {
+  let val = (e.target.value || '').trim();
+  let matchingApp;
+  store.withApp = val;
+
+  // do not trigger for one letter
+  if (val.length > 1) {
+    let desktopItems = store.searchItems.filter(item => item.desktop);
+    // if we can't find it in the desktop friendly list, then try harder
+    matchingApp = desktopItems.find(item => item.name.startsWith(val)) ||
+      store.searchItems.find(item => (item.name.startsWith(val)) && item.executable);
+  }
+
+  $('ghost').innerHTML = matchingApp ? escapeHtml(matchingApp.name) : '';
+  store.ghost = matchingApp || null;
 }
 
 function onDocumentKey (e) {
@@ -143,10 +161,11 @@ function onDomReady () {
   setWindowSize();
   $('search').focus();
   $('search').addEventListener('input', onSearchChange);
+  $('app').addEventListener('input', onAppChange);
   parseAll();
 }
 
-function launch() {
+function launch () {
   if (!store.found.length) {
     return false;
   }
@@ -154,7 +173,8 @@ function launch() {
   if (!item) {
     return false;
   }
-  openItem(item);
+  openItem(item, store.ghost || store.withApp);
+  $('app').value = $('ghost').value = '';
   hide();
 }
 
@@ -170,7 +190,7 @@ function setGlobalShortcut () {
   nw.App.registerGlobalHotKey(shortcut);
 }
 
-function run() {
+function run () {
   config = getConfig();
   setupTray();
   setGlobalShortcut();

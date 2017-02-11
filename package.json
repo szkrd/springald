@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "dev": "nw --enable-logging=stderr .",
-    "lint": "eslint scripts"
+    "lint": "eslint scripts main.js"
   },
   "window": {
     "show": false,

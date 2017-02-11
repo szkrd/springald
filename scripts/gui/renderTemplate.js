@@ -29,6 +29,7 @@ function renderTemplate () {
     <style type="text/css">${overrideCss()}</style>
     <input type="text" class="search" id="search" />
     <input type="text" class="app" id="app" />
+    <span class="ghost" id="ghost"></span>
     <div class="current" id="current"></div>
     <div class="results">${resultItems()}</div>
   `.replace(/\s+/g, ' ').replace(/> </g, '><');

@@ -61,21 +61,33 @@ body {
   padding: 0;
 }
 
-input[type=text] {
+input[type=text], .ghost {
   background-color: var(--main-bg-color);
   color: var(--main-fg-color);
   border: 0;
   margin: 0;
   padding: 0 .5rem;
   height: 2rem;
+  font-size: 0.8rem;
 }
 
 .search {
   width: calc(100% - 10rem);
 }
 
-.app {
+.app, .ghost {
   width: 10rem;
+}
+
+.ghost {
+  background-color: transparent;
+  display: block;
+  line-height: 2rem;
+  opacity: 0.3;
+  position: absolute;
+  top: 0;
+  right: 0;
+  pointer-events: none;
 }
 
 .current, .result {

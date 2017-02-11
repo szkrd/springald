@@ -1,8 +1,22 @@
 const path = require('path');
 const fs = require('fs');
+const consts = require('../consts');
 const isExec = require('../utils/isExec');
 
 let counter = 0;
+
+// linux only: get global .desktop files
+function getDesktopFriendlies () {
+  let location = consts.DESKTOP_FILES_LOCATION;
+  return new Promise((resolve, reject) => {
+    fs.readdir(location, (err, files) => {
+      if (err) {
+        return resolve([]);
+      }
+      return resolve(files.filter(fn => /\.desktop$/.test(fn)).map(fn => fn.replace(/\.desktop$/, '')));
+    });
+  });
+}
 
 // node injects the project's local bin directory to the path
 function isLocalNodeBin (s) {
@@ -38,6 +52,7 @@ function readDir (location) {
                 type: 'PATHITEM',
                 path: parsed.dir,
                 name: parsed.base,
+                desktop: false,
                 command: file // full path
               });
             }
@@ -59,9 +74,18 @@ function parsePath () {
     console.warn('You have duplicate items in your PATH!');
   }
   dirs = dirs.filter(dir => fs.existsSync(dir));
-  return Promise.all(dirs.map(dir => readDir(dir)))
+  let all = [getDesktopFriendlies(), ...dirs.map(dir => readDir(dir))];
+  return Promise.all(all)
     .then((packs) => {
+      let desktops = packs.shift();
       packs.forEach(pack => result.push.apply(result, pack));
+      if (desktops.length) {
+        result.forEach(fn => {
+          if (desktops.includes(fn.name)) {
+            fn.desktop = true;
+          }
+        });
+      }
       return Promise.resolve(result);
     }, (err) => {
       return Promise.reject(err);
