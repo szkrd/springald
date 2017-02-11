@@ -4,6 +4,11 @@ const isExec = require('../utils/isExec');
 
 let counter = 0;
 
+// node injects the project's local bin directory to the path
+function isLocalNodeBin (s) {
+  return /springald[/\\]node_modules/.test(s);
+}
+
 function readDir (location) {
   return new Promise((resolve, reject) => {
     let results = [];
@@ -26,7 +31,7 @@ function readDir (location) {
           if (stats.isFile()) {
             let parsed = path.parse(file);
             // on the path non executables are not interesting
-            if (isExec(parsed.ext, stats.mode)) {
+            if (isExec(parsed.ext, stats.mode) && !(isLocalNodeBin(file))) {
               results.push({
                 id: `p${counter++}`,
                 executable: true,
