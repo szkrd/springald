@@ -22,19 +22,19 @@ On OSX and Windows this is [elsewhere](http://docs.nwjs.io/en/latest/References/
 
 ## TODO
 
-- [X] parse simple fluxbox menu, spawn process
-- [ ] handle includes in fluxbox menu file
-- [X] allow css overriding
-- [X] allow configuration overriding
-- [ ] break up main.js (refactor)
-- [X] walk path, collect executables
-- [X] walk directories recursively
-- [X] dir walker: use whitelist (ext) and blacklist (dir)
+- [x] parse simple fluxbox menu, spawn process
+- [x] handle includes in fluxbox menu file
+- [x] allow css overriding
+- [x] allow configuration overriding
+- [x] walk path, collect executables
+- [x] walk directories recursively
+- [x] dir walker: use whitelist (ext) and blacklist (dir)
 - [ ] dir walker: skip hidden and system on windows (both files and dirs)
 - [ ] second input field should let you choose an executable
 - [ ] shell open for non executable files
 - [ ] folder open (with 'folder' as openWith)
-- [X] recursive search / multiple needles
-- [X] case insensitive search (when there are no uppercase chars in the search string)
+- [x] recursive search / multiple needles
+- [x] case insensitive search (when there are no uppercase chars in the search string)
 - [ ] save/reuse search and selection association (aka. learning)
 - [ ] save all results, load on startup
+- [ ] break up main.js (refactor)
