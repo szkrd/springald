@@ -1,6 +1,5 @@
 const path = require('path');
 const fs = require('fs');
-const os = require('os');
 const isExec = require('../utils/isExec');
 
 let counter = 0;

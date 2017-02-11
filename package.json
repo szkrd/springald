@@ -4,7 +4,8 @@
   "description": "Simple application launcher, similar to Launchy.",
   "main": "index.html",
   "scripts": {
-    "dev": "nw --enable-logging=stderr ."
+    "dev": "nw --enable-logging=stderr .",
+    "lint": "eslint scripts"
   },
   "window": {
     "show": false,
@@ -20,5 +21,13 @@
   "dependencies": {
     "osenv": "0.1.4",
     "superchild": "0.1.10"
+  },
+  "devDependencies": {
+    "eslint": "3.15.0",
+    "eslint-config-semistandard": "7.0.0",
+    "eslint-config-standard": "6.2.1",
+    "eslint-plugin-promise": "3.4.1",
+    "eslint-plugin-react": "6.9.0",
+    "eslint-plugin-standard": "2.0.1"
   }
 }

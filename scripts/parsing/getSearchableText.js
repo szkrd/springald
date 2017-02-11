@@ -4,7 +4,6 @@ const osenv = require('osenv');
 // this will be the text we can search against
 function getSearchableText (item) {
   let prefix = '';
-  let text = '';
   let separator = path.sep;
   let homeDir = osenv.home();
   let itemPath = item.path;

@@ -4,7 +4,7 @@ const multiSplitSearch = require('../utils/multiSplitSearch');
 const store = require('../store');
 const context = require('../context');
 
-function createName(item, needles) {
+function createName (item, needles) {
   let text = item.searchableText;
   if (multiSplitSearch(text, needles)) {
     text = underline(text, needles);
@@ -15,7 +15,7 @@ function createName(item, needles) {
 function setResults (needles) {
   let items = store.found;
   let els = context.document.querySelectorAll('.result');
-  els.forEach(el => el.style.display = 'none');
+  els.forEach(el => { el.style.display = 'none'; });
 
   for (let i = 0, l = items.length; i < l; i++) {
     let item = items[i];

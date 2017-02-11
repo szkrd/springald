@@ -1,7 +1,6 @@
 const escapeRex = require('../utils/escapeRex');
 const consts = require('../consts');
 
-
 function multiHtmlUnderline (text, needles) {
   const prefix = consts.U_PREFIX;
   const postfix = consts.U_POSTFIX;

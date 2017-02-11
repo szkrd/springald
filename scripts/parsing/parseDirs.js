@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const osenv = require('osenv');
 const getConfig = require('../getConfig');
-const isExec = require('../utils/isExec');
 
 let counter = 0;
 
@@ -25,7 +24,8 @@ function walk (dir, done) {
 
   fs.readdir(dir, (err, list) => {
     if (err) {
-      return done(err);
+      err.file = dir;
+      return done(err); // pretty much this is the only hard error that may stop the walking
     }
     let pending = list.length;
     let mayEnd = () => {
@@ -40,10 +40,18 @@ function walk (dir, done) {
       let name = file;
       file = path.resolve(dir, file);
       fs.stat(file, (err, stat) => {
+        if (err) {
+          console.error(`Could not stat file "${file}"`);
+          return; // skip current loop, but not the whole walking
+        }
         if (stat && stat.isDirectory()) {
           if (isAllowedDir(name)) {
             walk(file, (err, res) => {
-              results = results.concat(res);
+              if (err) {
+                console.error(`Could not read subdirectory "${file}"`);
+              } else {
+                results = results.concat(res);
+              }
               mayEnd();
             });
           } else {
@@ -72,7 +80,7 @@ function parseDirs () {
   return new Promise((resolve, reject) => {
     let homeDir = osenv.home();
     let config = getConfig();
-    let dirs = [ ...new Set(config.directories || [])];
+    let dirs = [...new Set(config.directories || [])];
     dirs = dirs.map(dir => dir.replace(/~/, homeDir).replace(/\\/g, '/')); // TODO normalize for path.sep
     dirs = dirs.filter(dir => fs.existsSync(dir));
     let processedCount = 0;
@@ -82,10 +90,7 @@ function parseDirs () {
     let cb = (err, res) => {
       processedCount++;
       if (err) {
-        console.error('Directory walker error'); // nw console error is a bit simple
-        console.error(err);
-        // not sure if I want to do anything w this, the ui has no error reporting by design
-        // maybe prmisify the walker and do a Promise.all...
+        console.error(`Directory walker error: could not read directory "${err.file}"`); // nw console error is a bit simple
         return errors.push(err);
       }
       results.push.apply(results, res);
@@ -93,6 +98,7 @@ function parseDirs () {
         resolve(results);
       }
     };
+
     dirs.forEach(dir => walk(dir, cb));
   });
 }

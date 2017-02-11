@@ -1,5 +1,7 @@
+const matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
+
 function escapeRegExp (str) {
-  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+  return str.replace(matchOperatorsRe, '\\$&');
 }
 
 module.exports = escapeRegExp;

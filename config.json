@@ -1,5 +1,6 @@
 {
   "winWidth": 800,
+  "fluxboxMenuFile": "~/.fluxbox/menu",
   "centerOnShow": true,
   "toggleKey": "Command+Q",
   "refreshKey": "F5",
