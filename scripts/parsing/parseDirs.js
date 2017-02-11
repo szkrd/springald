@@ -6,9 +6,11 @@ const getConfig = require('../getConfig');
 let counter = 0;
 
 function isAllowedFile (name) {
+  let regTest = (r, n) => (new RegExp(r)).test(n);
   let config = getConfig();
-  let rules = config.includeFiles;
-  return rules.every(rule => (new RegExp(rule)).test(name));
+  let incRules = config.includeFiles;
+  let excRules = config.excludeFiles;
+  return incRules.every(rule => regTest(rule, name)) && excRules.every(rule => !regTest(rule, name));
 }
 
 function isAllowedDir (name) {
@@ -58,7 +60,8 @@ function walk (dir, done) {
             mayEnd();
           }
         } else {
-          if (isAllowedFile(file)) {
+          let fileNameOnly = path.basename(file);
+          if (isAllowedFile(fileNameOnly)) {
             let parsed = path.parse(file);
             results.push({
               id: `d${counter++}`,
