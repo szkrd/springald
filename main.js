@@ -174,7 +174,8 @@ function launch () {
     return false;
   }
   openItem(item, store.ghost || store.withApp);
-  $('app').value = $('ghost').value = '';
+  $('app').value = store.withApp = '';
+  store.ghost = null;
   hide();
 }
 
