@@ -24,6 +24,7 @@ function isAllowedDir (name) {
 function walk (dir, done) {
   let results = [];
 
+  // TODO investigate {encoding: 'buffer'} further
   fs.readdir(dir, (err, list) => {
     if (err) {
       err.file = dir;
@@ -43,7 +44,8 @@ function walk (dir, done) {
       file = path.resolve(dir, file);
       fs.stat(file, (err, stat) => {
         if (err) {
-          console.error(`Could not stat file "${file}"`);
+          console.error(`Could not stat file "${file}".`, err);
+          mayEnd();
           return; // skip current loop, but not the whole walking
         }
         if (stat && stat.isDirectory()) {

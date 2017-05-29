@@ -20,6 +20,16 @@ _Esc_ hides, _ctrl + q_ quits, _mod4 + q_ toggles.
 
 On OSX and Windows this is [elsewhere](http://docs.nwjs.io/en/latest/References/App/#appdatapath).
 
+## Debugging
+
+- use nw sdk build
+- web context logs: f12 to open dev toolbar
+- node context logs: in app, context menu, show background page
+
+## Known issues
+
+Non utf-8 filenames may not work, this is especially a problem on Unices.
+
 ## TODO
 
 - [x] parse simple fluxbox menu, spawn process
@@ -33,6 +43,7 @@ On OSX and Windows this is [elsewhere](http://docs.nwjs.io/en/latest/References/
 - [x] folder open (with 'folder' or 'F' as openWith)
 - [x] recursive search / multiple needles
 - [x] case insensitive search (when there are no uppercase chars in the search string)
+- [ ] try to use binary buffer filenames
 - [ ] dir walker: skip hidden and system on windows (both files and dirs)
 - [ ] second input field should let you choose an executable [WIP]
 - [ ] shell open for non executable files
