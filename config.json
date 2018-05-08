@@ -1,6 +1,7 @@
 {
   "winWidth": 800,
   "fluxboxMenuFile": "~/.fluxbox/menu",
+  "showOnStartup": false,
   "centerOnShow": true,
   "toggleKey": "Command+Q",
   "refreshKey": "F5",
@@ -11,6 +12,9 @@
   "excludedDirs": [ "^node_modules$", "^\\." ],
   "excludeHidSys": true,
   "terminalCommand": "xterm -e %CMD%",
+  "appShortcuts": {
+    "showItemInFolder": "F"
+  },
   "directories": [
     "~/Downloads",
     "~/Pictures",

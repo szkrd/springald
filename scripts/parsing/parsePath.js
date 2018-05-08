@@ -27,9 +27,13 @@ function readDir (location) {
   return new Promise((resolve, reject) => {
     let results = [];
     fs.readdir(location, (err, files) => {
+      // not a show stopper, but still annoying
       if (err) {
-        return reject(err);
+        console.error(`☠️ Could not read location "$\{location}", skipping.`);
+        resolve([]);
+        return;
       }
+
       let itemCount = files.length;
       let processCount = 0;
       if (!files.length) {
@@ -39,7 +43,9 @@ function readDir (location) {
         file = path.resolve(location, file);
         fs.stat(file, (err, stats) => {
           if (err) {
-            return reject(err);
+            console.error(`☠️ Could not stat path "${file}", skipping!`);
+            resolve([]);
+            return;
           }
           processCount++;
           if (stats.isFile()) {
@@ -88,6 +94,7 @@ function parsePath () {
       }
       return Promise.resolve(result);
     }, (err) => {
+      err.module = 'parsePath';
       return Promise.reject(err);
     });
 }

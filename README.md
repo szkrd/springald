@@ -3,15 +3,28 @@
 Springald is a simple launcher, similar to Launchy. It is written in vanilla-js(tm) and
 uses the nwjs framework.
 
-## Launching
+It can parse a fluxbox menu file, read directories from path or from a config file,
+can launch .desktop files.
 
-* git clone
-* cd springald && npm i
-* nwjs .
+## Installation, launching
 
-See `config.json` for settings.
+Download and extract the [nwjs](https://nwjs.io/) sdk,
+then symlink the executable to your path.
+Then download springald:
 
-_Esc_ hides, _ctrl + q_ quits, _mod4 + q_ toggles.
+1. `cd ~/bin`
+2. `git clone https://github.com/szkrd/springald.git`
+3. `cd springald`
+4. `npm i`
+5. `nw .`
+
+See `config.json` for available settings.
+
+By default
+_Esc_ hides,
+_ctrl + q_ quits,
+_mod4 + q_ toggles,
+_F5_ reparses.
 
 ## Overrides
 
@@ -20,33 +33,34 @@ _Esc_ hides, _ctrl + q_ quits, _mod4 + q_ toggles.
 
 On OSX and Windows this is [elsewhere](http://docs.nwjs.io/en/latest/References/App/#appdatapath).
 
-## Debugging
+Config override does a shallow merge only. If you know what you're doing
+then probably you're better off modifying the `config.json` itself in the app
+and stash+pull+pop upgrade manually.
 
-- use nw sdk build
-- web context logs: f12 to open dev toolbar
-- node context logs: in app, context menu, show background page
+## Borderless window
+
+If you want to remove the window decorations then replace `"frame": true`
+with `"frame": false` in the `package.json` file. This is not an overridable
+flag, it must be set before the app startup.
+
+Another option is to force fluxbox to remove the decorations himself.
+
+## Open with
+
+Press _Tab_ to focus on the second (rightmost) input field,
+you can use it to enter simple executable names. Press enter
+to finish the autocomplete, enter `F` (configurable) to open
+in the shell's default folder viewer.
 
 ## Known issues
 
 Non utf-8 filenames may not work, this is especially a problem on Unices.
 
-## TODO
+## Debugging
 
-- [x] parse simple fluxbox menu, spawn process
-- [x] handle includes in fluxbox menu file
-- [x] allow css overriding
-- [x] allow configuration overriding
-- [x] walk path, collect executables
-- [x] walk directories recursively
-- [x] dir walker: use whitelist (ext) and blacklist (dir)
-- [x] use .desktop files for autocomplete in app field
-- [x] folder open (with 'folder' or 'F' as openWith)
-- [x] recursive search / multiple needles
-- [x] case insensitive search (when there are no uppercase chars in the search string)
-- [ ] try to use binary buffer filenames
-- [ ] dir walker: skip hidden and system on windows (both files and dirs)
-- [ ] second input field should let you choose an executable [WIP]
-- [ ] shell open for non executable files
-- [ ] save/reuse search and selection association (aka. learning)
-- [ ] save all results, load on startup
-- [ ] break up main.js (refactor)
+- use nw sdk build
+- web context logs: **f12** to open dev toolbar
+- node context logs: in app, context menu, **"Inspect background page"**  
+  (visible in stderr too, but stack trace is in the chromium debugger above)
+- use `showOnStartup` in the config, which makes "reload app" (in the context menu) pretty helpful
+- do not press reload in the debugger console

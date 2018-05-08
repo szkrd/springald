@@ -5,12 +5,15 @@ try { // win32 not supported
   superchild = require('./utils/superchildFallback');
 }
 const os = require('os');
+const osenv = require('osenv');
 const context = require('./context');
+const getConfig = require('./getConfig');
 
 // TODO support for withApp parameter
 // see for example: https://github.com/sindresorhus/opn
 // TODO return false on error
 function openItem (item, withApp) {
+  const config = getConfig();
   const gui = context.gui;
   const isWin = /^win/.test(os.platform());
 
@@ -20,8 +23,7 @@ function openItem (item, withApp) {
     return true;
   }
 
-  // TODO move app shortcuts to config
-  if (withApp === 'folder' || withApp === 'F') {
+  if (withApp === config.appShortcuts.showItemInFolder) {
     gui.Shell.showItemInFolder(item.command);
     return true;
   }
@@ -37,7 +39,7 @@ function openItem (item, withApp) {
 
   // xdg open will not launch shellscripts for instance
   if (item.executable) {
-    superchild(item.command);
+    superchild(item.command, {cwd: osenv.home()});
     return true;
   } else {
     gui.Shell.openItem(item.command);

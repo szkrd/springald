@@ -199,6 +199,9 @@ function run () {
   document.addEventListener('keyup', onDocumentKey);
   document.addEventListener('DOMContentLoaded', onDomReady);
   hide();
+  if (config.showOnStartup) {
+    setTimeout(show, 0); // rendered size determines the screen position
+  }
 }
 
 // ----

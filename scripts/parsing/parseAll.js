@@ -22,6 +22,8 @@ function parseAll () {
       let endedAt = Date.now();
       console.info(`Parsed ${store.searchItems.length} items in ${endedAt - startedAt} ms.`);
       appLoading(false);
+    }, err => {
+      console.error(`☠️ Parse error in parser module "${err.module || 'unknown'}"!\n`, err);
     });
 }
 

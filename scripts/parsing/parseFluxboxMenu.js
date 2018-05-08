@@ -60,9 +60,11 @@ function parseFluxboxMenu (fileName, depth = []) {
     }
     fs.readFile(menuFile, 'utf8', (err, contents) => {
       if (err) {
-        return reject(err);
+        err.module = 'parseFluxboxMenu';
+        reject(err);
+      } else {
+        parse(contents, depth).then(result => resolve(result));
       }
-      parse(contents, depth).then(result => resolve(result));
     });
   });
 }

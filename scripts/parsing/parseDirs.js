@@ -90,16 +90,17 @@ function parseDirs () {
     dirs = dirs.filter(dir => fs.existsSync(dir));
     let processedCount = 0;
     let results = [];
-    let errors = [];
 
     let cb = (err, res) => {
       processedCount++;
       if (err) {
-        console.error(`Directory walker error: could not read directory "${err.file}"`); // nw console error is a bit simple
-        return errors.push(err);
+        console.error(`☠️ Directory walker error: could not read directory "${err.file}"!`); // nw console error is a bit simple
+        return;
       }
       results.push.apply(results, res);
       if (processedCount === dirs.length) {
+        // we will never reject here, since not being able to
+        // parse a directory is not a showstopper
         resolve(results);
       }
     };

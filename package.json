@@ -8,6 +8,7 @@
     "lint": "eslint scripts main.js"
   },
   "window": {
+    "frame": true,
     "show": false,
     "resizable": false,
     "icon": "assets/icon.png",
@@ -18,6 +19,7 @@
   "single-instance": true,
   "author": "Szabolcs Kurdi",
   "license": "ISC",
+  "chromium-args": "--enable-logging=stderr",
   "dependencies": {
     "osenv": "0.1.4",
     "superchild": "0.1.10"
