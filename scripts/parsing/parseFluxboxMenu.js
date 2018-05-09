@@ -16,19 +16,19 @@ function parse (s, depth = []) {
       let name = line.replace(/[^(]*\(/, '').replace(/([^\\])\).*/, '$1');
 
       // submenu
-      if (/^\[submenu\]/.test(line)) {
+      if (/^\[submenu]/.test(line)) {
         // we ignore the {title} part of the submenu `[submenu] (foo) {foo title}`
         name = name.replace(/\\\)/g, ')'); // unescape "\)" to ")"
         itemPath.push(name);
       }
 
       // end of submenu
-      if (/^\[end\]/.test(line)) {
+      if (/^\[end]/.test(line)) {
         itemPath.pop();
       }
 
       // executable
-      if (/^\[exec\]/.test(line)) {
+      if (/^\[exec]/.test(line)) {
         name = name.replace(/\\\)/g, ')'); // unescape "\)" to ")"
         let command = line.replace(/[^{]*\{/, '').replace(/([^\\])}.*/, '$1');
         ret.push({
@@ -42,7 +42,7 @@ function parse (s, depth = []) {
       }
 
       // included menu
-      if (/^\[include\]/.test(line)) {
+      if (/^\[include]/.test(line)) {
         parseFluxboxMenu(name, itemPath).then(results => ret.push(...results));
       }
     }
@@ -56,7 +56,9 @@ function parseFluxboxMenu (fileName, depth = []) {
   let menuFile = fileName || path.join(homeDir, '.fluxbox', 'menu');
   return new Promise((resolve, reject) => {
     if (!fs.existsSync(menuFile)) {
-      return [];
+      console.info('No fluxbox menu file found.');
+      resolve([]);
+      return;
     }
     fs.readFile(menuFile, 'utf8', (err, contents) => {
       if (err) {
