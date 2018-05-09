@@ -1,5 +1,6 @@
 {
   "winWidth": 800,
+  "unixSocket": "/tmp/springald.sock",
   "fluxboxMenuFile": "~/.fluxbox/menu",
   "showOnStartup": false,
   "centerOnShow": true,

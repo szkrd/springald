@@ -52,6 +52,14 @@ you can use it to enter simple executable names. Press enter
 to finish the autocomplete, enter `F` (configurable) to open
 in the shell's default folder viewer.
 
+## Linux IPC
+
+On linux it's possible to remotely control the app via unix sockets
+(the default socket is `/tmp/springald.sock`, see config.json).
+
+- Commands: `show`, `hide`, `toggle`, `close`, `quit`
+- Example: `echo "show" | socat UNIX:/tmp/springald.sock -`
+
 ## Known issues
 
 Non utf-8 filenames may not work, this is especially a problem on Unices.

@@ -1,4 +1,6 @@
 /* global nw:false */
+const os = require('os');
+const net = require('net');
 const gui = require('nw.gui');
 const win = gui.Window.get();
 const renderTemplate = require('./scripts/gui/renderTemplate');
@@ -11,6 +13,7 @@ const openItem = require('./scripts/openItem');
 const store = require('./scripts/store');
 const context = require('./scripts/context');
 
+let unixServer;
 let config;
 let $ = id => document.getElementById(id);
 context.window = window;
@@ -191,11 +194,46 @@ function setGlobalShortcut () {
   nw.App.registerGlobalHotKey(shortcut);
 }
 
+// ipc interface
+function createUnixSocket () {
+  if (os.platform() !== 'linux') {
+    return;
+  }
+  unixServer = net.createServer((client) => {
+    client.on('data', (data) => {
+      data = (data.toString() || '').trim();
+      if (data === 'show') {
+        show();
+      } else if (data === 'hide') {
+        hide();
+      } else if (data === 'toggle') {
+        toggle();
+      } else if (data === 'quit' || data === 'close') {
+        win.close();
+      }
+    });
+  });
+  unixServer.listen(config.unixSocket);
+}
+
+// tear down
+function onWinClose () {
+  let close = () => this.close(true);
+  this.hide();
+  if (unixServer) {
+    unixServer.close(close);
+  } else {
+    close();
+  }
+}
+
 function run () {
   config = getConfig();
+  createUnixSocket();
   setupTray();
   setGlobalShortcut();
   win.on('minimize', onWinMinimize);
+  win.on('close', onWinClose);
   document.addEventListener('keyup', onDocumentKey);
   document.addEventListener('DOMContentLoaded', onDomReady);
   hide();
