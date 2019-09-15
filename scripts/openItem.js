@@ -5,7 +5,6 @@ try { // win32 not supported
   superchild = require('./utils/superchildFallback');
 }
 const os = require('os');
-const osenv = require('osenv');
 const context = require('./context');
 const getConfig = require('./getConfig');
 
@@ -39,7 +38,7 @@ function openItem (item, withApp) {
 
   // xdg open will not launch shellscripts for instance
   if (item.executable) {
-    superchild(item.command, {cwd: osenv.home()});
+    superchild(item.command, {cwd: os.homedir()});
     return true;
   } else {
     gui.Shell.openItem(item.command);

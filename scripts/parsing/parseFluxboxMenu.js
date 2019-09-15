@@ -1,9 +1,9 @@
-const osenv = require('osenv');
+const os = require('os');
 const path = require('path');
 const fs = require('fs');
 
 let counter = 0;
-let homeDir = osenv.home();
+let homeDir = os.homedir();
 
 function parse (s, depth = []) {
   return new Promise((resolve, reject) => {

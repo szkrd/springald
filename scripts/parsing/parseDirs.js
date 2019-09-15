@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const osenv = require('osenv');
+const os = require('os');
 const getConfig = require('../getConfig');
 
 let counter = 0;
@@ -83,7 +83,7 @@ function walk (dir, done) {
 
 function parseDirs () {
   return new Promise((resolve, reject) => {
-    let homeDir = osenv.home();
+    let homeDir = os.homedir();
     let config = getConfig();
     let dirs = [...new Set(config.directories || [])];
     dirs = dirs.map(dir => dir.replace(/~/, homeDir).replace(/\\/g, '/')); // TODO normalize for path.sep

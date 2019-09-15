@@ -1,11 +1,11 @@
 const path = require('path');
-const osenv = require('osenv');
+const os = require('os');
 
 // this will be the text we can search against
 function getSearchableText (item) {
   let prefix = '';
   let separator = path.sep;
-  let homeDir = osenv.home();
+  let homeDir = os.homedir();
   let itemPath = item.path;
   if (item.type === 'FB_MENUITEM') {
     prefix = 'fb:';
