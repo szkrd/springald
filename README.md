@@ -72,3 +72,10 @@ Non utf-8 filenames may not work, this is especially a problem on Unices.
   (visible in stderr too, but stack trace is in the chromium debugger above)
 - use `showOnStartup` in the config, which makes "reload app" (in the context menu) pretty helpful
 - do not press reload in the debugger console
+
+## Using with Gnome Desktop / Ubuntu
+
+- install socat and xterm (`sudo apt install socat xterm`)
+- set a keyboard shortcut for the command `xterm -e "echo show | socat UNIX:/tmp/springald.sock -"`
+
+![keyboard shortcuts](./docs/gnome-keyboard-shortcut.png)

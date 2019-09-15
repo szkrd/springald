@@ -44,12 +44,15 @@ function toggle () {
   }
 }
 
+// tray icon and right click menu
 function setupTray () {
   let tray = new nw.Tray({
     title: 'Tray',
     icon: 'assets/icon.png'
   });
   let menu = new nw.Menu();
+
+  // quit
   menu.append(new nw.MenuItem({
     type: 'normal',
     label: 'quit',
@@ -57,6 +60,16 @@ function setupTray () {
       win.close();
     }
   }));
+
+  // toggle visibility
+  menu.append(new nw.MenuItem({
+    type: 'normal',
+    label: 'toggle',
+    click: () => {
+      toggle();
+    }
+  }));
+
   tray.menu = menu;
   tray.on('click', toggle);
 }
