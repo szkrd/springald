@@ -1,7 +1,11 @@
 /* variables */
+
 :root {
   --main-bg-color: #353535;
   --main-fg-color: #fff;
   --selected-fg-color: #bde068;
   --underline-fg-color: #729fcf;
+  --scrollbar-thumb-color: #656565;
+  --scrollbar-thumb-hover-color: #7f7f7f;
+  --scrollbar-thumb-active-color: #999999;
 }

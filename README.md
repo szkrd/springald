@@ -29,13 +29,12 @@ _F5_ reparses.
 ## Overrides
 
 * config: create a `~/.config/springald/config.json` file. ([options](./config.json))
+* supported themes so far: _default_, _ambiance_
 * styles: create a `~/.config/springald/override.css` file. ([variables](./styles/variables.css), [more](./styles/springald.css))
 
-On OSX and Windows this is [elsewhere](http://docs.nwjs.io/en/latest/References/App/#appdatapath).
+On OSX and Windows these are [elsewhere](http://docs.nwjs.io/en/latest/References/App/#appdatapath).
 
-Config override does a shallow merge only. If you know what you're doing
-then probably you're better off modifying the `config.json` itself in the app
-and stash+pull+pop upgrade manually.
+Config override does a shallow merge only. If you know what you're doing and you find this a problem then probably you're better off modifying the `config.json` itself in the app and stash+pull+pop upgrade manually.
 
 ## Borderless window
 
@@ -64,19 +63,15 @@ On linux it's possible to remotely control the app via unix sockets
 
 Non utf-8 filenames may not work, this is especially a problem on Unices.
 
-## Debugging
+## Debugging, development
 
-- use nw sdk build
-- web context logs: **f12** to open dev toolbar
-- node context logs: in app, context menu, **"Inspect background page"**  
-  (visible in stderr too, but stack trace is in the chromium debugger above)
-- use `showOnStartup` in the config, which makes "reload app" (in the context menu) pretty helpful
-- do not press reload in the debugger console
-- quit with ctrl+q from the app (or via the socket), not with ctrl+c from the console, since the socket file may remain in tmp (a proper [shutdown hook](https://github.com/nwjs/nw.js/issues/5212) probably can not be implemented)
+See also the [README in docs](./docs/README.md)
 
 ## Using with Gnome Desktop / Ubuntu
 
-- install socat and xterm (`sudo apt install socat xterm`)
+In gnome the global registered toggle key [may not work](https://github.com/nwjs/nw.js/issues/6228), in that case you can use the socket fallback below:
+
+- install _socat_ and _xterm_ (`sudo apt install socat xterm`)
 - set a keyboard shortcut for the command `xterm -e "echo show | socat UNIX:/tmp/springald.sock -"`
 
 ![keyboard shortcuts](./docs/gnome-keyboard-shortcut.png)

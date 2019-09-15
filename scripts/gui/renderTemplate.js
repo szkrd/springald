@@ -30,6 +30,7 @@ function renderTemplate() {
     <input type="text" class="search" id="search" />
     <input type="text" class="app" id="app" />
     <span class="ghost" id="ghost"></span>
+    <div class="input-focus-indicator"></div>
     <div class="current" id="current"></div>
     <div class="results">${resultItems()}</div>
   `

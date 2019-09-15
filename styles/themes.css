@@ -1,0 +1,27 @@
+/* themes */
+
+/**
+ * AMBIANCE
+ */
+body.theme-ambiance {
+  --main-bg-color: #3f3e3a;
+  --main-fg-color: #e4e4e4;
+  --selected-fg-color: #f07746;
+  --underline-fg-color: #fff;
+  --scrollbar-thumb-color: #a86547;
+  --scrollbar-thumb-hover-color: #f07746;
+  --scrollbar-thumb-active-color: #f07746;
+}
+
+/* selected item */
+body.theme-ambiance .result.selected {
+  font-weight: normal;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, .1));
+}
+
+/* two text inputs on the top */
+body.theme-ambiance .search,
+body.theme-ambiance .app {
+  background: linear-gradient(180deg, rgba(0, 0, 0, .2) 1%, rgba(0, 0, 0, 0));
+  border-bottom: 1px solid var(--main-bg-color);
+}

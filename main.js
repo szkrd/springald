@@ -7,12 +7,14 @@ const renderTemplate = require('./scripts/gui/renderTemplate')
 const parseAll = require('./scripts/parsing/parseAll')
 const setResults = require('./scripts/gui/setResults')
 const escapeHtml = require('./scripts/utils/escapeHtml')
-const log = require('./scripts/utils/log')
+const inputFocusClassToBody = require('./scripts/utils/inputFocusClassToBody')
+const disableKeyDownForElement = require('./scripts/utils/disableKeyDownForElement')
 const getConfig = require('./scripts/getConfig')
 const filterSearchItems = require('./scripts/filterSearchItems')
 const openItem = require('./scripts/openItem')
 const store = require('./scripts/store')
 const context = require('./scripts/context')
+// const log = require('./scripts/utils/log')
 
 let unixServer
 let config
@@ -104,6 +106,8 @@ function markCurrentResult() {
   }
 }
 
+// resizable must be true in pcakge.json for gnome, otherwise
+// the window manager will ignore resize requests
 function setWindowSize() {
   const MAX_ITEM_COUNT = 6
   const style = window.getComputedStyle($('current'), null)
@@ -111,8 +115,7 @@ function setWindowSize() {
   const itemMax = Math.min(store.found.length, MAX_ITEM_COUNT)
   let height = itemHeight + itemHeight * itemMax
   height += store.found.length ? itemHeight : 0
-  win.height = height
-  win.width = config.winWidth || 600
+  win.resizeTo(config.winWidth || 600, height)
 }
 
 function onSearchChange(e) {
@@ -180,8 +183,19 @@ function onWinMinimize() {
 }
 
 function onDomReady() {
+  document.body.className = `theme-${config.theme}`
   document.body.innerHTML = renderTemplate()
   setWindowSize()
+
+  // add a helper class to the body, so that we can move the focus
+  // indicator line below the focused input with css animation
+  inputFocusClassToBody('search')
+  inputFocusClassToBody('app')
+
+  // disable jumping to start / end of input.value
+  disableKeyDownForElement('search', ['ArrowUp', 'ArrowDown'])
+  disableKeyDownForElement('app', ['ArrowUp', 'ArrowDown'])
+
   $('search').focus()
   $('search').addEventListener('input', onSearchChange)
   $('app').addEventListener('input', onAppChange)

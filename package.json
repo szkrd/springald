@@ -12,7 +12,7 @@
   "window": {
     "frame": true,
     "show": false,
-    "resizable": false,
+    "resizable": true,
     "icon": "assets/icon-64x64.png",
     "position": "center",
     "always-on-top": true,
