@@ -1,10 +1,12 @@
 # springald
 
-Springald is a simple launcher, similar to Launchy. It is written in vanilla-js(tm) and
+Springald is a simple launcher, similar to Launchy. It is written in _vanilla-js™_ and
 uses the nwjs framework.
 
 It can parse a fluxbox menu file, read directories from path or from a config file,
 can launch .desktop files.
+
+![looks like this](./docs/demo.jpg)
 
 ## Installation, launching
 
