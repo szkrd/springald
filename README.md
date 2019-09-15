@@ -72,6 +72,7 @@ Non utf-8 filenames may not work, this is especially a problem on Unices.
   (visible in stderr too, but stack trace is in the chromium debugger above)
 - use `showOnStartup` in the config, which makes "reload app" (in the context menu) pretty helpful
 - do not press reload in the debugger console
+- quit with ctrl+q from the app (or via the socket), not with ctrl+c from the console, since the socket file may remain in tmp (a proper [shutdown hook](https://github.com/nwjs/nw.js/issues/5212) probably can not be implemented)
 
 ## Using with Gnome Desktop / Ubuntu
 
