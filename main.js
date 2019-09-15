@@ -28,16 +28,12 @@ function hide() {
   store.visible = false
 }
 
-win.on('minimize', function() {
-  log('Window is minimized')
-});
-
 function show() {
   if (config.centerOnShow) {
     win.setPosition('center')
   }
   win.show()
-  setTimeout(() => win.restore(), 10) // plain win.restore is erratic with gnome
+  win.restore() // this is kinda erratic with gnome desktop
   store.visible = true
   $('search').select()
 }
@@ -151,7 +147,7 @@ function onAppChange(e) {
 function onDocumentKey(e) {
   if (e.key === 'Enter') {
     launch()
-    win.minimize()
+    hide()
   }
   if (e.key === config.refreshKey) {
     parseAll()
