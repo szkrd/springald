@@ -13,7 +13,7 @@
     "frame": true,
     "show": false,
     "resizable": false,
-    "icon": "assets/icon.png",
+    "icon": "assets/icon-64x64.png",
     "position": "center",
     "always-on-top": true,
     "visible-on-all-workspaces": true

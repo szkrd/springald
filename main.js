@@ -7,6 +7,7 @@ const renderTemplate = require('./scripts/gui/renderTemplate')
 const parseAll = require('./scripts/parsing/parseAll')
 const setResults = require('./scripts/gui/setResults')
 const escapeHtml = require('./scripts/utils/escapeHtml')
+const log = require('./scripts/utils/log')
 const getConfig = require('./scripts/getConfig')
 const filterSearchItems = require('./scripts/filterSearchItems')
 const openItem = require('./scripts/openItem')
@@ -27,11 +28,16 @@ function hide() {
   store.visible = false
 }
 
+win.on('minimize', function() {
+  log('Window is minimized')
+});
+
 function show() {
   if (config.centerOnShow) {
     win.setPosition('center')
   }
   win.show()
+  setTimeout(() => win.restore(), 10) // plain win.restore is erratic with gnome
   store.visible = true
   $('search').select()
 }
@@ -48,7 +54,7 @@ function toggle() {
 function setupTray() {
   const tray = new nw.Tray({
     title: 'Tray',
-    icon: 'assets/icon.png'
+    icon: 'assets/icon-16x16.png'
   })
   const menu = new nw.Menu()
 
