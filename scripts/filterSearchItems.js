@@ -1,36 +1,36 @@
-const multiSplitSearch = require('./utils/multiSplitSearch');
+const multiSplitSearch = require('./utils/multiSplitSearch')
 
-const throwAwayLessUseful = true;
+const throwAwayLessUseful = true
 
 // higher score first
-function compare (a, b) {
+function compare(a, b) {
   if (a.score > b.score) {
-    return -1;
+    return -1
   } else if (a.score < b.score) {
-    return 1;
+    return 1
   }
-  return 0;
+  return 0
 }
 
-function filterSearchItems (items, needles) {
-  let getScore = text => multiSplitSearch(text, needles);
+function filterSearchItems(items, needles) {
+  const getScore = (text) => multiSplitSearch(text, needles)
   if (!needles || !needles.length) {
-    return [];
+    return []
   }
-  let filtered = items.filter(item => {
-    let score = getScore(item.searchableText);
+  let filtered = items.filter((item) => {
+    const score = getScore(item.searchableText)
     if (score) {
-      item.score = score; // yay, a mutant kitten died here
-      return true;
+      item.score = score // yay, a mutant kitten died here
+      return true
     }
-  });
-  filtered = filtered.sort(compare);
+  })
+  filtered = filtered.sort(compare)
   // try to throw away less useful items
   if (needles.length > 1 && throwAwayLessUseful) {
-    let highest = (filtered[0] || {}).score || 0;
-    filtered = filtered.filter(item => item.score === highest);
+    const highest = (filtered[0] || {}).score || 0
+    filtered = filtered.filter((item) => item.score === highest)
   }
-  return filtered;
+  return filtered
 }
 
-module.exports = filterSearchItems;
+module.exports = filterSearchItems

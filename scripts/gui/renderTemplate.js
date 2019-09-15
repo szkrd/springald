@@ -1,30 +1,30 @@
-const fs = require('fs');
-const path = require('path');
-const context = require('../context');
-const consts = require('../consts');
+const fs = require('fs')
+const path = require('path')
+const context = require('../context')
+const consts = require('../consts')
 
-function resultItems () {
-  let ret = '';
+function resultItems() {
+  let ret = ''
   for (let i = 0; i < consts.MAX_RESULT_ITEMS; i++) {
-    ret += `<div class="result" id="result-${i}" style="display:none">${i}</div>`;
+    ret += `<div class="result" id="result-${i}" style="display:none">${i}</div>`
   }
-  return ret;
+  return ret
 }
 
-function overrideCss () {
-  let fileName = path.join(context.dataPath, 'override.css');
+function overrideCss() {
+  const fileName = path.join(context.dataPath, 'override.css')
   if (!fs.existsSync(fileName)) {
-    return '';
+    return ''
   }
-  let contents = fs.readFileSync(fileName, 'utf-8');
+  const contents = fs.readFileSync(fileName, 'utf-8')
   if (contents.indexOf('</') > -1) {
-    console.error('Please refrain from using html-ish tags in the override css.');
-    return '';
+    console.error('Please refrain from using html-ish tags in the override css.')
+    return ''
   }
-  return contents;
+  return contents
 }
 
-function renderTemplate () {
+function renderTemplate() {
   return `
     <style type="text/css">${overrideCss()}</style>
     <input type="text" class="search" id="search" />
@@ -32,7 +32,9 @@ function renderTemplate () {
     <span class="ghost" id="ghost"></span>
     <div class="current" id="current"></div>
     <div class="results">${resultItems()}</div>
-  `.replace(/\s+/g, ' ').replace(/> </g, '><');
+  `
+    .replace(/\s+/g, ' ')
+    .replace(/> </g, '><')
 }
 
-module.exports = renderTemplate;
+module.exports = renderTemplate

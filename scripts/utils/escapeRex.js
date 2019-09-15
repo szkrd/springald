@@ -1,7 +1,7 @@
-const matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
+const matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g
 
-function escapeRegExp (str) {
-  return str.replace(matchOperatorsRe, '\\$&');
+function escapeRegExp(str) {
+  return str.replace(matchOperatorsRe, '\\$&')
 }
 
-module.exports = escapeRegExp;
+module.exports = escapeRegExp

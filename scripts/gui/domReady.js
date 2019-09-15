@@ -1,14 +1,14 @@
 // OBSOLETE / PENDING
 
-const context = require('../context');
+const context = require('../context')
 
 // dom ready as promise
-function domReady () {
+function domReady() {
   return new Promise((resolve, reject) => {
     context.document.addEventListener('DOMContentLoaded', () => {
-      resolve();
-    });
-  });
+      resolve()
+    })
+  })
 }
 
-module.exports = domReady;
+module.exports = domReady

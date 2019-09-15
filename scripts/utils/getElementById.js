@@ -1,3 +1,3 @@
-module.exports = document => {
-  return s => document.getElementById(s);
-};
+module.exports = (document) => {
+  return (s) => document.getElementById(s)
+}

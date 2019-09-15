@@ -5,4 +5,4 @@ module.exports = Object.freeze({
   // on the ui
   MAX_RESULT_ITEMS: 30,
   DESKTOP_FILES_LOCATION: '/usr/share/applications/'
-});
+})

@@ -1,7 +1,7 @@
-const context = require('../context');
+const context = require('../context')
 
-function appLoading (state) {
-  context.document.body.className = state ? 'loading' : '';
+function appLoading(state) {
+  context.document.body.className = state ? 'loading' : ''
 }
 
-module.exports = appLoading;
+module.exports = appLoading

@@ -1,16 +1,16 @@
-const path = require('path');
-const config = require('../config.json');
-const context = require('./context');
-const readJsonFile = require('./utils/readJsonFile');
+const path = require('path')
+const config = require('../config.json')
+const context = require('./context')
+const readJsonFile = require('./utils/readJsonFile')
 
-let parsed = false;
+let parsed = false
 
-function getConfig () {
+function getConfig() {
   if (!parsed) {
-    Object.assign(config, readJsonFile(path.join(context.dataPath, 'config.json')) || {});
-    parsed = true;
+    Object.assign(config, readJsonFile(path.join(context.dataPath, 'config.json')) || {})
+    parsed = true
   }
-  return config;
+  return config
 }
 
-module.exports = getConfig;
+module.exports = getConfig

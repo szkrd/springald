@@ -1,25 +1,24 @@
-const path = require('path');
-const os = require('os');
+const path = require('path')
+const os = require('os')
+const homeDir = os.homedir()
 
 // this will be the text we can search against
-function getSearchableText (item) {
-  let prefix = '';
-  let separator = path.sep;
-  let homeDir = os.homedir();
-  let itemPath = item.path;
+function getSearchableText(item) {
+  let prefix = ''
+  let separator = path.sep
+  let itemPath = item.path
   if (item.type === 'FB_MENUITEM') {
-    prefix = 'fb:';
-    separator = '/';
+    prefix = 'fb:'
+    separator = '/'
   } else if (item.type === 'PATHITEM') {
-    prefix = 'p:';
+    prefix = 'p:'
   } else if (item.type === 'DIRITEM') {
-    prefix = 'd:';
+    prefix = 'd:'
   }
   if (item.type === 'PATHITEM' || item.type === 'DIRITEM') {
-    itemPath = itemPath.replace(homeDir, '~');
+    itemPath = itemPath.replace(homeDir, '~')
   }
-  return (prefix + itemPath + separator + item.name)
-    .replace(/\/+/g, '/'); // fb root level and extra separator
+  return (prefix + itemPath + separator + item.name).replace(/\/+/g, '/') // fb root level and extra separator
 }
 
-module.exports = getSearchableText;
+module.exports = getSearchableText

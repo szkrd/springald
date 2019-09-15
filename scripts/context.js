@@ -1,7 +1,7 @@
-let context = {
+const context = {
   window: null,
   document: null,
   gui: null,
   app: null
-};
-module.exports = context;
+}
+module.exports = context

@@ -1,57 +1,57 @@
-const path = require('path');
-const fs = require('fs');
-const consts = require('../consts');
-const isExec = require('../utils/isExec');
+const path = require('path')
+const fs = require('fs')
+const consts = require('../consts')
+const isExec = require('../utils/isExec')
 
-let counter = 0;
+let counter = 0
 
 // linux only: get global .desktop files
-function getDesktopFriendlies () {
-  let location = consts.DESKTOP_FILES_LOCATION;
+function getDesktopFriendlies() {
+  const location = consts.DESKTOP_FILES_LOCATION
   return new Promise((resolve, reject) => {
     fs.readdir(location, (err, files) => {
       if (err) {
-        return resolve([]);
+        return resolve([])
       }
-      return resolve(files.filter(fn => /\.desktop$/.test(fn)).map(fn => fn.replace(/\.desktop$/, '')));
-    });
-  });
+      return resolve(files.filter((fn) => /\.desktop$/.test(fn)).map((fn) => fn.replace(/\.desktop$/, '')))
+    })
+  })
 }
 
 // node injects the project's local bin directory to the path
-function isLocalNodeBin (s) {
-  return /springald[/\\]node_modules/.test(s);
+function isLocalNodeBin(s) {
+  return /springald[/\\]node_modules/.test(s)
 }
 
-function readDir (location) {
+function readDir(location) {
   return new Promise((resolve, reject) => {
-    let results = [];
+    const results = []
     fs.readdir(location, (err, files) => {
       // not a show stopper, but still annoying
       if (err) {
-        console.error(`☠️ Could not read location "$\{location}", skipping.`);
-        resolve([]);
-        return;
+        console.error(`☠️ Could not read location "$\{location}", skipping.`)
+        resolve([])
+        return
       }
 
-      let itemCount = files.length;
-      let processCount = 0;
+      const itemCount = files.length
+      let processCount = 0
       if (!files.length) {
-        resolve([]);
+        resolve([])
       }
-      files.forEach(file => {
-        file = path.resolve(location, file);
+      files.forEach((file) => {
+        file = path.resolve(location, file)
         fs.stat(file, (err, stats) => {
           if (err) {
-            console.error(`☠️ Could not stat path "${file}", skipping!`);
-            resolve([]);
-            return;
+            console.error(`☠️ Could not stat path "${file}", skipping!`)
+            resolve([])
+            return
           }
-          processCount++;
+          processCount++
           if (stats.isFile()) {
-            let parsed = path.parse(file);
+            const parsed = path.parse(file)
             // on the path non executables are not interesting
-            if (isExec(parsed.ext, stats.mode) && !(isLocalNodeBin(file))) {
+            if (isExec(parsed.ext, stats.mode) && !isLocalNodeBin(file)) {
               results.push({
                 id: `p${counter++}`,
                 executable: true,
@@ -60,43 +60,45 @@ function readDir (location) {
                 name: parsed.base,
                 desktop: false,
                 command: file // full path
-              });
+              })
             }
           }
           if (processCount === itemCount) {
-            resolve(results);
+            resolve(results)
           }
-        }); // end stat
-      }); // end forEach
-    }); // end readdir
-  }); // end Promise
+        }) // end stat
+      }) // end forEach
+    }) // end readdir
+  }) // end Promise
 }
 
-function parsePath () {
-  let result = [];
-  let pathItems = process.env.PATH.split(path.delimiter);
-  let dirs = [ ...new Set(pathItems) ];
+function parsePath() {
+  const result = []
+  const pathItems = process.env.PATH.split(path.delimiter)
+  let dirs = [...new Set(pathItems)]
   if (pathItems.length !== dirs.length) {
-    console.warn('You have duplicate items in your PATH!');
+    console.warn('You have duplicate items in your PATH!')
   }
-  dirs = dirs.filter(dir => fs.existsSync(dir));
-  let all = [getDesktopFriendlies(), ...dirs.map(dir => readDir(dir))];
-  return Promise.all(all)
-    .then((packs) => {
-      let desktops = packs.shift();
-      packs.forEach(pack => result.push.apply(result, pack));
+  dirs = dirs.filter((dir) => fs.existsSync(dir))
+  const all = [getDesktopFriendlies(), ...dirs.map((dir) => readDir(dir))]
+  return Promise.all(all).then(
+    (packs) => {
+      const desktops = packs.shift()
+      packs.forEach((pack) => result.push.apply(result, pack))
       if (desktops.length) {
-        result.forEach(fn => {
+        result.forEach((fn) => {
           if (desktops.includes(fn.name)) {
-            fn.desktop = true;
+            fn.desktop = true
           }
-        });
+        })
       }
-      return Promise.resolve(result);
-    }, (err) => {
-      err.module = 'parsePath';
-      return Promise.reject(err);
-    });
+      return Promise.resolve(result)
+    },
+    (err) => {
+      err.module = 'parsePath'
+      return Promise.reject(err)
+    }
+  )
 }
 
-module.exports = parsePath;
+module.exports = parsePath
