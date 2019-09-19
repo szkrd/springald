@@ -27,8 +27,8 @@ function overrideCss() {
 function renderTemplate() {
   return `
     <style type="text/css">${overrideCss()}</style>
-    <input type="text" class="search" id="search" />
-    <input type="text" class="app" id="app" />
+    <input type="text" class="search" id="search" autocomplete="off"/>
+    <input type="text" class="app" id="app" autocomplete="off" />
     <span class="ghost" id="ghost"></span>
     <div class="input-focus-indicator"></div>
     <div class="current" id="current"></div>

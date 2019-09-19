@@ -4,5 +4,5 @@ module.exports = Object.freeze({
   U_POSTFIX: '[/\u00a0u\u00a0]',
   // on the ui
   MAX_RESULT_ITEMS: 30,
-  DESKTOP_FILES_LOCATION: '/usr/share/applications/'
+  DESKTOP_FILES_LOCATION: '/usr/share/applications/' // TODO [ ..., '~/.local/share/applications']
 })

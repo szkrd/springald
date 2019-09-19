@@ -14,7 +14,7 @@ const filterSearchItems = require('./scripts/filterSearchItems')
 const openItem = require('./scripts/openItem')
 const store = require('./scripts/store')
 const context = require('./scripts/context')
-const log = require('./scripts/utils/log')
+// const log = require('./scripts/utils/log')
 
 let unixServer = null
 let config = null
@@ -162,7 +162,6 @@ function onDocumentKey(e) {
     parseAll()
   }
   if (e.key === 'c' && e.ctrlKey) {
-    log('centering')
     win.setPosition('center')
   }
   if (e.key === 'Escape') {
