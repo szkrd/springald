@@ -15,10 +15,9 @@
     "resizable": true,
     "icon": "assets/icon-64x64.png",
     "position": "center",
-    "always-on-top": true,
-    "visible-on-all-workspaces": true
+    "always_on_top": true,
+    "visible_on_all_workspaces": true
   },
-  "single-instance": true,
   "author": "Szabolcs Kurdi",
   "license": "ISC",
   "chromium-args": "--enable-logging=stderr",

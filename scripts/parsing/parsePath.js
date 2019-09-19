@@ -43,6 +43,9 @@ function readDir(location) {
         file = path.resolve(location, file)
         fs.stat(file, (err, stats) => {
           if (err) {
+            // on Ubuntu some packages may leave broken symlinks behind, so
+            // getting a file not found error is not that uncommon
+            // in that case go and delete that file yourself...
             console.error(`☠️ Could not stat path "${file}", skipping!`)
             resolve([])
             return

@@ -14,10 +14,14 @@ const filterSearchItems = require('./scripts/filterSearchItems')
 const openItem = require('./scripts/openItem')
 const store = require('./scripts/store')
 const context = require('./scripts/context')
-// const log = require('./scripts/utils/log')
+const log = require('./scripts/utils/log')
 
-let unixServer
-let config
+let unixServer = null
+let config = null
+let tray = null
+let trayMenu = null
+const trayMenuItems = []
+let globalToggleShortcut = null
 const $ = (id) => document.getElementById(id)
 context.window = window
 context.document = document
@@ -49,36 +53,38 @@ function toggle() {
 }
 
 // tray icon and right click menu
+// (the right click menu may not work though,
+// see https://github.com/nwjs/nw.js/issues/6715)
 function setupTray() {
-  const tray = new nw.Tray({
+  tray = new nw.Tray({
     title: 'Tray',
     icon: 'assets/icon-16x16.png'
   })
-  const menu = new nw.Menu()
+  trayMenu = new nw.Menu()
 
   // quit
-  menu.append(
-    new nw.MenuItem({
-      type: 'normal',
-      label: 'quit',
-      click: () => {
-        win.close()
-      }
-    })
-  )
+  let item = new nw.MenuItem({
+    type: 'normal',
+    label: 'quit',
+    click: () => {
+      win.close()
+    }
+  })
+  trayMenuItems.push(item)
+  trayMenu.append(item)
 
   // toggle visibility
-  menu.append(
-    new nw.MenuItem({
-      type: 'normal',
-      label: 'toggle',
-      click: () => {
-        toggle()
-      }
-    })
-  )
+  item = new nw.MenuItem({
+    type: 'normal',
+    label: 'toggle',
+    click: () => {
+      toggle()
+    }
+  })
+  trayMenuItems.push(item)
+  trayMenu.append(item)
 
-  tray.menu = menu
+  tray.menu = trayMenu
   tray.on('click', toggle)
 }
 
@@ -155,7 +161,8 @@ function onDocumentKey(e) {
   if (e.key === config.refreshKey) {
     parseAll()
   }
-  if (e.key === config.centerKey) {
+  if (e.key === 'c' && e.ctrlKey) {
+    log('centering')
     win.setPosition('center')
   }
   if (e.key === 'Escape') {
@@ -163,6 +170,9 @@ function onDocumentKey(e) {
   }
   if (e.key === 'q' && e.ctrlKey) {
     win.close()
+  }
+  if (config.development && e.key === 'r' && e.ctrlKey) {
+    reloadApp()
   }
   if (e.key === 'ArrowUp') {
     e.stopPropagation()
@@ -176,6 +186,15 @@ function onDocumentKey(e) {
     markCurrentResult()
     setCurrent()
   }
+}
+
+function removeTray() {
+  tray.remove()
+  tray = null
+  trayMenuItems.forEach((item) => {
+    trayMenu.remove(item)
+  })
+  trayMenu = null
 }
 
 function onWinMinimize() {
@@ -224,8 +243,13 @@ function setGlobalShortcut() {
       console.error(`Failed to register hotkey "${config.toggleKey}"`)
     }
   }
-  const shortcut = new nw.Shortcut(option)
-  nw.App.registerGlobalHotKey(shortcut)
+  globalToggleShortcut = new nw.Shortcut(option)
+  nw.App.registerGlobalHotKey(globalToggleShortcut)
+}
+
+function removeGlobalShortcut() {
+  nw.App.unregisterGlobalHotKey(globalToggleShortcut)
+  globalToggleShortcut = null
 }
 
 // ipc interface
@@ -242,12 +266,22 @@ function createUnixSocket() {
         hide()
       } else if (data === 'toggle') {
         toggle()
+      } else if (data === 'reload') {
+        reloadApp()
       } else if (data === 'quit' || data === 'close') {
         win.close()
       }
     })
   })
   unixServer.listen(config.unixSocket)
+}
+
+function removeUnixSocket(callback) {
+  if (!unixServer) {
+    callback()
+    return
+  }
+  unixServer.close(callback)
 }
 
 // tear down
@@ -261,6 +295,28 @@ function onWinClose() {
   }
 }
 
+function reloadApp() {
+  // tray and global shortcuts are "outside" the rloadable window
+  removeTray()
+  removeGlobalShortcut()
+  // not sure if these are needed, but better be safe than leak memory
+  win.removeListener('minimize', onWinMinimize)
+  win.removeListener('close', onWinClose)
+  document.removeEventListener('keyup', onDocumentKey)
+  document.removeEventListener('DOMContentLoaded', onDomReady)
+  document.body.className = ''
+  document.body.innerHTML = ''
+  // flush node's require cache
+  for (const cacheItem in require.cache) {
+    delete require.cache[cacheItem]
+  }
+  removeUnixSocket(() => {
+    config = null
+    unixServer = null
+    win.reload() // finally kaboom
+  })
+}
+
 function run() {
   config = getConfig()
   createUnixSocket()
@@ -270,8 +326,11 @@ function run() {
   win.on('close', onWinClose)
   document.addEventListener('keyup', onDocumentKey)
   document.addEventListener('DOMContentLoaded', onDomReady)
+  // we could disable the context menu for config.development
+  // but the proper way is to have "chromium-args": "--disable-devtools"
+  // in package.json (for a prod build, plus removing the copy-paste menu is not nice)
   hide()
-  if (config.showOnStartup) {
+  if (config.showOnStartup || config.development) {
     setTimeout(show, 0) // rendered size determines the screen position
   }
 }

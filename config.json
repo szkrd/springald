@@ -7,7 +7,6 @@
   "centerOnShow": true,
   "toggleKey": "Command+Q",
   "refreshKey": "F5",
-  "centerKey": "Ctrl+C",
   "logicalAndSeparator": " ",
   "includeFiles": [ "\\.(txt|md|html|docx|pdf|jpe?g|png|avi|mkv|mp4)$" ],
   "excludeFiles": [ "^\\._" ],

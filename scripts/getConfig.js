@@ -8,6 +8,7 @@ let parsed = false
 function getConfig() {
   if (!parsed) {
     Object.assign(config, readJsonFile(path.join(context.dataPath, 'config.json')) || {})
+    config.development = process.env.NODE_ENV === 'development'
     parsed = true
   }
   return config

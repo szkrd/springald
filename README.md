@@ -58,7 +58,7 @@ in the shell's default folder viewer.
 On linux it's possible to remotely control the app via unix sockets
 (the default socket is `/tmp/springald.sock`, see config.json).
 
-- Commands: `show`, `hide`, `toggle`, `close`, `quit`
+- Commands: `show`, `hide`, `toggle`, `close`, `reload`, `quit`
 - Example: `echo "show" | socat UNIX:/tmp/springald.sock -`
 
 ## Known issues
