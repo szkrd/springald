@@ -6,7 +6,7 @@ const consts = require('../consts')
 function resultItems() {
   let ret = ''
   for (let i = 0; i < consts.MAX_RESULT_ITEMS; i++) {
-    ret += `<div class="result" id="result-${i}" style="display:none">${i}</div>`
+    ret += `<div class="result type-UNSET" id="result-${i}" style="display:none">${i}</div>`
   }
   return ret
 }

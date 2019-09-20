@@ -26,6 +26,9 @@ function setResults(needles) {
       return
     }
     el.style.display = 'block'
+    // this will mark elements by their type (in case I want to colorize them):
+    // type-UNSET, type-FB_MENUITEM, type-PATHITEM, type-DIRITEM
+    el.className = el.className.replace(/type-[A-Z]+/, `type-${item.type}`)
     el.innerHTML = escapeHtml(createName(item, needles))
     el.dataset.id = item.id
   }

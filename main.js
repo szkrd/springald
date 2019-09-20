@@ -16,6 +16,7 @@ const store = require('./scripts/store')
 const context = require('./scripts/context')
 // const log = require('./scripts/utils/log')
 
+const MAX_VISIBLE_ITEM_COUNT = 6
 let unixServer = null
 let config = null
 let tray = null
@@ -106,19 +107,19 @@ function markCurrentResult() {
   const el = $(`result-${store.current}`)
   if (el) {
     all.forEach((current) => {
-      current.className = current.className.replace(/ selected/g, '').trim()
+      current.classList.remove('selected')
     })
-    el.className += ' selected'
+    el.classList.add('selected')
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }
 }
 
 // resizable must be true in pcakge.json for gnome, otherwise
 // the window manager will ignore resize requests
 function setWindowSize() {
-  const MAX_ITEM_COUNT = 6
   const style = window.getComputedStyle($('current'), null)
   const itemHeight = parseInt(style.height.replace(/px/, ''), 10)
-  const itemMax = Math.min(store.found.length, MAX_ITEM_COUNT)
+  const itemMax = Math.min(store.found.length, MAX_VISIBLE_ITEM_COUNT)
   let height = itemHeight + itemHeight * itemMax
   height += store.found.length ? itemHeight : 0
   win.resizeTo(config.winWidth || 600, height)
@@ -173,15 +174,17 @@ function onDocumentKey(e) {
   if (config.development && e.key === 'r' && e.ctrlKey) {
     reloadApp()
   }
-  if (e.key === 'ArrowUp') {
+  if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown'].includes(e.key)) {
     e.stopPropagation()
-    store.current = (store.current - 1) % store.found.length
-    markCurrentResult()
-    setCurrent()
-  }
-  if (e.key === 'ArrowDown') {
-    e.stopPropagation()
-    store.current = (store.current + 1) % store.found.length
+    if (e.key === 'ArrowUp') {
+      store.current = (store.current - 1) % store.found.length
+    } else if (e.key === 'ArrowDown') {
+      store.current = (store.current + 1) % store.found.length
+    } else if (e.key === 'PageUp') {
+      store.current = Math.max(store.current - MAX_VISIBLE_ITEM_COUNT, 0)
+    } else if (e.key === 'PageDown') {
+      store.current = Math.min(store.current + MAX_VISIBLE_ITEM_COUNT, store.found.length - 1)
+    }
     markCurrentResult()
     setCurrent()
   }
