@@ -74,7 +74,8 @@ input[type=text], .ghost {
 
 .input-focus-indicator {
   position: absolute;
-  top: calc(2rem - 1px);
+  top: 2rem;
+  margin-top: -1px;
   left: 0;
   height: 1px;
   opacity: 0;
