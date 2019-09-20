@@ -8,11 +8,14 @@ function getSearchableText(item) {
   let separator = path.sep
   let itemPath = item.path
   if (item.type === 'FB_MENUITEM') {
+    // an item found in the fluxbox menu file
     prefix = 'fb:'
     separator = '/'
   } else if (item.type === 'PATHITEM') {
+    // an item on the path
     prefix = 'p:'
   } else if (item.type === 'DIRITEM') {
+    // an item found in the list of extra directories (config)
     prefix = 'd:'
   }
   if (item.type === 'PATHITEM' || item.type === 'DIRITEM') {

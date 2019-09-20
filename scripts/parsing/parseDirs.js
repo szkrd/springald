@@ -81,17 +81,22 @@ function walk(dir, done) {
   }) // end readdir
 }
 
+// parse the "directories" (section from the config)
 function parseDirs() {
   return new Promise((resolve, reject) => {
+    // first we replace the ~ with the proper home path
     const homeDir = os.homedir()
     const config = getConfig()
     let dirs = [...new Set(config.directories || [])]
     dirs = dirs.map((dir) => dir.replace(/~/, homeDir).replace(/\\/g, '/')) // TODO normalize for path.sep
+
+    // then check if all the directories exist
     dirs = dirs.filter((dir) => fs.existsSync(dir))
     let processedCount = 0
     const results = []
 
-    const cb = (err, res) => {
+    // recursively process all the files in thes directories
+    const walkDirCallback = (err, res) => {
       processedCount++
       if (err) {
         console.error(`☠️ Directory walker error: could not read directory "${err.file}"!`) // nw console error is a bit simple
@@ -104,8 +109,7 @@ function parseDirs() {
         resolve(results)
       }
     }
-
-    dirs.forEach((dir) => walk(dir, cb))
+    dirs.forEach((dir) => walk(dir, walkDirCallback))
   })
 }
 

@@ -1,5 +1,7 @@
 const path = require('path')
 const fs = require('fs')
+const { promisify } = require('util')
+const fsReaddir = promisify(fs.readdir)
 const consts = require('../consts')
 const isExec = require('../utils/isExec')
 
@@ -7,16 +9,17 @@ let counter = 0
 
 // linux only: get global .desktop files, strip the "extensions"
 // and return only the basename part (no path either)
-function getDesktopFriendlies() {
-  const location = consts.DESKTOP_FILES_LOCATION // TODO use an array
-  return new Promise((resolve, reject) => {
-    fs.readdir(location, (err, files) => {
-      if (err) {
-        return resolve([])
-      }
-      return resolve(files.filter((fn) => /\.desktop$/.test(fn)).map((fn) => fn.replace(/\.desktop$/, '')))
-    })
-  })
+async function getDesktopFriendlies() {
+  const location = consts.DESKTOP_FILES_LOCATION
+  let files = []
+  try {
+    files = await fsReaddir(location)
+  } catch (err) {
+    files = []
+  }
+  const onlyDesktopExtensions = (fn) => /\.desktop$/.test(fn)
+  const baseNameOnly = (fn) => fn.replace(/\.desktop$/, '')
+  return files.filter(onlyDesktopExtensions).map(baseNameOnly)
 }
 
 // node injects the project's local bin directory to the path
@@ -59,7 +62,6 @@ function readDir(location) {
               results.push({
                 id: `p${counter++}`,
                 executable: true,
-                parameters: '', // TODO / NYI
                 type: 'PATHITEM',
                 path: parsed.dir,
                 name: parsed.base,
@@ -96,7 +98,9 @@ function parsePath() {
       packs.forEach((pack) => result.push.apply(result, pack))
 
       // if an executable file name has a ".desktop" version then it
-      // has a desktop file, so we would like to prioritize that
+      // has a desktop file, so we would like to add it to the "with app"
+      // list of openers (since it's meant to be used on the gui for sure)
+      //
       // (that was the original scope, but I'm beginning to miss shortcuts
       // that are available in gnome's default search, but not in springald's)
       //
@@ -112,24 +116,6 @@ function parsePath() {
             desktops[idxInDesktopsArray] = null
           }
         })
-        // omit marked nulls, this will leave us with a list
-        // .desktop files that do more than just reference
-        // an executable with the same name. The problem with these
-        // desktop files is that their "Name=" section may not be particularly descriptive,
-        // nevertheless it would be nice to parse the contents of these files
-        // and add them to the list of files we already have:
-        //
-        // `gnome-keyboard-panel.desktop` =>
-        // {
-        //   name: 'Keyboard',
-        //   executable: '?/?/gnome-control-center', // <- path has to be looked up in the found executables' list
-        //   parameters: 'keyboard',
-        //   ...
-        // }
-        const remainingDesktopBaseNames = desktops.filter((baseName) => baseName)
-        if (remainingDesktopBaseNames.length) {
-          console.info(`NYI: ${remainingDesktopBaseNames.length} unprocessed .desktop files were ignored.`) // NYI
-        }
       }
       return Promise.resolve(result)
     },
