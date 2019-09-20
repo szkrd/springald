@@ -12,9 +12,10 @@
   "excludeFiles": [ "^\\._" ],
   "excludedDirs": [ "^node_modules$", "^\\." ],
   "excludeHidSys": true,
-  "terminalCommand": "xterm -e %CMD%",
+  "terminalCommand": "gnome-terminal -e %CMD%",
   "appShortcuts": {
-    "showItemInFolder": "F"
+    "showItemInFolder": "F",
+    "launchInTerminal": "T"
   },
   "directories": [
     "~/Downloads",

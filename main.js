@@ -229,7 +229,7 @@ function launch() {
     return false
   }
   openItem(item, store.ghost || store.withApp)
-  $('app').value = store.withApp = ''
+  $('app').value = store.withApp = $('ghost').innerHTML = ''
   store.ghost = null
   hide()
 }
