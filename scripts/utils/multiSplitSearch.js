@@ -1,8 +1,9 @@
-const escapeRex = require('./escapeRex')
+import escapeRex from './escapeRex'
+import uniq from './uniq'
 
 // we do not care for recursive matches
 function multiSplitSearch(text, needles) {
-  needles = Array.isArray(needles) ? [...new Set(needles)] : [needles]
+  needles = Array.isArray(needles) ? uniq(needles) : [needles]
   let score = 0
   let strictMatch = 0
   needles.forEach((needle) => {
@@ -24,4 +25,4 @@ function multiSplitSearch(text, needles) {
   return score
 }
 
-module.exports = multiSplitSearch
+export default multiSplitSearch

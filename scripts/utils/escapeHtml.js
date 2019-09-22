@@ -1,5 +1,5 @@
-const escapeRex = require('./escapeRex')
-const consts = require('../consts')
+import escapeRex from './escapeRex'
+import consts from '../consts'
 
 // escape html, but allow underlines
 function escapeHtml(unsafe) {
@@ -15,4 +15,4 @@ function escapeHtml(unsafe) {
     .replace(new RegExp(escapeRex(postfix), 'g'), '</u>')
 }
 
-module.exports = escapeHtml
+export default escapeHtml

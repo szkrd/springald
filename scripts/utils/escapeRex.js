@@ -4,4 +4,4 @@ function escapeRegExp(str) {
   return str.replace(matchOperatorsRe, '\\$&')
 }
 
-module.exports = escapeRegExp
+export default escapeRegExp

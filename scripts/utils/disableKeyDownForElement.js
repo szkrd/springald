@@ -1,4 +1,4 @@
-const $ = require('./getElementById')
+import $ from './getElementById'
 
 // useful for swallowing down and up arrow press on the input itself
 // (so that we can disable jumping to the beginning or the end of the input value)
@@ -11,4 +11,4 @@ function disableKeyDownForElement(elementId = '', keyNames = []) {
   })
 }
 
-module.exports = disableKeyDownForElement
+export default disableKeyDownForElement

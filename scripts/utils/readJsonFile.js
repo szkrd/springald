@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-module.exports = (fileName) => {
+export default (fileName) => {
   if (!fs.existsSync(fileName)) {
     return null
   }

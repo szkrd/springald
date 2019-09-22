@@ -47,4 +47,4 @@ log.error = function() {
   return _log('e', Array.from(arguments))
 }
 
-module.exports = log
+export default log

@@ -5,6 +5,7 @@
   "main": "index.html",
   "scripts": {
     "dev": "node tools/preDev && cross-env NODE_ENV=development nw --enable-logging=stderr .",
+    "build": "tsc -p . && node tools/patchOutput.js",
     "logger": "node tools/logger.js",
     "lint": "eslint scripts main.js",
     "prettifyAll": "prettier --loglevel silent --write **/*.js"
@@ -25,6 +26,7 @@
     "superchild": "0.1.10"
   },
   "devDependencies": {
+    "@types/node": "12.7.5",
     "chalk": "2.4.2",
     "cross-env": "5.2.1",
     "eslint": "6.4.0",
@@ -35,7 +37,7 @@
     "eslint-plugin-prettier": "3.1.0",
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "4.0.1",
-    "http": "0.0.0",
-    "prettier": "1.18.2"
+    "prettier": "1.18.2",
+    "typescript": "3.6.3"
   }
 }

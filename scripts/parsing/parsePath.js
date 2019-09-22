@@ -1,9 +1,10 @@
+import consts from '../consts'
+import isExec from '../utils/isExec'
+import uniq from '../utils/uniq'
 const path = require('path')
 const fs = require('fs')
 const { promisify } = require('util')
 const fsReaddir = promisify(fs.readdir)
-const consts = require('../consts')
-const isExec = require('../utils/isExec')
 
 let counter = 0
 
@@ -82,7 +83,7 @@ function readDir(location) {
 function parsePath() {
   const result = []
   const pathItems = process.env.PATH.split(path.delimiter)
-  let dirs = [...new Set(pathItems)]
+  let dirs = uniq(pathItems)
   if (pathItems.length !== dirs.length) {
     console.warn('You have duplicate items in your PATH!')
   }
@@ -126,4 +127,4 @@ function parsePath() {
   )
 }
 
-module.exports = parsePath
+export default parsePath

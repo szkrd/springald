@@ -1,4 +1,4 @@
-const multiSplitSearch = require('./utils/multiSplitSearch')
+import multiSplitSearch from './utils/multiSplitSearch'
 
 const throwAwayLessUseful = true
 
@@ -33,4 +33,4 @@ function filterSearchItems(items, needles) {
   return filtered
 }
 
-module.exports = filterSearchItems
+export default filterSearchItems

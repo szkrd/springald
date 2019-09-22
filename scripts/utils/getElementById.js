@@ -1,7 +1,7 @@
-const context = require('../context')
+import context from '../context'
 
 function getElementById(elementId) {
   return context.document.getElementById(elementId)
 }
 
-module.exports = getElementById
+export default getElementById

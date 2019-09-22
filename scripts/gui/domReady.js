@@ -1,6 +1,6 @@
 // OBSOLETE / PENDING
 
-const context = require('../context')
+import context from '../context'
 
 // dom ready as promise
 function domReady() {
@@ -11,4 +11,4 @@ function domReady() {
   })
 }
 
-module.exports = domReady
+export default domReady

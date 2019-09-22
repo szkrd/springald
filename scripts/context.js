@@ -1,7 +1,8 @@
 const context = {
+  dataPath: '',
   window: null,
   document: null,
   gui: null,
   app: null
 }
-module.exports = context
+export default context

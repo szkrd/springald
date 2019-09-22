@@ -24,4 +24,4 @@ function getSearchableText(item) {
   return (prefix + itemPath + separator + item.name).replace(/\/+/g, '/') // fb root level and extra separator
 }
 
-module.exports = getSearchableText
+export default getSearchableText

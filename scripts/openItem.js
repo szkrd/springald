@@ -1,13 +1,8 @@
-let superchild
-try {
-  // win32 not supported
-  superchild = require('superchild')
-} catch (err) {
-  superchild = require('./utils/superchildFallback')
-}
+// TODO win32 not supported
+import context from './context'
+import getConfig from './getConfig'
 const os = require('os')
-const context = require('./context')
-const getConfig = require('./getConfig')
+const superchild = require('superchild')
 
 // TODO support for withApp parameter
 // see for example: https://github.com/sindresorhus/opn
@@ -55,4 +50,4 @@ function openItem(item, withApp) {
   }
 }
 
-module.exports = openItem
+export default openItem

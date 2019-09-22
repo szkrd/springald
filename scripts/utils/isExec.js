@@ -9,4 +9,4 @@ function isExec(extension, mode) {
   return isWin ? exe : ux || gx || ox
 }
 
-module.exports = isExec
+export default isExec

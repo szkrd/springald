@@ -1,8 +1,8 @@
-const escapeHtml = require('../utils/escapeHtml')
-const underline = require('./multiHtmlUnderline')
-const multiSplitSearch = require('../utils/multiSplitSearch')
-const store = require('../store')
-const context = require('../context')
+import escapeHtml from '../utils/escapeHtml'
+import underline from './multiHtmlUnderline'
+import multiSplitSearch from '../utils/multiSplitSearch'
+import store from '../store'
+import context from '../context'
 
 function createName(item, needles) {
   let text = item.searchableText
@@ -34,4 +34,4 @@ function setResults(needles) {
   }
 }
 
-module.exports = setResults
+export default setResults

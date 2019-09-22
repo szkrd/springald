@@ -5,4 +5,4 @@ function superchildFallback(command) {
   spawn(command)
 }
 
-module.exports = superchildFallback
+export default superchildFallback

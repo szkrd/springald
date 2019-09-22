@@ -71,4 +71,4 @@ function parseFluxboxMenu(fileName, depth = []) {
   })
 }
 
-module.exports = parseFluxboxMenu
+export default parseFluxboxMenu

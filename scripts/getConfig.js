@@ -1,8 +1,9 @@
+import context from './context'
+import readJsonFile from './utils/readJsonFile'
+import defaultConfig from '../defaultConfig'
 const path = require('path')
-const config = require('../config.json')
-const context = require('./context')
-const readJsonFile = require('./utils/readJsonFile')
 
+const config = defaultConfig()
 let parsed = false
 
 function getConfig() {
@@ -14,4 +15,4 @@ function getConfig() {
   return config
 }
 
-module.exports = getConfig
+export default getConfig

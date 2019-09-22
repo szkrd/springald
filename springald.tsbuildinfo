@@ -1,0 +1,69 @@
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./scripts/models/ILaunchable.ts",
+      "./scripts/context.js",
+      "./scripts/consts.js",
+      "./scripts/gui/renderTemplate.js",
+      "./scripts/utils/readJsonFile.js",
+      "./defaultConfig.ts",
+      "./scripts/getConfig.js",
+      "./scripts/utils/uniq.ts",
+      "./scripts/parsing/parseDirs.js",
+      "./scripts/utils/isExec.js",
+      "./scripts/parsing/parsePath.js",
+      "./scripts/parsing/parseFluxboxMenu.js",
+      "./scripts/parsing/getSearchableText.js",
+      "./scripts/gui/appLoading.js",
+      "./scripts/store.js",
+      "./scripts/parsing/parseAll.js",
+      "./scripts/utils/escapeRex.js",
+      "./scripts/utils/escapeHtml.js",
+      "./scripts/gui/multiHtmlUnderline.js",
+      "./scripts/utils/multiSplitSearch.js",
+      "./scripts/gui/setResults.js",
+      "./scripts/utils/getElementById.js",
+      "./scripts/utils/inputFocusClassToBody.js",
+      "./scripts/utils/disableKeyDownForElement.js",
+      "./scripts/filterSearchItems.js",
+      "./scripts/openItem.js",
+      "./springald.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 680,
+          "kind": "emitHelpers",
+          "data": "typescript:awaiter"
+        },
+        {
+          "pos": 681,
+          "end": 2471,
+          "kind": "emitHelpers",
+          "data": "typescript:generator"
+        },
+        {
+          "pos": 2472,
+          "end": 2799,
+          "kind": "emitHelpers",
+          "data": "typescript:spreadArrays"
+        },
+        {
+          "pos": 2800,
+          "end": 48324,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:awaiter",
+          "typescript:generator",
+          "typescript:spreadArrays"
+        ]
+      }
+    }
+  },
+  "version": "3.6.3"
+}

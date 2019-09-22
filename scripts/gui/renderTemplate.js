@@ -1,7 +1,7 @@
+import context from '../context'
+import consts from '../consts'
 const fs = require('fs')
 const path = require('path')
-const context = require('../context')
-const consts = require('../consts')
 
 function resultItems() {
   let ret = ''
@@ -38,4 +38,4 @@ function renderTemplate() {
     .replace(/> </g, '><')
 }
 
-module.exports = renderTemplate
+export default renderTemplate

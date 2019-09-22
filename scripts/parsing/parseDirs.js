@@ -1,7 +1,8 @@
+import getConfig from '../getConfig'
+import uniq from '../utils/uniq'
 const fs = require('fs')
 const path = require('path')
 const os = require('os')
-const getConfig = require('../getConfig')
 
 let counter = 0
 
@@ -87,7 +88,7 @@ function parseDirs() {
     // first we replace the ~ with the proper home path
     const homeDir = os.homedir()
     const config = getConfig()
-    let dirs = [...new Set(config.directories || [])]
+    let dirs = uniq(config.directories || [])
     dirs = dirs.map((dir) => dir.replace(/~/, homeDir).replace(/\\/g, '/')) // TODO normalize for path.sep
 
     // then check if all the directories exist
@@ -113,4 +114,4 @@ function parseDirs() {
   })
 }
 
-module.exports = parseDirs
+export default parseDirs

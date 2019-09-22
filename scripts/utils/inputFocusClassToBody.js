@@ -1,4 +1,4 @@
-const $ = require('./getElementById')
+import $ from './getElementById'
 
 // when an input is focused the body will get a marker class
 function inputFocusClassToBody(elementId = '') {
@@ -7,4 +7,4 @@ function inputFocusClassToBody(elementId = '') {
   $(elementId).addEventListener('blur', () => $('body').classList.remove(className))
 }
 
-module.exports = inputFocusClassToBody
+export default inputFocusClassToBody

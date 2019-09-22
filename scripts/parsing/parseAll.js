@@ -1,10 +1,10 @@
-const parseDirs = require('./parseDirs')
-const parsePath = require('./parsePath')
-const parseFluxboxMenu = require('./parseFluxboxMenu')
-const getSearchableText = require('./getSearchableText')
-const appLoading = require('../gui/appLoading')
-const getConfig = require('../getConfig')
-const store = require('../store')
+import parseDirs from './parseDirs'
+import parsePath from './parsePath'
+import parseFluxboxMenu from './parseFluxboxMenu'
+import getSearchableText from './getSearchableText'
+import appLoading from '../gui/appLoading'
+import getConfig from '../getConfig'
+import store from '../store'
 
 function parseAll() {
   appLoading(true)
@@ -31,4 +31,4 @@ function parseAll() {
   )
 }
 
-module.exports = parseAll
+export default parseAll
