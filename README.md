@@ -1,3 +1,7 @@
+😴 This repository has been archived: the code is quite fast and the memory footprint is tiny (around 30mb for 3400 items, which are parsed in 61ms) but it's hardly maintainable anymore and there are much better alternatives out there. Maybe sometime I'll rewrite it with a modern stack, but til then it shall lay dormant in Octocat's stasis chamber.
+
+----
+
 # springald
 
 Springald is a simple launcher, similar to Launchy. It is written in _vanilla-js™_ and
