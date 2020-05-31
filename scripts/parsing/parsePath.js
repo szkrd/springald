@@ -4,6 +4,7 @@ const { promisify } = require('util')
 const fsReaddir = promisify(fs.readdir)
 const consts = require('../consts')
 const isExec = require('../utils/isExec')
+const log = require('../utils/log')
 
 let counter = 0
 
@@ -66,7 +67,7 @@ function readDir(location) {
                 path: parsed.dir,
                 name: parsed.base,
                 desktop: false,
-                command: file // full path
+                command: file, // full path
               })
             }
           }
@@ -84,7 +85,8 @@ function parsePath() {
   const pathItems = process.env.PATH.split(path.delimiter)
   let dirs = [...new Set(pathItems)]
   if (pathItems.length !== dirs.length) {
-    console.warn('You have duplicate items in your PATH!')
+    const duplicates = [...new Set(pathItems.filter((item, index) => pathItems.indexOf(item) !== index))]
+    log.warn(`You have duplicate items in your PATH! (${duplicates.join(', ')})`)
   }
   dirs = dirs.filter((dir) => fs.existsSync(dir))
   const all = [getDesktopFriendlies(), ...dirs.map((dir) => readDir(dir))]

@@ -14,7 +14,7 @@ const filterSearchItems = require('./scripts/filterSearchItems')
 const openItem = require('./scripts/openItem')
 const store = require('./scripts/store')
 const context = require('./scripts/context')
-// const log = require('./scripts/utils/log')
+const log = require('./scripts/utils/log')
 
 const MAX_VISIBLE_ITEM_COUNT = 6
 let unixServer = null
@@ -59,7 +59,7 @@ function toggle() {
 function setupTray() {
   tray = new nw.Tray({
     title: 'Tray',
-    icon: 'assets/icon-16x16.png'
+    icon: 'assets/icon-16x16.png',
   })
   trayMenu = new nw.Menu()
 
@@ -69,7 +69,7 @@ function setupTray() {
     label: 'quit',
     click: () => {
       win.close()
-    }
+    },
   })
   trayMenuItems.push(item)
   trayMenu.append(item)
@@ -80,7 +80,7 @@ function setupTray() {
     label: 'toggle',
     click: () => {
       toggle()
-    }
+    },
   })
   trayMenuItems.push(item)
   trayMenu.append(item)
@@ -243,7 +243,7 @@ function setGlobalShortcut() {
     active: toggle,
     failed: (msg) => {
       console.error(`Failed to register hotkey "${config.toggleKey}"`)
-    }
+    },
   }
   globalToggleShortcut = new nw.Shortcut(option)
   nw.App.registerGlobalHotKey(globalToggleShortcut)

@@ -1,3 +1,4 @@
+const log = require('../utils/log')
 const parseDirs = require('./parseDirs')
 const parsePath = require('./parsePath')
 const parseFluxboxMenu = require('./parseFluxboxMenu')
@@ -22,7 +23,7 @@ function parseAll() {
         item.searchableText = getSearchableText(item)
       })
       const endedAt = Date.now()
-      console.info(`Parsed ${store.searchItems.length} items in ${endedAt - startedAt} ms.`)
+      log(`Parsed ${store.searchItems.length} items in ${endedAt - startedAt} ms.`)
       appLoading(false)
     },
     (err) => {

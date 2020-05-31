@@ -37,7 +37,7 @@ function parse(s, depth = []) {
           type: 'FB_MENUITEM',
           path: '/' + itemPath.join('/'),
           name,
-          command
+          command,
         })
       }
 

@@ -3,6 +3,6 @@ const store = {
   current: 0,
   ghost: null,
   searchItems: [],
-  found: []
+  found: [],
 }
 module.exports = store

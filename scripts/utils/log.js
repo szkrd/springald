@@ -19,31 +19,38 @@ const stringify = (v) => {
 }
 
 function _log(prefix, args) {
-  if (!isDev) {
-    return
-  }
   let payload = encodeURIComponent(stringify(args))
   if (payload.length > MAX_GET_REQUEST_SIZE) {
     payload = encodeURIComponent(
       stringify(args.map((val) => (typeof val === 'object' && val !== null ? { skipped: 'object too large' } : val)))
     )
   }
-  http.get(`http://localhost:${REMOTE_PORT}?p=${prefix}:${payload}`)
+  // remote logging is only active in dev mode
+  if (isDev) {
+    http.get(`http://localhost:${REMOTE_PORT}?p=${prefix}:${payload}`)
+  }
+  const consoleMethod = {
+    i: 'info',
+    w: 'warn',
+    e: 'error',
+  }[prefix]
+  args = args.map((arg) => (arg && typeof arg === 'object' ? JSON.stringify(arg) : arg))
+  console[consoleMethod](`[${consoleMethod.toUpperCase()}]`, args.join(' || '))
 }
 
 function log() {
   return _log('i', Array.from(arguments))
 }
 
-log.info = function() {
+log.info = function () {
   return _log('i', Array.from(arguments))
 }
 
-log.warn = function() {
+log.warn = function () {
   return _log('w', Array.from(arguments))
 }
 
-log.error = function() {
+log.error = function () {
   return _log('e', Array.from(arguments))
 }
 

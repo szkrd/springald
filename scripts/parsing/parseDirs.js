@@ -71,7 +71,7 @@ function walk(dir, done) {
               type: 'DIRITEM',
               path: parsed.dir,
               name: parsed.base,
-              command: file // full path
+              command: file, // full path
             })
           }
           mayEnd()
