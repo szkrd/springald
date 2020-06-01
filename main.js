@@ -298,7 +298,7 @@ function onWinClose() {
 }
 
 function reloadApp() {
-  // tray and global shortcuts are "outside" the rloadable window
+  // tray and global shortcuts are "outside" the reloadable window
   removeTray()
   removeGlobalShortcut()
   // not sure if these are needed, but better be safe than leak memory

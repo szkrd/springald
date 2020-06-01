@@ -2,7 +2,7 @@
 
 ## Warning
 
-The project uses vanilla js and is a **quick hack* for myself: the codebase is dirty,
+The project uses vanilla js and is a *quick hack* for myself: the codebase is dirty,
 evil, broken etc. - I thought about a rewrite in typescript, but it would be a major
 pain; using react or a modern framework would be nice, but I do like the tiny memory
 footprint.
