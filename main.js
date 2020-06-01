@@ -5,6 +5,7 @@ const renderTemplate = require('./scripts/gui/renderTemplate')
 const parseAll = require('./scripts/parsing/parseAll')
 const setResults = require('./scripts/gui/setResults')
 const escapeHtml = require('./scripts/utils/escapeHtml')
+const getOpenWith = require('./scripts/utils/getOpenWith')
 const inputFocusClassToBody = require('./scripts/utils/inputFocusClassToBody')
 const disableKeyDownForElement = require('./scripts/utils/disableKeyDownForElement')
 const getConfig = require('./scripts/getConfig')
@@ -50,11 +51,25 @@ function toggle() {
   }
 }
 
-function setCurrent() {
+function setCurrentAndApp() {
   if (!store.found.length || !store.found[store.current]) {
     return
   }
-  $('current').textContent = store.found[store.current].command
+  const found = store.found[store.current]
+  $('current').textContent = found.command
+  // if you haven't modified the app field, then "prefill" it with ghost text
+  // (searchableText is the pretty text, like "d:~/foo/bar/baz.txt")
+  if (!$('app').value && Object.keys(config.openWith || {}).length > 0) {
+    const appGhostText = getOpenWith(found.searchableText, config.openWith)
+    onAppChange(appGhostText)
+  }
+}
+
+function clearInputs() {
+  onSearchChange('')
+  onAppChange('')
+  $('search').value = $('app').value = store.withApp = $('ghost').innerHTML = ''
+  $('search').focus()
 }
 
 function markCurrentResult() {
@@ -87,18 +102,18 @@ function setWindowSize() {
 }
 
 function onSearchChange(e) {
-  const val = (e.target.value || '').trim()
+  const val = (typeof e === 'string' ? e : e.target.value || '').trim()
   const needles = val ? val.split(config.logicalAndSeparator) : []
   store.found = filterSearchItems(store.searchItems, needles)
   store.current = 0
-  setCurrent()
+  setCurrentAndApp()
   setResults(needles)
   markCurrentResult()
   setWindowSize()
 }
 
 function onAppChange(e) {
-  const val = (e.target.value || '').trim()
+  const val = (typeof e === 'string' ? e : e.target.value || '').trim()
   let matchingApp
   store.withApp = val
 
@@ -123,8 +138,11 @@ function onDocumentKey(e) {
   if (e.key === config.refreshKey) {
     parseAll()
   }
-  if (e.key === 'c' && e.ctrlKey) {
+  if (e.key === 'c' && e.altKey) {
     win.setPosition('center')
+  }
+  if (e.key === 'c' && e.ctrlKey) {
+    clearInputs()
   }
   if (e.key === 'Escape') {
     hide()
@@ -147,7 +165,7 @@ function onDocumentKey(e) {
       store.current = Math.min(store.current + MAX_VISIBLE_ITEM_COUNT, store.found.length - 1)
     }
     markCurrentResult()
-    setCurrent()
+    setCurrentAndApp()
   }
 }
 
@@ -184,8 +202,11 @@ function launch() {
     return false
   }
   openItem(item, store.ghost || store.withApp)
-  $('app').value = store.withApp = $('ghost').innerHTML = ''
-  store.ghost = null
+  // reset manually changed app only (pure ghosts can stay, those were programmatic)
+  if ($('app').value) {
+    $('app').value = store.withApp = $('ghost').innerHTML = ''
+    store.ghost = null
+  }
   hide()
 }
 

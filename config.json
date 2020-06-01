@@ -12,7 +12,7 @@
   "excludeFiles": [ "^\\._" ],
   "excludedDirs": [ "^node_modules$", "^\\." ],
   "excludeHidSys": true,
-  "terminalCommand": "gnome-terminal -e %CMD%",
+  "terminalCommand": "gnome-terminal -- %CMD%",
   "appShortcuts": {
     "showItemInFolder": "F",
     "launchInTerminal": "T"

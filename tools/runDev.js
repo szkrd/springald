@@ -17,7 +17,8 @@ if (os.platform() === 'linux') {
 
 // since we already have a launcher script, we might as well fix nwjs' "everything's grey"
 // coloring (along with some annoyances); we output to stderr and then print that out to stdout
-const child = execFile('nw', ['--enable-logging=stderr', '.'], {
+const nwBin = process.env.NW_BIN || 'nw'
+const child = execFile(nwBin, ['--enable-logging=stderr', '.'], {
   env: {
     ...process.env,
     NODE_ENV: 'development',

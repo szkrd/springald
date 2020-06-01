@@ -14,6 +14,7 @@ run it.
 ## Debugging, development
 
 - use nw **sdk build**
+- you can use `NW_BIN` to set the nw binary location (useful for run configurations)
 - web context logs: **f12** to open dev toolbar
 - node context logs: in app, context menu, **"Inspect background page"**  
   (visible in stderr too, but **stack trace** is in the chromium debugger above)

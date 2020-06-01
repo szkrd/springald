@@ -22,11 +22,13 @@ Then download springald:
 
 See `config.json` for available settings.
 
-By default
-_Esc_ hides,
-_ctrl + q_ quits,
-_mod4 + q_ toggles,
-_F5_ reparses.
+Default shortcuts:
+- _Esc_ = hide
+- _ctrl + q_ = quit
+- _mod4 + q_ = toggle
+- _F5_ = reparse
+- _alt + c_ = center on screen
+- _ctrl + c_ = clear inputs
 
 ## Overrides
 
