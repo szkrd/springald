@@ -55,7 +55,6 @@ function setCurrent() {
     return
   }
   $('current').textContent = store.found[store.current].command
-  $('app').value = 'code'
 }
 
 function markCurrentResult() {
