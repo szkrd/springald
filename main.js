@@ -1,6 +1,4 @@
 /* global nw:false */
-const os = require('os')
-const net = require('net')
 const gui = require('nw.gui')
 const win = gui.Window.get()
 const renderTemplate = require('./scripts/gui/renderTemplate')
@@ -15,13 +13,12 @@ const openItem = require('./scripts/openItem')
 const store = require('./scripts/store')
 const context = require('./scripts/context')
 const log = require('./scripts/utils/log')
+const tray = require('./scripts/modules/tray')
+const socket = require('./scripts/modules/socket')
 
 const MAX_VISIBLE_ITEM_COUNT = 6
 let unixServer = null
 let config = null
-let tray = null
-let trayMenu = null
-const trayMenuItems = []
 let globalToggleShortcut = null
 const $ = (id) => document.getElementById(id)
 context.window = window
@@ -51,42 +48,6 @@ function toggle() {
   } else {
     show()
   }
-}
-
-// tray icon and right click menu
-// (the right click menu may not work though,
-// see https://github.com/nwjs/nw.js/issues/6715)
-function setupTray() {
-  tray = new nw.Tray({
-    title: 'Tray',
-    icon: 'assets/icon-16x16.png',
-  })
-  trayMenu = new nw.Menu()
-
-  // quit
-  let item = new nw.MenuItem({
-    type: 'normal',
-    label: 'quit',
-    click: () => {
-      win.close()
-    },
-  })
-  trayMenuItems.push(item)
-  trayMenu.append(item)
-
-  // toggle visibility
-  item = new nw.MenuItem({
-    type: 'normal',
-    label: 'toggle',
-    click: () => {
-      toggle()
-    },
-  })
-  trayMenuItems.push(item)
-  trayMenu.append(item)
-
-  tray.menu = trayMenu
-  tray.on('click', toggle)
 }
 
 function setCurrent() {
@@ -172,7 +133,7 @@ function onDocumentKey(e) {
     win.close()
   }
   if (config.development && e.key === 'r' && e.ctrlKey) {
-    reloadApp()
+    reload()
   }
   if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown'].includes(e.key)) {
     e.stopPropagation()
@@ -188,15 +149,6 @@ function onDocumentKey(e) {
     markCurrentResult()
     setCurrent()
   }
-}
-
-function removeTray() {
-  tray.remove()
-  tray = null
-  trayMenuItems.forEach((item) => {
-    trayMenu.remove(item)
-  })
-  trayMenu = null
 }
 
 function onWinMinimize() {
@@ -254,38 +206,6 @@ function removeGlobalShortcut() {
   globalToggleShortcut = null
 }
 
-// ipc interface
-function createUnixSocket() {
-  if (os.platform() !== 'linux') {
-    return
-  }
-  unixServer = net.createServer((client) => {
-    client.on('data', (data) => {
-      data = (data.toString() || '').trim()
-      if (data === 'show') {
-        show()
-      } else if (data === 'hide') {
-        hide()
-      } else if (data === 'toggle') {
-        toggle()
-      } else if (data === 'reload') {
-        reloadApp()
-      } else if (data === 'quit' || data === 'close') {
-        win.close()
-      }
-    })
-  })
-  unixServer.listen(config.unixSocket)
-}
-
-function removeUnixSocket(callback) {
-  if (!unixServer) {
-    callback()
-    return
-  }
-  unixServer.close(callback)
-}
-
 // tear down
 function onWinClose() {
   const close = () => this.close(true)
@@ -297,9 +217,9 @@ function onWinClose() {
   }
 }
 
-function reloadApp() {
+function reload() {
   // tray and global shortcuts are "outside" the reloadable window
-  removeTray()
+  tray.destroy()
   removeGlobalShortcut()
   // not sure if these are needed, but better be safe than leak memory
   win.removeListener('minimize', onWinMinimize)
@@ -312,7 +232,7 @@ function reloadApp() {
   for (const cacheItem in require.cache) {
     delete require.cache[cacheItem]
   }
-  removeUnixSocket(() => {
+  socket.destroy(() => {
     config = null
     unixServer = null
     win.reload() // finally kaboom
@@ -321,8 +241,8 @@ function reloadApp() {
 
 function run() {
   config = getConfig()
-  createUnixSocket()
-  setupTray()
+  socket.create({ show, hide, toggle, reload, config, gui })
+  tray.create({ toggle, gui })
   setGlobalShortcut()
   win.on('minimize', onWinMinimize)
   win.on('close', onWinClose)
