@@ -17,6 +17,9 @@
     "showItemInFolder": "F",
     "launchInTerminal": "T"
   },
+  "openWith": {
+    "\\.(txt|md)$": "code"
+  },
   "directories": [
     "~/Downloads",
     "~/Pictures",
