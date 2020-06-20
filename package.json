@@ -2,8 +2,14 @@
   "name": "springald",
   "version": "0.0.2",
   "description": "Simple application launcher, similar to Launchy.",
-  "main": "index.html",
+  "main": "index.js",
   "scripts": {
+    "start": "electron .",
+    "dev": "NODE_ENV=development electron .",
+    "lint": "eslint scripts main.js"
+  },
+  "__main": "index.html",
+  "__scripts": {
     "dev": "node tools/runDev",
     "dev:simple": "NODE_ENV=development nw --enable-logging=stderr .",
     "checkOutdated": "npm outdated",
@@ -11,7 +17,7 @@
     "lint": "eslint scripts main.js",
     "prettifyAll": "prettier --loglevel silent --write **/*.js"
   },
-  "window": {
+  "__window": {
     "frame": true,
     "show": false,
     "resizable": true,
@@ -28,6 +34,7 @@
   },
   "devDependencies": {
     "chalk": "4.0.0",
+    "electron": "9.0.4",
     "eslint": "7.1.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-prettier": "3.1.3",
