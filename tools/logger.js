@@ -8,10 +8,7 @@ const noObjects = !!process.argv.find((s) => s === '--no-objects')
 const port = process.env.DEBUG_LISTENER_PORT || 7070
 const px = 'R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=' // a black pixel
 const getDate = () => {
-  return new Date()
-    .toJSON()
-    .slice(0, 19)
-    .replace('T', ' ')
+  return new Date().toJSON().slice(0, 19).replace('T', ' ')
 }
 
 // logs to the console anything after the ?p= param,
@@ -49,8 +46,5 @@ const server = http.createServer('*', (req, res) => {
   res.end(img)
 })
 
-server.listen(port, () => {
-  console.log(
-    `Listening on port ${port}!\n` + '--------------------------------------------------------------------------------'
-  )
-})
+server.listen(port)
+console.log(`Listening on port ${port}!`)

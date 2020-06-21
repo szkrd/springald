@@ -1,11 +1,9 @@
-let fs = require('fs')
-const { promisify } = require('util')
-
-fs = ['exists', 'readFile'].reduce((acc, name) => ({ ...acc, [name]: promisify(fs[name]) }), {})
+let fs = require('fs').promises
 
 async function readJsonFile(fileName) {
-  const fileExists = await fs.exists(fileName)
-  if (!fileExists) {
+  try {
+    await fs.access(fileName)
+  } catch (err) {
     return null
   }
   let contents = null

@@ -8,6 +8,7 @@
   "toggleKey": "Command+Q",
   "refreshKey": "F5",
   "logicalAndSeparator": " ",
+  "desktopFilesLocation": "/usr/share/applications/",
   "includeFiles": [ "\\.(txt|md|html|docx|pdf|jpe?g|png|avi|mkv|mp4)$" ],
   "excludeFiles": [ "^\\._" ],
   "excludedDirs": [ "^node_modules$", "^\\." ],
