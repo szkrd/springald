@@ -2,33 +2,14 @@
   "name": "springald",
   "version": "0.0.2",
   "description": "Simple application launcher, similar to Launchy.",
+  "author": "Szabolcs Kurdi",
+  "license": "ISC",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
     "dev": "NODE_ENV=development electron .",
-    "lint": "eslint scripts main.js"
+    "lint": "eslint src index.js"
   },
-  "__main": "index.html",
-  "__scripts": {
-    "dev": "node tools/runDev",
-    "dev:simple": "NODE_ENV=development nw --enable-logging=stderr .",
-    "checkOutdated": "npm outdated",
-    "logListener": "node tools/logger.js",
-    "lint": "eslint scripts main.js",
-    "prettifyAll": "prettier --loglevel silent --write **/*.js"
-  },
-  "__window": {
-    "frame": true,
-    "show": false,
-    "resizable": true,
-    "icon": "assets/icon-64x64.png",
-    "position": "center",
-    "always_on_top": true,
-    "visible_on_all_workspaces": true
-  },
-  "author": "Szabolcs Kurdi",
-  "license": "ISC",
-  "chromium-args": "--enable-logging=stderr",
   "dependencies": {
     "superchild": "0.1.10"
   },

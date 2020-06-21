@@ -4,12 +4,16 @@
   <title>Springald</title>
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
   <link rel="stylesheet" href="styles/variables.css" />
-  <link rel="stylesheet" href="styles/themes.css" />
   <link rel="stylesheet" href="styles/springald.css" />
-  <script> window.app = { constants: {}, runtime: {}, utils: {} } </script>
+  <link rel="stylesheet" href="styles/themes.css" />
+  <script type="text/javascript">
+    window.app = { constants: {}, config: {}, runtime: {}, utils: {}, store: {} }
+  </script>
+  <script src="src/client/utils/dom.js"></script>
   <script src="src/client/constants.js"></script>
   <script src="src/client/runtime/sendMessage.js"></script>
   <script src="src/client/runtime/renderPage.js"></script>
+  <script src="src/client/runtime/setWindowSize.js"></script>
   <script src="src/client/main.js"></script>
 </head>
 <body id="body"></body>
