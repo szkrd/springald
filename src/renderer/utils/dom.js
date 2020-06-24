@@ -26,6 +26,9 @@
   }
 
   function $(selector) {
+    if (typeof selector === 'function' && arguments.length === 1) {
+      return $('document').on('DOMContentLoaded', selector) // onDomReady
+    }
     let el
     if (selector === 'document' || selector === document) {
       el = document

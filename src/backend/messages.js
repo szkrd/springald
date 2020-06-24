@@ -5,6 +5,8 @@ const messages = {
   MSG_HIDE_WINDOW: '',
   // payload: { width, height }
   MSG_RESIZE_WINDOW: '',
+  MSG_TOGGLE_WINDOW: '',
+  MSG_OPEN_DEV_TOOLS: '',
 }
 
 Object.keys(messages).forEach((key) => {

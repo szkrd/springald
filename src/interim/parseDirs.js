@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const os = require('os')
-const getConfig = require('../getConfig')
+const getConfig = require('../backend/getConfig')
 
 let counter = 0
 let config

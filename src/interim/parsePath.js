@@ -2,8 +2,8 @@ const path = require('path')
 const fsPr = require('fs').promises
 const fsCb = require('fs')
 const { existsSync } = require('fs')
-const isExecutable = require('../utils/isExecutable')
-const getConfig = require('../getConfig')
+const isExecutable = require('./isExecutable')
+const getConfig = require('../backend/getConfig')
 
 let counter = 0
 

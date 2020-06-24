@@ -1,6 +1,6 @@
 const path = require('path')
 const appConfig = require('../../config.json')
-const readJsonFile = require('./utils/readJsonFile')
+const readJsonFile = require('../interim/readJsonFile')
 
 let initialized = false
 const config = {

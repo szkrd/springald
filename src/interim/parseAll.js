@@ -2,7 +2,7 @@ const parseDirs = require('./parseDirs')
 const parsePath = require('./parsePath')
 const parseFluxboxMenu = require('./parseFluxboxMenu')
 const getSearchableText = require('./getSearchableText')
-const getConfig = require('../getConfig')
+const getConfig = require('../backend/getConfig')
 
 async function parseAll() {
   // NW appLoading(false)

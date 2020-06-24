@@ -1,18 +1,52 @@
 const { BrowserWindow } = require('electron')
+const getConfig = require('./getConfig')
 
-function initWindow() {
-  const win = new BrowserWindow({
-    width: 1000,
-    height: 100,
-    show: false,
+class Window extends BrowserWindow {
+  constructor(options) {
+    super(options)
+    this.hidden = !options.show
+  }
+
+  hide() {
+    super.hide()
+    this.hidden = true
+  }
+
+  show() {
+    super.show()
+    this.hidden = false
+  }
+
+  toggle() {
+    if (this.hidden) {
+      this.show()
+    } else {
+      this.hide()
+    }
+  }
+
+  openDevTools() {
+    super.webContents.openDevTools({ mode: 'undocked' })
+  }
+}
+
+async function initWindow() {
+  const config = await getConfig()
+  const isDev = config.development
+  const win = new Window({
+    width: config.winWidth,
+    height: 40,
+    show: isDev,
     // resizable: true, will gnome let us programmatically resize?
     webPreferences: {
       nodeIntegration: true,
     },
   })
-  win.setMenuBarVisibility(false)
   win.loadFile('index.html')
-  win.webContents.openDevTools({ mode: 'undocked' })
+  win.setMenuBarVisibility(false)
+  if (isDev) {
+    win.openDevTools()
+  }
   return win
 }
 

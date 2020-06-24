@@ -7,14 +7,20 @@
   <link rel="stylesheet" href="styles/springald.css" />
   <link rel="stylesheet" href="styles/themes.css" />
   <script type="text/javascript">
-    window.app = { constants: {}, config: {}, runtime: {}, utils: {}, store: {} }
+    window.app = { constants: {}, config: {}, runtime: {}, interim: {}, utils: {}, store: {} }
   </script>
-  <script src="src/client/utils/dom.js"></script>
-  <script src="src/client/constants.js"></script>
-  <script src="src/client/runtime/sendMessage.js"></script>
-  <script src="src/client/runtime/renderPage.js"></script>
-  <script src="src/client/runtime/setWindowSize.js"></script>
-  <script src="src/client/main.js"></script>
+  <script src="src/interim/interim.js"></script>
+  <script src="src/renderer/utils/string.js"></script>
+  <script src="src/renderer/utils/dom.js"></script>
+  <script src="src/renderer/utils/search.js"></script>
+  <script src="src/renderer/constants.js"></script>
+  <script src="src/renderer/runtime/getPreferredOpenWith.js"></script>
+  <script src="src/renderer/runtime/filterSearchItems.js"></script>
+  <script src="src/renderer/runtime/setAppLoading.js"></script>
+  <script src="src/renderer/runtime/renderPage.js"></script>
+  <script src="src/renderer/runtime/handleError.js"></script>
+  <script src="src/renderer/runtime/setWindowSize.js"></script>
+  <script src="src/renderer/main.js"></script>
 </head>
 <body id="body"></body>
 </html>

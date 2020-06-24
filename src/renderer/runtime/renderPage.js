@@ -13,6 +13,8 @@
   //   see also: `<style type="text/css">${overrideCss()}</style>`
   function renderPage() {
     return `
+    <div id="error-line"></div>
+    <div class="loader"></div>
     <input type="text" class="search" id="search" autocomplete="off"/>
     <input type="text" class="app" id="app" autocomplete="off" />
     <span class="ghost" id="ghost"></span>

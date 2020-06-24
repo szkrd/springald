@@ -90,7 +90,7 @@ function markCurrentResult() {
   }
 }
 
-// resizable must be true in pcakge.json for gnome, otherwise
+// resizable must be true in package.json for gnome, otherwise
 // the window manager will ignore resize requests
 function setWindowSize() {
   const style = window.getComputedStyle($('current'), null)
@@ -174,20 +174,20 @@ function onWinMinimize() {
 }
 
 function onDomReady() {
-  document.body.className = `theme-${config.theme}`
-  document.body.innerHTML = renderTemplate()
+  document.body.className = `theme-${config.theme}`//cl
+  document.body.innerHTML = renderTemplate()//cl
   setWindowSize()
 
   // add a helper class to the body, so that we can move the focus
   // indicator line below the focused input with css animation
-  inputFocusClassToBody('search')
-  inputFocusClassToBody('app')
+  inputFocusClassToBody('search')//cl
+  inputFocusClassToBody('app')//cl
 
   // disable jumping to start / end of input.value
-  disableKeyDownForElement('search', ['ArrowUp', 'ArrowDown'])
-  disableKeyDownForElement('app', ['ArrowUp', 'ArrowDown'])
+  disableKeyDownForElement('search', ['ArrowUp', 'ArrowDown'])//cl
+  disableKeyDownForElement('app', ['ArrowUp', 'ArrowDown'])//cl
 
-  $('search').focus()
+  $('search').focus()//cl
   $('search').addEventListener('input', onSearchChange)
   $('app').addEventListener('input', onAppChange)
   parseAll()
@@ -261,19 +261,19 @@ function reload() {
 }
 
 function run() {
-  config = getConfig()
-  socket.create({ show, hide, toggle, reload, config, gui })
-  tray.create({ toggle, gui })
-  setGlobalShortcut()
-  win.on('minimize', onWinMinimize)
-  win.on('close', onWinClose)
+  config = getConfig()//be
+  socket.create({ show, hide, toggle, reload, config, gui })//x
+  tray.create({ toggle, gui })//be
+  setGlobalShortcut()//be
+  win.on('minimize', onWinMinimize)//x
+  win.on('close', onWinClose)//x
   document.addEventListener('keyup', onDocumentKey)
   document.addEventListener('DOMContentLoaded', onDomReady)
   // we could disable the context menu for config.development
   // but the proper way is to have "chromium-args": "--disable-devtools"
   // in package.json (for a prod build, plus removing the copy-paste menu is not nice)
-  hide()
-  if (config.showOnStartup || config.development) {
+  hide()//x
+  if (config.showOnStartup || config.development) {//x
     setTimeout(show, 0) // rendered size determines the screen position
   }
 }
