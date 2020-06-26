@@ -2,7 +2,7 @@
   const { $ } = window.app.utils.dom
 
   function handleError() {
-    app.interim.sendMessage('MSG_OPEN_DEV_TOOLS')
+    app.interim.sendMessage('MSG_TOGGLE_DEV_TOOLS')
     console.error(...arguments)
     const el = $('#error-line')
     el.style.opacity = 1

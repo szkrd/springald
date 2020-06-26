@@ -5,10 +5,11 @@
   let timer
 
   function _setAppLoading(enable) {
+    const { $ } = window.app.utils.dom
     if (enable) {
       lastActiveInput = document.activeElement
     }
-    document.body.classList[enable ? 'add' : 'remove']('loading')
+    $('body').classList[enable ? 'add' : 'remove']('loading')
     if (!enable) {
       lastActiveInput.focus()
     }

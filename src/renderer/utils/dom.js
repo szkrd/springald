@@ -32,19 +32,26 @@
     let el
     if (selector === 'document' || selector === document) {
       el = document
+    } else if (selector === 'body') {
+      el = document.body
     } else if (selector.startsWith('#')) {
       el = document.getElementById(selector.replace(/^#/, ''))
     } else {
       el = document.querySelector(selector)
     }
     if (el) {
-      el.on = on.bind(el)
+      el.on = el.on || on.bind(el)
     }
     return el
   }
 
+  function $$(selector) {
+    return Array.from(document.querySelectorAll(selector))
+  }
+
   window.app.utils.dom = {
     $,
+    $$,
     disableKeyDownForElement,
     inputFocusClassToBody,
   }

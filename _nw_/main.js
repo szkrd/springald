@@ -267,8 +267,8 @@ function run() {
   setGlobalShortcut()//be
   win.on('minimize', onWinMinimize)//x
   win.on('close', onWinClose)//x
-  document.addEventListener('keyup', onDocumentKey)
-  document.addEventListener('DOMContentLoaded', onDomReady)
+  document.addEventListener('keyup', onDocumentKey)//x
+  document.addEventListener('DOMContentLoaded', onDomReady)//x
   // we could disable the context menu for config.development
   // but the proper way is to have "chromium-args": "--disable-devtools"
   // in package.json (for a prod build, plus removing the copy-paste menu is not nice)

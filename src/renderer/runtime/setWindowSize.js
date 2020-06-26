@@ -3,7 +3,7 @@
     const { MAX_VISIBLE_ITEM_COUNT, FALLBACK_WIN_WIDTH } = window.app.constants
     const { config } = window.app
     const { $ } = window.app.utils.dom
-    const { sendMessage } = window.app.runtime
+    const { sendMessage } = window.app.interim
     const foundItems = window.app.store.found || []
     const foundItemCount = foundItems.length
 

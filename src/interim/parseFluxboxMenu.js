@@ -1,12 +1,12 @@
 const os = require('os')
 const path = require('path')
-const fs = require('fs').promises
+const fs = require('fs')
 
 let counter = 0
 const homeDir = os.homedir()
 
 function parse(s, depth = []) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     s = s.replace(/\r\n/g, '\n')
     const itemPath = depth
     const ret = []
@@ -30,7 +30,7 @@ function parse(s, depth = []) {
       // executable
       if (/^\[exec]/.test(line)) {
         name = name.replace(/\\\)/g, ')') // unescape "\)" to ")"
-        const command = line.replace(/[^{]*{/, '').replace(/([^\\])}.*/, '$1')
+        const command = line.replace(/[^{]*\{/, '').replace(/([^\\])}.*/, '$1')
         ret.push({
           id: `f${counter++}`,
           executable: true,
@@ -50,33 +50,25 @@ function parse(s, depth = []) {
   })
 }
 
-async function parseFluxboxMenu(fileName, depth = []) {
+function parseFluxboxMenu(fileName, depth = []) {
   depth = Array.from(depth)
   fileName = (fileName || '').replace(/~/, homeDir)
   const menuFile = fileName || path.join(homeDir, '.fluxbox', 'menu')
-  let result = []
-  if (!fileName) return result
-  try {
-    await fs.access(menuFile)
-  } catch (err) {
-    console.info(`Fluxbox menu file "${fileName}" not found or not accessible.`) // not found
-    return result
-  }
-  let contents
-  try {
-    contents = await fs.readFile(menuFile, 'utf8')
-  } catch (err) {
-    console.error(`Could not read fluxbox menu file at "${fileName}"`, err) // not readable
-    return result
-  }
-  try {
-    result = await parse(contents, depth)
-  } catch (err) {
-    console.error('Could not parse fluxbox menu file.', err) // not parsable
-    return result
-  }
-  console.info(`Parsed ${result.length} items from fluxbox menu.`)
-  return result
+  return new Promise((resolve, reject) => {
+    if (!fs.existsSync(menuFile)) {
+      console.info('No fluxbox menu file found.')
+      resolve([])
+      return
+    }
+    fs.readFile(menuFile, 'utf8', (err, contents) => {
+      if (err) {
+        err.module = 'parseFluxboxMenu'
+        reject(err)
+      } else {
+        parse(contents, depth).then((result) => resolve(result))
+      }
+    })
+  })
 }
 
 module.exports = parseFluxboxMenu

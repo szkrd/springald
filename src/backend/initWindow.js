@@ -5,6 +5,9 @@ class Window extends BrowserWindow {
   constructor(options) {
     super(options)
     this.hidden = !options.show
+    if (this.hidden) {
+      this.hide()
+    }
   }
 
   hide() {
@@ -36,14 +39,16 @@ async function initWindow() {
   const win = new Window({
     width: config.winWidth,
     height: 40,
-    show: isDev,
-    // resizable: true, will gnome let us programmatically resize?
+    // show: config.showOnStartup || isDev,
+    show: false,
+    resizable: true, // if you set to false, then resizing will be buggy!
     webPreferences: {
       nodeIntegration: true,
     },
   })
   win.loadFile('index.html')
   win.setMenuBarVisibility(false)
+  win.center(config.centerOnShow)
   if (isDev) {
     win.openDevTools()
   }

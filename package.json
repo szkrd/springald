@@ -10,11 +10,7 @@
     "dev": "NODE_ENV=development electron .",
     "lint": "eslint src index.js"
   },
-  "dependencies": {
-    "superchild": "0.1.10"
-  },
   "devDependencies": {
-    "chalk": "4.0.0",
     "electron": "9.0.4",
     "eslint": "7.1.0",
     "eslint-config-prettier": "6.11.0",

@@ -2,32 +2,30 @@ const parseDirs = require('./parseDirs')
 const parsePath = require('./parsePath')
 const parseFluxboxMenu = require('./parseFluxboxMenu')
 const getSearchableText = require('./getSearchableText')
-const getConfig = require('../backend/getConfig')
 
-async function parseAll() {
-  // NW appLoading(false)
-  let items = []
+function parseAll(searchItems) {
+  searchItems = searchItems || []
+  searchItems.length = 0
   const startedAt = Date.now()
-  const config = await getConfig()
+  const config = window.app.config
   const fbMenuFile = config.fluxboxMenuFile
-  try {
-    // the individual parsers must do their own error handling, do NOT break the Promise.all group
-    const itemGroups = await Promise.all([parseFluxboxMenu(fbMenuFile), parsePath(), parseDirs()])
-    items = itemGroups.flat()
-  } catch (err) {
-    console.error('Unexpected parse error.', err)
-    return items
-  }
+  return Promise.all([parseFluxboxMenu(fbMenuFile), parsePath(), parseDirs()]).then(
+    (itemPacks) => {
+      itemPacks.forEach((items) => searchItems.push.apply(searchItems, items))
 
-  // add the searchable text, which shall be unified for all item types
-  // (and it must be available for the search AND the gui)
-  items.forEach((item) => {
-    item.searchableText = getSearchableText(item)
-  })
-  const endedAt = Date.now()
-  console.info(`Parsed all ${items.length} items in ${endedAt - startedAt} ms.`)
-  // NW appLoading(false)
-  return items
+      // add the searchable text, which shall be unified for all item types
+      // (and it must be available for the search AND the gui)
+      searchItems.forEach((item) => {
+        item.searchableText = getSearchableText(item)
+      })
+      const endedAt = Date.now()
+      console.log(`Parsed ${searchItems.length} items in ${endedAt - startedAt} ms.`)
+      return searchItems
+    },
+    (err) => {
+      console.error(`☠️ Parse error in parser module "${err.module || 'unknown'}"!\n`, err)
+    }
+  )
 }
 
 module.exports = parseAll

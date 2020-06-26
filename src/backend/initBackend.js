@@ -19,8 +19,12 @@ function setupMessageListener() {
     backend.win.toggle()
   })
 
-  handleMessage('MSG_OPEN_DEV_TOOLS', () => {
-    backend.win.openDevTools()
+  handleMessage('MSG_CENTER_WINDOW', () => {
+    backend.win.center()
+  })
+
+  handleMessage('MSG_TOGGLE_DEV_TOOLS', () => {
+    backend.win.toggleDevTools()
   })
 }
 

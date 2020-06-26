@@ -1,19 +1,20 @@
 const fs = require('fs')
 const path = require('path')
 const os = require('os')
-const getConfig = require('../backend/getConfig')
 
 let counter = 0
-let config
+const getConfig = () => window.app.config
 
 function isAllowedFile(name) {
   const regTest = (r, n) => new RegExp(r).test(n)
+  const config = getConfig()
   const incRules = config.includeFiles
   const excRules = config.excludeFiles
   return incRules.every((rule) => regTest(rule, name)) && excRules.every((rule) => !regTest(rule, name))
 }
 
 function isAllowedDir(name) {
+  const config = getConfig()
   const rules = config.excludedDirs
   name = name.split('/').pop()
   return !rules.some((rule) => new RegExp(rule).test(name))
@@ -81,32 +82,30 @@ function walk(dir, done) {
 }
 
 // parse the "directories" (section from the config)
-async function parseDirs() {
-  // first we replace the ~ with the proper home path
-  const homeDir = os.homedir()
-  config = await getConfig()
-  counter = 0
-  let dirs = [...new Set(config.directories || [])]
-  dirs = dirs.map((dir) => dir.replace(/~/, homeDir).replace(/\\/g, '/')) // TODO normalize for path.sep
+function parseDirs() {
+  return new Promise((resolve, reject) => {
+    // first we replace the ~ with the proper home path
+    const homeDir = os.homedir()
+    const config = getConfig()
+    let dirs = [...new Set(config.directories || [])]
+    dirs = dirs.map((dir) => dir.replace(/~/, homeDir).replace(/\\/g, '/')) // TODO normalize for path.sep
 
-  // then check if all the directories exist
-  dirs = dirs.filter((dir) => fs.existsSync(dir))
-  let processedCount = 0
-  const results = []
+    // then check if all the directories exist
+    dirs = dirs.filter((dir) => fs.existsSync(dir))
+    let processedCount = 0
+    const results = []
 
-  // recursively process all the files in these directories
-  return new Promise((resolve) => {
+    // recursively process all the files in thes directories
     const walkDirCallback = (err, res) => {
       processedCount++
       if (err) {
-        console.error(`Directory walker error: could not read directory "${err.file}"!`)
+        console.error(`☠️ Directory walker error: could not read directory "${err.file}"!`) // nw console error is a bit simple
         return
       }
       results.push.apply(results, res)
       if (processedCount === dirs.length) {
         // we will never reject here, since not being able to
         // parse a directory is not a showstopper
-        console.info(`Parsed ${dirs.length} dirs and their ${results.length} items from included directories.`)
         resolve(results)
       }
     }
