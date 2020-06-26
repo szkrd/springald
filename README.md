@@ -1,81 +1,38 @@
 # springald
 
-Springald is a simple launcher, similar to Launchy. It is written in _vanilla-js™_ and
-uses the nwjs framework.
+Springald is a simple launcher, similar to Launchy. It is written in _vanilla-js™_
+uses no dependencies apart from  ~~nwjs~~ electron.
 
 It can parse a fluxbox menu file, read directories from path or from a config file,
-can launch .desktop files.
+can launch .desktop files. That's it.
 
 ![looks like this](./docs/demo.jpg)
 
-## Installation, launching
+This is a rather messy tool, you probably need something more robust, like
+[Albert](https://github.com/albertlauncher/albert),
+[ULauncher](https://github.com/Ulauncher/Ulauncher/),
+[Rofi](https://github.com/davatorium/rofi),
+[Launchy](https://www.launchy.net/index.php)
+etc.
 
-Download and extract the [nwjs](https://nwjs.io/) sdk,
-then symlink the executable to your path.
-Then download springald:
+## usage
 
-1. `cd ~/bin`
-2. `git clone https://github.com/szkrd/springald.git`
-3. `cd springald`
-4. `npm ci`
-5. `nw .`
+The app is not bundled. Use node.
 
-See `config.json` for available settings.
+For options see [config.json](./config.json); you can shallow override them
+with a `~/.config/springald/config.json` file.
 
-Default shortcuts:
+Shortcuts:
+
 - _Esc_ = hide
-- _ctrl + q_ = quit
-- _mod4 + q_ = toggle
+- (_ctrl + q_ = quit)
+- _mod4 + a_ = toggle
 - _F5_ = reparse
 - _alt + c_ = center on screen
 - _ctrl + c_ = clear inputs
+- _F12_ = toggle dev toolbar
+- _tab_ = toggle between the two inputs (path left, open with app right)
 
-## Overrides
+## development
 
-* config: create a `~/.config/springald/config.json` file. ([options](./config.json))
-* supported themes so far: _default_, _ambiance_
-* styles: create a `~/.config/springald/override.css` file. ([variables](./styles/variables.css), [more](./styles/springald.css))
-
-On OSX and Windows these are [elsewhere](http://docs.nwjs.io/en/latest/References/App/#appdatapath).
-
-Config override does a shallow merge only. If you know what you're doing and you find this a problem then probably you're better off modifying the `config.json` itself in the app and stash+pull+pop upgrade manually.
-
-## Borderless window
-
-If you want to remove the window decorations then replace `"frame": true`
-with `"frame": false` in the `package.json` file. This is not an overridable
-flag, it must be set before the app startup.
-
-Another option is to force fluxbox to remove the decorations himself.
-
-## Open with
-
-Press _Tab_ to focus on the second (rightmost) input field,
-you can use it to enter simple executable names. Press enter
-to finish the autocomplete, enter `F` (configurable) to open
-in the shell's default folder viewer.
-
-## Linux IPC
-
-On linux it's possible to remotely control the app via unix sockets
-(the default socket is `/tmp/springald.sock`, see config.json).
-
-- Commands: `show`, `hide`, `toggle`, `close`, `reload`, `quit`
-- Example: `echo "show" | socat UNIX:/tmp/springald.sock -`
-
-## Known issues
-
-Non utf-8 filenames may not work, this is especially a problem on Unices.
-
-## Debugging, development
-
-See also the [README in docs](./docs/README.md)
-
-## Using with Gnome Desktop / Ubuntu
-
-In gnome the global registered toggle key [may not work](https://github.com/nwjs/nw.js/issues/6228), in that case you can use the socket fallback below:
-
-- install _socat_ and _xterm_ (`sudo apt install socat xterm`)
-- set a keyboard shortcut for the command `xterm -e "echo show | socat UNIX:/tmp/springald.sock -"`
-
-![keyboard shortcuts](./docs/gnome-keyboard-shortcut.png)
+If you are _me_ and you (I) haven't touched this project in a while, then you might be wondering what is this mess. Dear me, please read your notes in the [docs](./docs/dev.md) folder.

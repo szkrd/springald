@@ -2,10 +2,27 @@
 <html>
 <head>
   <title>Springald</title>
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
   <link rel="stylesheet" href="styles/variables.css" />
-  <link rel="stylesheet" href="styles/themes.css" />
   <link rel="stylesheet" href="styles/springald.css" />
-  <script src="main.js"></script>
+  <link rel="stylesheet" href="styles/themes.css" />
+  <script type="text/javascript">
+    window.app = { constants: {}, config: {}, runtime: {}, interim: {}, utils: {}, store: {} }
+  </script>
+  <script src="src/interim/interim.js"></script>
+  <script src="src/renderer/utils/string.js"></script>
+  <script src="src/renderer/utils/dom.js"></script>
+  <script src="src/renderer/utils/search.js"></script>
+  <script src="src/renderer/constants.js"></script>
+  <script src="src/renderer/runtime/getPreferredOpenWith.js"></script>
+  <script src="src/renderer/runtime/filterSearchItems.js"></script>
+  <script src="src/renderer/runtime/setAppLoading.js"></script>
+  <script src="src/renderer/runtime/highlightSelectedResult.js"></script>
+  <script src="src/renderer/runtime/renderResults.js"></script>
+  <script src="src/renderer/runtime/renderPage.js"></script>
+  <script src="src/renderer/runtime/handleError.js"></script>
+  <script src="src/renderer/runtime/setWindowSize.js"></script>
+  <script src="src/renderer/renderer.js"></script>
 </head>
 <body id="body"></body>
 </html>
