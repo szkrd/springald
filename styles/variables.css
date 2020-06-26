@@ -3,8 +3,10 @@
 :root {
   --main-bg-color: #353535;
   --main-fg-color: #fff;
+  --error-color: #f00;
   --selected-fg-color: #bde068;
   --underline-fg-color: #72b25f;
+  --loader-color: #72b25f;
   --scrollbar-thumb-color: #656565;
   --scrollbar-thumb-hover-color: #7f7f7f;
   --scrollbar-thumb-active-color: #999999;

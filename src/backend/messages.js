@@ -1,0 +1,17 @@
+// list of the ipc message names (object keys for IDE help); the rest are just docs
+// this file is also INCLUDED IN THE RENDERER PROCESS
+const messages = {
+  MSG_GET_CONFIG: '',
+  MSG_HIDE_WINDOW: '',
+  // payload: { width, height }
+  MSG_RESIZE_WINDOW: '',
+  MSG_CENTER_WINDOW: '',
+  MSG_TOGGLE_WINDOW: '',
+  MSG_TOGGLE_DEV_TOOLS: '',
+}
+
+Object.keys(messages).forEach((key) => {
+  messages[key] = key
+})
+
+module.exports = messages

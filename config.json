@@ -1,21 +1,24 @@
 {
   "theme": "default",
   "winWidth": 800,
-  "unixSocket": "/tmp/springald.sock",
+  "__unixSocket": "/tmp/springald.sock",
   "fluxboxMenuFile": "~/.fluxbox/menu",
   "showOnStartup": false,
   "centerOnShow": true,
-  "toggleKey": "Command+Q",
-  "refreshKey": "F5",
+  "toggleKey": "Super+A",
   "logicalAndSeparator": " ",
+  "desktopFilesLocation": "/usr/share/applications/",
   "includeFiles": [ "\\.(txt|md|html|docx|pdf|jpe?g|png|avi|mkv|mp4)$" ],
   "excludeFiles": [ "^\\._" ],
   "excludedDirs": [ "^node_modules$", "^\\." ],
   "excludeHidSys": true,
-  "terminalCommand": "gnome-terminal -e %CMD%",
+  "terminalCommand": "gnome-terminal -- %CMD%",
   "appShortcuts": {
     "showItemInFolder": "F",
     "launchInTerminal": "T"
+  },
+  "openWith": {
+    "\\.(txt|md)$": "code"
   },
   "directories": [
     "~/Downloads",
