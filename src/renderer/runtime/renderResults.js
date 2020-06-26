@@ -12,9 +12,9 @@
   }
 
   function createName(item, needles) {
-    const multiSplitSearch = window.app.utils.search.multiSplit
+    const { getScore } = window.app.utils.search
     let text = item.searchableText
-    if (multiSplitSearch(text, needles)) {
+    if (getScore(text, needles) > 0) {
       text = underline(text, needles)
     }
     return text

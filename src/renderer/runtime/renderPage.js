@@ -18,7 +18,7 @@
     <input type="text" class="app" id="app" autocomplete="off" autocorrect="off" spellcheck="false" />
     <span class="ghost" id="ghost"></span>
     <div class="input-focus-indicator"></div>
-    <div class="current" id="current"></div>
+    <div class="current" id="current" style="display:none"></div>
     <div class="results">${resultItems()}</div>
   `
       .replace(/\s+/g, ' ')

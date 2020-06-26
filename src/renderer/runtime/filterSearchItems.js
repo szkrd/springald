@@ -1,9 +1,7 @@
 ;(function () {
   const { search } = window.app.utils
-  const throwAwayLessUseful = true
 
-  // higher score first
-  function compare(a, b) {
+  function compareByScore(a, b) {
     if (a.score > b.score) {
       return -1
     } else if (a.score < b.score) {
@@ -13,7 +11,8 @@
   }
 
   function filterSearchItems(items, needles) {
-    const getScore = (text) => search.multiSplit(text, needles)
+    const THROW_AWAY_LESS_USEFUL = true
+    const getScore = (text) => search.getScore(text, needles)
     if (!needles || !needles.length) {
       return []
     }
@@ -24,9 +23,9 @@
         return true
       }
     })
-    filtered = filtered.sort(compare)
+    filtered = filtered.sort(compareByScore)
     // try to throw away less useful items
-    if (needles.length > 1 && throwAwayLessUseful) {
+    if (needles.length > 1 && THROW_AWAY_LESS_USEFUL) {
       const highest = (filtered[0] || {}).score || 0
       filtered = filtered.filter((item) => item.score === highest)
     }

@@ -2,7 +2,7 @@
   const { escapeRegExp } = window.app.utils.string
 
   // we do not care for recursive matches
-  function multiSplit(text, needles) {
+  function getScore(text, needles) {
     needles = Array.isArray(needles) ? [...new Set(needles)] : [needles]
     let score = 0
     let strictMatch = 0
@@ -26,6 +26,6 @@
   }
 
   window.app.utils.search = {
-    multiSplit,
+    getScore,
   }
 })()

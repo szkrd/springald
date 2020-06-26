@@ -4,11 +4,11 @@
   "description": "Simple application launcher, similar to Launchy.",
   "author": "Szabolcs Kurdi",
   "license": "ISC",
-  "main": "index.js",
+  "main": "./src/backend/backend.js",
   "scripts": {
     "start": "electron .",
     "dev": "NODE_ENV=development electron .",
-    "lint": "eslint src index.js"
+    "lint": "eslint src"
   },
   "devDependencies": {
     "electron": "9.0.4",

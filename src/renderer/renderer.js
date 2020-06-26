@@ -7,10 +7,10 @@
   const { store } = window.app
   const rt = window.app.runtime
   const config = (window.app.config = sendMessage('MSG_GET_CONFIG'))
+  let electronLayoutFixed = false
 
   function initStore() {
     Object.assign(store, {
-      visible: true,
       current: 0,
       ghost: null,
       searchItems: [],
@@ -21,7 +21,7 @@
   function resetInputFields() {
     onSearchChange('')
     onAppChange('')
-    $('#search').value = $('app').value = store.withApp = $('ghost').innerHTML = ''
+    $('#search').value = $('#app').value = store.withApp = $('#ghost').innerHTML = ''
     $('#search').focus()
   }
 
@@ -43,6 +43,12 @@
   }
 
   function onDocumentKey(e) {
+    if (!electronLayoutFixed) {
+      // if the app starts hidden and shown later,
+      // then the body's top is outside the viewport for some reason
+      $('#current').style.display = 'block'
+      electronLayoutFixed = true
+    }
     if (e.key === 'Enter') {
       if (launch()) sendMessage('MSG_TOGGLE_WINDOW')
     }
@@ -119,7 +125,7 @@
     rt.setWindowSize()
   }
 
-  function onDomReady() {
+  $(() => {
     initStore()
     rt.setAppLoading(true)
     int
@@ -146,13 +152,5 @@
     $('document').on('keyup', onDocumentKey)
     $('#search').on('input', onSearchChange)
     $('#app').on('input', onAppChange)
-  }
-
-  function main() {
-    $(onDomReady)
-  }
-
-  // ---
-
-  main()
+  })
 })()

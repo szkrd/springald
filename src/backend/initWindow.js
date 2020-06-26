@@ -39,8 +39,7 @@ async function initWindow() {
   const win = new Window({
     width: config.winWidth,
     height: 40,
-    // show: config.showOnStartup || isDev,
-    show: false,
+    show: config.showOnStartup || isDev,
     resizable: true, // if you set to false, then resizing will be buggy!
     webPreferences: {
       nodeIntegration: true,
