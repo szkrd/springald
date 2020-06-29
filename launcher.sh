@@ -1,5 +1,9 @@
 #!/bin/bash
-cd "$(dirname "${BASH_SOURCE[0]}")"
+# check if we symlinked the launcher
+SRC="${BASH_SOURCE[0]}"
+SYMLNKSRC="$(readlink -f $SRC)"
+if [ ! -z "${SYMLNKSRC}" ]; then SRC=$SYMLNKSRC; fi
+cd "$(dirname "${SRC}")"
 # non-interactive (no nvm function, but we have a sourceable nvm script)
 if [ -z "$(type -t nvm)" ] && [ -f "${HOME}/.nvm/nvm.sh" ]; then source "${HOME}/.nvm/nvm.sh"; fi
 # interactive (nvm is a function and .nvm exists)
