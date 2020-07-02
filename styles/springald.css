@@ -150,7 +150,7 @@ body.app-focused .input-focus-indicator {
   top: -10px;
   left: 0;
   background: var(--error-color);
-  box-shadow: 0 0 10px 3px var(--error-color);
+  box-shadow: 0 0 15px 3px var(--error-color);
   border-radius: 50%;
   transition: all .5s ease-in-out;
   opacity: 0;

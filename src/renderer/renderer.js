@@ -33,7 +33,7 @@
     if (!item) {
       return false
     }
-    int.openWithApp(item, store.ghost || store.withApp, config).catch(rt.handleError)
+    int.openWithApp(item, store.ghost || store.withApp, config)
     // reset manually changed app only (pure ghosts can stay, those were programmatic)
     if ($('#app').value) {
       $('#app').value = store.withApp = $('#ghost').innerHTML = ''
@@ -126,6 +126,7 @@
   }
 
   $(() => {
+    $(window).on('error', rt.handleError)
     initStore()
     rt.setAppLoading(true)
     int

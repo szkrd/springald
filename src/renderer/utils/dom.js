@@ -30,7 +30,9 @@
       return $('document').on('DOMContentLoaded', selector) // onDomReady
     }
     let el
-    if (selector === 'document' || selector === document) {
+    if (selector === 'window' || selector === window) {
+      el = window
+    } else if (selector === 'document' || selector === document) {
       el = document
     } else if (selector === 'body') {
       el = document.body
