@@ -7,7 +7,7 @@
   "main": "./src/backend/backend.js",
   "scripts": {
     "start": "electron .",
-    "dev": "NODE_ENV=development electron .",
+    "dev": "NODE_ENV=development ELECTRON_ENABLE_LOGGING=true electron .",
     "lint": "eslint src"
   },
   "devDependencies": {
