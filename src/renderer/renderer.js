@@ -3,10 +3,11 @@
   const { sendMessage } = int
   const { dom } = window.app.utils
   const str = window.app.utils.string
-  const { $, $$ } = dom
+  const { $ } = dom
   const { store } = window.app
   const rt = window.app.runtime
-  const config = (window.app.config = sendMessage('MSG_GET_CONFIG'))
+  const { MAX_VISIBLE_ITEM_COUNT } = window.app.constants
+  let config = (window.app.config = sendMessage('MSG_GET_CONFIG'))
   let electronLayoutFixed = false
 
   function initStore() {
@@ -23,6 +24,18 @@
     onAppChange('')
     $('#search').value = $('#app').value = store.withApp = $('#ghost').innerHTML = ''
     $('#search').focus()
+  }
+
+  function reparse() {
+    rt.setAppLoading(true)
+    return int // probably you've added new dirs in your local config, so let's reread the cfg
+      .getConfig(config.dataPath, true)
+      .then((cfg) => {
+        sendMessage('MSG_REFRESH_CONFIG', cfg)
+        config = window.app.config = cfg
+        return parseAll()
+      })
+      .finally(() => rt.setAppLoading(false))
   }
 
   function launch() {
@@ -56,8 +69,7 @@
       sendMessage('MSG_TOGGLE_DEV_TOOLS')
     }
     if (e.key === 'F5') {
-      rt.setAppLoading(true)
-      parseAll().finally(() => rt.setAppLoading(false))
+      reparse()
     }
     if (e.key === 'c' && e.altKey) {
       sendMessage('MSG_CENTER_WINDOW')

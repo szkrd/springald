@@ -1,7 +1,10 @@
 // list of the ipc message names (object keys for IDE help); the rest are just docs
 // this file is also INCLUDED IN THE RENDERER PROCESS
 const messages = {
+  // get the config by the *backend* process
   MSG_GET_CONFIG: '',
+  // send a config object for the backend (which can cache it for itself)
+  MSG_REFRESH_CONFIG: '',
   MSG_HIDE_WINDOW: '',
   // payload: { width, height }
   MSG_RESIZE_WINDOW: '',

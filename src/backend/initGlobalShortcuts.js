@@ -1,5 +1,5 @@
 const { globalShortcut } = require('electron')
-const getConfig = require('./getConfig')
+const getConfig = require('../interim/getConfig')
 const sendMessage = require('./modules/messages/sendMessage')
 
 let initialized = false
