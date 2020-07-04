@@ -3,12 +3,14 @@
 const _require = require
 require = (s) => _require(`./src/interim/${s}`)
 
+const getConfig = require('./getConfig')
 const sendMessage = require('./sendMessage')
 const parseAll = require('./parseAll')
 const openWithApp = require('./openWithApp')
 require = _require
 
 window.app.interim = {
+  getConfig,
   sendMessage,
   parseAll,
   openWithApp,

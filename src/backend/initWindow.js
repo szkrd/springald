@@ -1,5 +1,5 @@
 const { BrowserWindow } = require('electron')
-const getConfig = require('./getConfig')
+const getConfig = require('../interim/getConfig')
 
 class Window extends BrowserWindow {
   constructor(options) {

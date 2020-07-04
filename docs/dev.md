@@ -41,12 +41,14 @@ Electron has a main process, and a renderer process; this is nothing like server
 1. `src/renderer` is a pure frontend, no node; retro html script tags in index.html,
    all parts of the app are exposed via `window.app` (I've already said it's a mess)
 2. `src/backend` is the electron main thread, node works, require works;
-   - config parsing is here for convenience, but that could've been anywhere
+   - initial config parsing is here for convenience
    - window and tray handling must be here though; you access them through electron ipc sync messages
      (electron ipc is just a wrapper around a node EventEmitter)
 3. `src/interim` is a place where you use node requires, but the script is
    included via a script tag in index.html; this messes up require a bit,
    but this is "normal" (like hell it is normal, but electron)
+   - config parsing may be called from here too, but then there will be two
+     in memory configs (one for be, one for re), to avoid this, we use `MSG_REFRESH_CONFIG` event
 
 Don't forget, that a renderer process can do **nearly everything**. Multiple instance
 and window management must be done in the main thread, but that's all. You launch

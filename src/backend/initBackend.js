@@ -1,5 +1,5 @@
 const { app } = require('electron')
-const getConfig = require('./getConfig')
+const getConfig = require('../interim/getConfig')
 const initTray = require('./initTray')
 const initWindow = require('./initWindow')
 const initGlobalShortcuts = require('./initGlobalShortcuts')
@@ -10,6 +10,7 @@ let backend // win, tray, config
 
 function setupMessageListener() {
   handleMessage('MSG_GET_CONFIG', () => backend.config)
+  handleMessage('MSG_REFRESH_CONFIG', getConfig.inject)
 
   handleMessage('MSG_RESIZE_WINDOW', (payload) => {
     backend.win.setSize(payload.width, payload.height)

@@ -3,24 +3,16 @@ const spawn = require('child_process').spawn
 const { shell } = require('electron')
 
 function spawnProcess(commandLine, options = {}) {
-  return new Promise((resolve, reject) => {
-    if (!commandLine) return
-    const spawnOpt = Object.assign(
-      {
-        shell: true,
-        cwd: os.homedir(),
-        detached: true,
-      },
-      options
-    )
-    let ret
-    try {
-      ret = spawn(commandLine, spawnOpt)
-    } catch (err) {
-      reject(err)
-    }
-    resolve(ret)
-  })
+  if (!commandLine) return
+  const spawnOpt = Object.assign(
+    {
+      shell: true,
+      cwd: os.homedir(),
+      detached: true,
+    },
+    options
+  )
+  return spawn(commandLine, spawnOpt)
 }
 
 // TODO support for withApp parameter
@@ -28,7 +20,7 @@ function spawnProcess(commandLine, options = {}) {
 function openWithApp(item, withApp, config) {
   // shortcut for open with default file manager
   if (withApp === config.appShortcuts.showItemInFolder) {
-    return shell.showItemInFolder(item.command)
+    return shell.showItemInFolder(item.command) // this is NOT a Promise
   }
 
   // open in terminal (preferred terminal emulator can be set in config.terminalCommand)
@@ -48,7 +40,7 @@ function openWithApp(item, withApp, config) {
   if (item.executable) {
     return spawnProcess(item.command)
   } else {
-    return shell.openPath(item.command)
+    return shell.openPath(item.command) // this is a Promise
   }
 }
 
