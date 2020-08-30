@@ -31,6 +31,11 @@ function setupMessageListener() {
 }
 
 async function initBackend() {
+  if (!app.requestSingleInstanceLock()) {
+    throw Object.assign(new Error('Already running! This is a single instance app.'), {
+      alreadyRunning: true,
+    })
+  }
   if (initialized) return backend
   const config = await getConfig(app.getPath('userData'))
   const tray = initTray()
