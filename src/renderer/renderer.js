@@ -77,6 +77,9 @@
     if (e.key === 'c' && e.ctrlKey) {
       resetInputFields()
     }
+    if (e.key === 'q' && e.ctrlKey) {
+      sendMessage('MSG_QUIT')
+    }
     if (e.key === 'Escape') {
       sendMessage('MSG_TOGGLE_WINDOW')
     }

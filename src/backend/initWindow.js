@@ -40,6 +40,7 @@ async function initWindow() {
     width: config.winWidth,
     height: 40,
     show: config.showOnStartup || isDev,
+    frame: !config.borderlessWindow,
     resizable: true, // if you set to false, then resizing will be buggy!
     webPreferences: {
       nodeIntegration: true,

@@ -20,12 +20,16 @@ etc.
 The app is not bundled. Use node.
 
 For options see [config.json](./config.json); you can shallow override them
-with a `~/.config/springald/config.json` file.
+with a local config:
 
-Shortcuts:
+- linux: `~/.config/springald/config.json`
+- window: `C:\Users\%USERNAME%\AppData\Roaming\springald\config.json`
+- mac: `~/Library/Application Support/springald\config.json`
+
+### shortcuts
 
 - _Esc_ = hide
-- (_ctrl + q_ = quit)
+- _ctrl + q_ / _ctrl + w_ = quit
 - _mod4 + a_ = toggle
 - _F5_ = reparse
 - _alt + c_ = center on screen
@@ -36,3 +40,13 @@ Shortcuts:
 ## development
 
 If you are _me_ and you (I) haven't touched this project in a while, then you might be wondering what is this mess. Dear me, please read your notes in the [docs](./docs/dev.md) folder.
+
+## notes
+
+### win
+
+- create a user config to override defaults
+- use `"borderlessWindow": true` on windows to fix the height calculation
+- on windows the _"Super+`"_ key is a good alternative (_win+A_ opens the notification sidebar)
+- files in `C:\WINDOWS*` are skipped
+- launch in terminal is kinda pointles

@@ -9,6 +9,7 @@ let initialized = false
 let backend // win, tray, config
 
 function setupMessageListener() {
+  handleMessage('MSG_QUIT', () => app.quit())
   handleMessage('MSG_GET_CONFIG', () => backend.config)
   handleMessage('MSG_REFRESH_CONFIG', getConfig.inject)
 

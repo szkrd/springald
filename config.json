@@ -3,6 +3,7 @@
   "winWidth": 800,
   "__unixSocket": "/tmp/springald.sock",
   "fluxboxMenuFile": "~/.fluxbox/menu",
+  "borderlessWindow": false,
   "showOnStartup": false,
   "centerOnShow": true,
   "toggleKey": "Super+A",

@@ -1,6 +1,12 @@
 const os = require('os')
 const spawn = require('child_process').spawn
+const path = require('path')
 const { shell } = require('electron')
+
+// windows executables may be coming from paths with spaces
+function quote(s) {
+  return /\s/.test(s) ? `"${s}"` : s
+}
 
 function spawnProcess(commandLine, options = {}) {
   if (!commandLine) return
@@ -33,7 +39,7 @@ function openWithApp(item, withApp, config) {
   // this of course can create interesting scenarios (like opening a fluxbox
   // command with a mediaplayer, but let's assume the user knows what he or she does)
   if (typeof withApp === 'object' && withApp !== null && withApp.command) {
-    return spawnProcess(`${withApp.command} "${item.command}"`)
+    return spawnProcess(`${quote(withApp.command)} "${item.command}"`)
   }
 
   // xdg open will not launch shellscripts for instance

@@ -19,7 +19,9 @@ let config = {
  */
 async function getConfig(dataPath = '', flush = false) {
   if (initialized && !flush) return config
-  const userConfig = await readJsonFile(path.join(dataPath, 'config.json'))
+  const configPath = path.join(dataPath, 'config.json')
+  const userConfig = await readJsonFile(configPath)
+  console.info(`User config ${userConfig ? 'loaded from' : 'not found at'} "${configPath}".`)
   Object.assign(config, appConfig, userConfig || {})
   config.dataPath = config.dataPath || dataPath
   config.development = process.env.NODE_ENV === 'development'

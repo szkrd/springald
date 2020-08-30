@@ -3,6 +3,10 @@ const fs = require('fs')
 const fsReaddir = require('fs').promises.readdir
 const isExec = require('./isExecutable')
 
+// skips C:\WINDOWS\* which is not a "healthy thing" to parse
+// (lots of files, special permissions etc.)
+const IGNORE_WIN_ROOT = true
+
 let counter = 0
 
 // linux only: get global .desktop files, strip the "extensions"
@@ -45,16 +49,22 @@ function readDir(location) {
       files.forEach((file) => {
         file = path.resolve(location, file)
         fs.stat(file, (err, stats) => {
-          if (err) {
+          // on windows uwp reparse points (zero byte executables that
+          // setup a security context) are unreadable (https://stackoverflow.com/q/58296925)
+          const unreadableError = file.endsWith('.exe') && String(err).startsWith('Error: UNKNOWN:')
+          const noPermission = String(err).startsWith('Error: EPERM:')
+          if (err && !unreadableError && !noPermission) {
             // on Ubuntu some packages may leave broken symlinks behind, so
             // getting a file not found error is not that uncommon
             // in that case go and delete that file yourself...
+            // TODO this skips the whole dir, probably we _really_ should check if the file is a dead symlink
             console.error(`☠️ Could not stat path "${file}", skipping!`)
+            console.log(err)
             resolve([])
             return
           }
           processCount++
-          if (stats.isFile()) {
+          if (stats && stats.isFile()) {
             const parsed = path.parse(file)
             // on the path non executables are not interesting
             if (isExec(parsed.ext, stats.mode) && !isLocalNodeBin(file)) {
@@ -79,12 +89,18 @@ function readDir(location) {
 }
 
 function parsePath() {
+  const dl = path.delimiter
   const result = []
-  const pathItems = process.env.PATH.split(path.delimiter)
+  const pathItems = process.env.PATH.split(dl)
   let dirs = [...new Set(pathItems)]
   if (pathItems.length !== dirs.length) {
     const duplicates = [...new Set(pathItems.filter((item, index) => pathItems.indexOf(item) !== index))]
     console.warn(`You have duplicate items in your PATH! (${duplicates.join(', ')})`)
+  }
+  if (IGNORE_WIN_ROOT) {
+    dirs = dirs
+      .filter((dir) => !/^C:\\WINDOWS\\?$/.test(dir.toUpperCase()))
+      .filter((dir) => !/^C:\\WINDOWS\\.*/.test(dir.toUpperCase()))
   }
   dirs = dirs.filter((dir) => fs.existsSync(dir))
   const all = [getDesktopFriendlies(), ...dirs.map((dir) => readDir(dir))]
