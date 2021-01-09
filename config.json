@@ -5,7 +5,7 @@
   "borderlessWindow": false,
   "showOnStartup": false,
   "centerOnShow": true,
-  "toggleKey": "Ctrl+Super+A",
+  "toggleKey": ["Super+`", "CmdOrCtrl+Alt+Shift+`"],
   "logicalAndSeparator": " ",
   "desktopFilesLocation": "/usr/share/applications/",
   "includeFiles": [ "\\.(txt|md|html|docx|pdf|jpe?g|png|avi|mkv|mp4)$" ],

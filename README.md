@@ -17,7 +17,10 @@ etc.
 
 ## usage
 
-The app is not bundled. Use node.
+The app is not bundled. Use node:
+
+1. `npm i`
+2. `npm start` (or use `launcher.sh` or `launcher.vbs`)
 
 For options see [config.json](./config.json); you can shallow override them
 with a local config:
@@ -30,14 +33,14 @@ with a local config:
 
 - _Esc_ = hide
 - _ctrl + q_ / _ctrl + w_ = quit
-- _mod4 + a_ = toggle
 - _F5_ = reparse
 - _alt + c_ = center on screen
 - _ctrl + c_ = clear inputs
 - _F12_ = toggle dev toolbar
 - _tab_ = toggle between the two inputs (path left, open with app right)
 
-Global shortcut toggle by default is `logo key + backtick` be sure to set an override in your user config.
+Global shortcut toggle by default is `logo key + backtick` (and `ctrl + shift + alt + backtick`)
+be sure to set an override in your user config, string for single key, array for multiple keys.
 
 Available global electron shortcuts are [here](https://www.electronjs.org/docs/api/accelerator),
 modifiers are `Cmd`, `Ctrl`, `CmdOrCtrl`, `Alt`, `Option`, `AltGr`, `Shift`, `Super`.
@@ -46,6 +49,14 @@ modifiers are `Cmd`, `Ctrl`, `CmdOrCtrl`, `Alt`, `Option`, `AltGr`, `Shift`, `Su
 
 If you are _me_ and you (I) haven't touched this project in a while, then you might be wondering what is this mess. Dear me, please read your notes in the [docs](./docs/dev.md) folder.
 
+Other than that, `npm run dev` from the console.
+
+Notable entry points:
+
+1. [backend.js](./src/backend/backend.js) via [package.json](./package.json)
+2. ([interim.js](./src/interim/interim.js) via [index.html](./index.html))
+3. [renderer.js](./src/renderer/renderer.js) via [index.html](./index.html)
+
 ## notes
 
 ### win
@@ -53,4 +64,4 @@ If you are _me_ and you (I) haven't touched this project in a while, then you mi
 - create a user config to override defaults
 - use `"borderlessWindow": true` on windows to fix the height calculation
 - files in `C:\WINDOWS*` are skipped
-- launch in terminal is kinda pointles
+- launch in terminal is kinda pointless

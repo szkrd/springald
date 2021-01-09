@@ -14,13 +14,20 @@ const globalShortcuts = { free }
 async function initGlobalShortcuts() {
   if (initialized) return globalShortcuts
   const config = await getConfig()
-  const key = config.toggleKey
-  const success = globalShortcut.register(key, () => {
-    sendMessage('MSG_TOGGLE_WINDOW')
-  })
-  if (!success) {
-    console.error(`Global hotkey "${key}" registration failed.`)
+  let keys = config.toggleKey
+  if (typeof keys === 'string') {
+    keys = [keys]
   }
+  keys.forEach((key) => {
+    const toggleAction = () => {
+      sendMessage('MSG_TOGGLE_WINDOW')
+    }
+    const success = globalShortcut.register(key, toggleAction)
+    if (!success) {
+      console.error(`Global hotkey "${key}" registration failed.`)
+    }
+  })
+
   return globalShortcuts
 }
 
