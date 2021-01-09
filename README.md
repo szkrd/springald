@@ -57,6 +57,10 @@ Notable entry points:
 2. ([interim.js](./src/interim/interim.js) via [index.html](./index.html))
 3. [renderer.js](./src/renderer/renderer.js) via [index.html](./index.html)
 
+### vscode
+
+Available tasks: **lint** (as build, use `ctrl + shift + b`), **lint:fix**.
+
 ## notes
 
 ### win
