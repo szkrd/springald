@@ -1,12 +1,11 @@
 {
   "theme": "default",
   "winWidth": 800,
-  "__unixSocket": "/tmp/springald.sock",
   "fluxboxMenuFile": "~/.fluxbox/menu",
   "borderlessWindow": false,
   "showOnStartup": false,
   "centerOnShow": true,
-  "toggleKey": "Super+A",
+  "toggleKey": "Ctrl+Super+A",
   "logicalAndSeparator": " ",
   "desktopFilesLocation": "/usr/share/applications/",
   "includeFiles": [ "\\.(txt|md|html|docx|pdf|jpe?g|png|avi|mkv|mp4)$" ],

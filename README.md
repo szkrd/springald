@@ -23,7 +23,7 @@ For options see [config.json](./config.json); you can shallow override them
 with a local config:
 
 - linux: `~/.config/springald/config.json`
-- window: `C:\Users\%USERNAME%\AppData\Roaming\springald\config.json`
+- windows: `C:\Users\%USERNAME%\AppData\Roaming\springald\config.json`
 - mac: `~/Library/Application Support/springald\config.json`
 
 ### shortcuts
@@ -37,6 +37,11 @@ with a local config:
 - _F12_ = toggle dev toolbar
 - _tab_ = toggle between the two inputs (path left, open with app right)
 
+Global shortcut toggle by default is `logo key + backtick` be sure to set an override in your user config.
+
+Available global electron shortcuts are [here](https://www.electronjs.org/docs/api/accelerator),
+modifiers are `Cmd`, `Ctrl`, `CmdOrCtrl`, `Alt`, `Option`, `AltGr`, `Shift`, `Super`.
+
 ## development
 
 If you are _me_ and you (I) haven't touched this project in a while, then you might be wondering what is this mess. Dear me, please read your notes in the [docs](./docs/dev.md) folder.
@@ -47,6 +52,5 @@ If you are _me_ and you (I) haven't touched this project in a while, then you mi
 
 - create a user config to override defaults
 - use `"borderlessWindow": true` on windows to fix the height calculation
-- on windows the _"Super+`"_ key is a good alternative (_win+A_ opens the notification sidebar)
 - files in `C:\WINDOWS*` are skipped
 - launch in terminal is kinda pointles

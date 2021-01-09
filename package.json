@@ -8,7 +8,8 @@
   "scripts": {
     "start": "electron .",
     "dev": "cross-env NODE_ENV=development electron .",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src"
   },
   "devDependencies": {
     "cross-env": "7.0.2",
