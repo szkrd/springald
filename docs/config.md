@@ -46,7 +46,7 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   // directories excluded from the search
   "excludedDirs": [ "^node_modules$", "^\\." ],
 
-  // exclude hidden and system files (Windows)
+  // exclude hidden and system files (Windows), NOT YET SUPPORTED
   "excludeHidSys": true,
 
   // terminal command for the "launchInTerminal" shortcut
