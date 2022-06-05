@@ -22,8 +22,8 @@ The app is not bundled. Use node:
 1. `npm i`
 2. `npm start` (or use `launcher.sh` or `launcher.vbs`)
 
-For options see [config.json](./config.json); you can shallow override them
-with a local config:
+For options see [config.json](./config.json) and [docs](./docs/config.md);
+you can **shallow override** them with a local config:
 
 - linux: `~/.config/springald/config.json`
 - windows: `C:\Users\%USERNAME%\AppData\Roaming\springald\config.json`
