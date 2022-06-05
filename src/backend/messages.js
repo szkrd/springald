@@ -4,6 +4,8 @@ const messages = {
   MSG_QUIT: '',
   // get the config by the *backend* process
   MSG_GET_CONFIG: '',
+  // get the backend log buffer (so that we can show it in the renderer process)
+  MSG_GET_LOG_BUFFER: '',
   // send a config object for the backend (which can cache it for itself)
   MSG_REFRESH_CONFIG: '',
   MSG_HIDE_WINDOW: '',

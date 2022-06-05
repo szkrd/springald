@@ -1,6 +1,7 @@
 const os = require('os')
 const path = require('path')
 const fs = require('fs')
+const log = require('./log')
 
 let counter = 0
 const homeDir = os.homedir()
@@ -56,7 +57,7 @@ function parseFluxboxMenu(fileName, depth = []) {
   const menuFile = fileName || path.join(homeDir, '.fluxbox', 'menu')
   return new Promise((resolve, reject) => {
     if (!fs.existsSync(menuFile)) {
-      console.info('No fluxbox menu file found.')
+      log.info('No fluxbox menu file found.')
       resolve([])
       return
     }

@@ -1,4 +1,5 @@
 const path = require('path')
+const log = require('./log')
 const appConfig = require('../../config.json')
 const readJsonFile = require('../interim/readJsonFile')
 
@@ -20,11 +21,17 @@ let config = {
 async function getConfig(dataPath = '', flush = false) {
   if (initialized && !flush) return config
   const configPath = path.join(dataPath, 'config.json')
-  const userConfig = await readJsonFile(configPath)
-  console.info(`User config ${userConfig ? 'loaded from' : 'not found at'} "${configPath}".`)
+  let userConfig = await readJsonFile(configPath) // has catch
+  log.info(`User config ${userConfig ? 'loaded from' : 'failed to load from'} "${configPath}".`)
   Object.assign(config, appConfig, userConfig || {})
+  log.debug('Merged config contains:', config)
   config.dataPath = config.dataPath || dataPath
   config.development = process.env.NODE_ENV === 'development'
+  if (!userConfig && !config.development) {
+    // let's hide window borders even if we failed to parse the user config
+    // (the bordered window with zero height content looks really scary)
+    config.borderlessWindow = true
+  }
   initialized = true
   return config
 }
@@ -32,7 +39,7 @@ async function getConfig(dataPath = '', flush = false) {
 // if the renderer reparses the config,
 // it can push it back here for the backend
 getConfig.inject = (newConfig) => {
-  console.info('Config refreshed via renderer.')
+  log.info('Config refreshed via renderer.')
   config = newConfig
 }
 

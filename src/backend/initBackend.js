@@ -1,4 +1,5 @@
 const { app } = require('electron')
+const log = require('../interim/log')
 const getConfig = require('../interim/getConfig')
 const initTray = require('./initTray')
 const initWindow = require('./initWindow')
@@ -8,9 +9,12 @@ const handleMessage = require('./modules/messages/handleMesssage')
 let initialized = false
 let backend // win, tray, config
 
+// do NOT forget to set these message is messages.js
+// along with a helpful comment about what it does
 function setupMessageListener() {
   handleMessage('MSG_QUIT', () => app.quit())
   handleMessage('MSG_GET_CONFIG', () => backend.config)
+  handleMessage('MSG_GET_LOG_BUFFER', () => log.getBuffer())
   handleMessage('MSG_REFRESH_CONFIG', getConfig.inject)
 
   handleMessage('MSG_RESIZE_WINDOW', (payload) => {

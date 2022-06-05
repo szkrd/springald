@@ -1,4 +1,5 @@
 const { globalShortcut } = require('electron')
+const log = require('../interim/log')
 const getConfig = require('../interim/getConfig')
 const sendMessage = require('./modules/messages/sendMessage')
 
@@ -24,7 +25,7 @@ async function initGlobalShortcuts() {
     }
     const success = globalShortcut.register(key, toggleAction)
     if (!success) {
-      console.error(`Global hotkey "${key}" registration failed.`)
+      log.error(`Global hotkey "${key}" registration failed.`)
     }
   })
 

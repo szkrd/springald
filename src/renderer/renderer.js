@@ -1,6 +1,6 @@
 ;(function () {
   const int = window.app.interim
-  const { sendMessage } = int
+  const { sendMessage, log } = int
   const { dom } = window.app.utils
   const str = window.app.utils.string
   const { $ } = dom
@@ -65,7 +65,11 @@
     if (e.key === 'Enter') {
       if (launch()) sendMessage('MSG_TOGGLE_WINDOW')
     }
-    if (e.key === 'F12') {
+    if (e.key === 'F12' && e.shiftKey) {
+      // do NOT use the log wrapper here, we don't want this end up in the buffer
+      log.noBufferLog({ renderer: log.getBuffer(), backend: sendMessage('MSG_GET_LOG_BUFFER') })
+    }
+    if (e.key === 'F12' && !e.shiftKey) {
       sendMessage('MSG_TOGGLE_DEV_TOOLS')
     }
     if (e.key === 'F5') {
@@ -141,6 +145,7 @@
   }
 
   $(() => {
+    log.info('App renderer activated. You can access app internals inside renderer via "window.app".')
     $(window).on('error', rt.handleError)
     initStore()
     rt.setAppLoading(true)
@@ -168,5 +173,20 @@
     $('document').on('keyup', onDocumentKey)
     $('#search').on('input', onSearchChange)
     $('#app').on('input', onAppChange)
+
+    // if we had errors in the backend's log buffer, then let's show that
+    // (this of course can be checked by launching from the commandline)
+    const backendLogBuffer = sendMessage('MSG_GET_LOG_BUFFER')
+    if (log.getErrorCount(backendLogBuffer)) {
+      log.noBufferWarn(
+        [
+          '!!!',
+          'There has been errors during the backend startup:',
+          '(you can access the combined log buffer with shift+F12)',
+          '!!!',
+        ].join('\n'),
+        backendLogBuffer
+      )
+    }
   })
 })()

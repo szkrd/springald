@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const fsReaddir = require('fs').promises.readdir
+const log = require('./log')
 const isExec = require('./isExecutable')
 
 // skips C:\WINDOWS\* which is not a "healthy thing" to parse
@@ -36,7 +37,7 @@ function readDir(location) {
     fs.readdir(location, (err, files) => {
       // not a show stopper, but still annoying
       if (err) {
-        console.error(`☠️ Could not read location "$\{location}", skipping.`)
+        log.error(`☠️ Could not read location "$\{location}", skipping.`)
         resolve([])
         return
       }
@@ -58,8 +59,7 @@ function readDir(location) {
             // getting a file not found error is not that uncommon
             // in that case go and delete that file yourself...
             // TODO this skips the whole dir, probably we _really_ should check if the file is a dead symlink
-            console.error(`☠️ Could not stat path "${file}", skipping!`)
-            console.log(err)
+            log.error(`☠️ Could not stat path "${file}", skipping!`, err)
             resolve([])
             return
           }
@@ -95,7 +95,7 @@ function parsePath() {
   let dirs = [...new Set(pathItems)]
   if (pathItems.length !== dirs.length) {
     const duplicates = [...new Set(pathItems.filter((item, index) => pathItems.indexOf(item) !== index))]
-    console.warn(`You have duplicate items in your PATH! (${duplicates.join(', ')})`)
+    log.warn(`You have duplicate items in your PATH! (${duplicates.join(', ')})`)
   }
   if (IGNORE_WIN_ROOT) {
     dirs = dirs

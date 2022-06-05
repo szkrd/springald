@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const os = require('os')
+const log = require('./log')
 
 let counter = 0
 const getConfig = () => window.app.config
@@ -44,7 +45,7 @@ function walk(dir, done) {
       file = path.resolve(dir, file)
       fs.stat(file, (err, stat) => {
         if (err) {
-          console.error(`Could not stat file "${file}".`, err)
+          log.error(`Could not stat file "${file}".`, err)
           mayEnd()
           return // skip current loop, but not the whole walking
         }
@@ -52,7 +53,7 @@ function walk(dir, done) {
           if (isAllowedDir(name)) {
             walk(file, (err, res) => {
               if (err) {
-                console.error(`Could not read subdirectory "${file}"`)
+                log.error(`Could not read subdirectory "${file}"`)
               } else {
                 results = results.concat(res)
               }
@@ -99,7 +100,7 @@ function parseDirs() {
     const walkDirCallback = (err, res) => {
       processedCount++
       if (err) {
-        console.error(`☠️ Directory walker error: could not read directory "${err.file}"!`) // nw console error is a bit simple
+        log.error(`☠️ Directory walker error: could not read directory "${err.file}"!`) // nw console error is a bit simple
         return
       }
       results.push.apply(results, res)

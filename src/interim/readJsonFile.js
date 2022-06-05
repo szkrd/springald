@@ -1,4 +1,5 @@
 let fs = require('fs').promises
+const log = require('./log')
 
 async function readJsonFile(fileName) {
   try {
@@ -10,13 +11,13 @@ async function readJsonFile(fileName) {
   try {
     contents = await fs.readFile(fileName, 'utf8')
   } catch (err) {
-    console.error(`Could not read file "${fileName}"`)
+    log.error(`Could not read file "${fileName}"`)
     return null
   }
   try {
     contents = JSON.parse(contents)
   } catch (err) {
-    console.error(`Could not parse json "${fileName}"`)
+    log.error(`Could not parse json "${fileName}"`, err)
     return null
   }
   return contents

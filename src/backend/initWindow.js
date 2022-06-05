@@ -1,4 +1,5 @@
 const { BrowserWindow } = require('electron')
+const log = require('../interim/log')
 const getConfig = require('../interim/getConfig')
 
 class Window extends BrowserWindow {
@@ -49,7 +50,8 @@ async function initWindow() {
   win.loadFile('index.html')
   win.setMenuBarVisibility(false)
   win.center(config.centerOnShow)
-  if (isDev) {
+  // TODO indicate problems without popping open the devtool?
+  if (isDev || log.getWarningAndErrorCount() > 0) {
     win.openDevTools()
   }
   return win

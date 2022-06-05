@@ -37,6 +37,7 @@ with a local config:
 - _alt + c_ = center on screen
 - _ctrl + c_ = clear inputs
 - _F12_ = toggle dev toolbar
+- _shift + F12_ = dump both backend and renderer logs to console
 - _tab_ = toggle between the two inputs (path left, open with app right)
 
 Global shortcut toggle by default is `logo key + backtick` (and `ctrl + shift + alt + backtick`)

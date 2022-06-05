@@ -1,3 +1,4 @@
+const log = require('./log')
 const parseDirs = require('./parseDirs')
 const parsePath = require('./parsePath')
 const parseFluxboxMenu = require('./parseFluxboxMenu')
@@ -19,11 +20,11 @@ function parseAll(searchItems) {
         item.searchableText = getSearchableText(item)
       })
       const endedAt = Date.now()
-      console.log(`Parsed ${searchItems.length} items in ${endedAt - startedAt} ms.`)
+      log.info(`Parsed ${searchItems.length} items in ${endedAt - startedAt} ms.`)
       return searchItems
     },
     (err) => {
-      console.error(`☠️ Parse error in parser module "${err.module || 'unknown'}"!\n`, err)
+      log.error(`☠️ Parse error in parser module "${err.module || 'unknown'}"!\n`, err)
     }
   )
 }

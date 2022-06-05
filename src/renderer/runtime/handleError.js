@@ -1,9 +1,10 @@
 ;(function () {
   const { $ } = window.app.utils.dom
+  const { sendMessage, log } = app.interim
 
   function handleError() {
-    app.interim.sendMessage('MSG_TOGGLE_DEV_TOOLS')
-    console.error(...arguments)
+    sendMessage('MSG_TOGGLE_DEV_TOOLS')
+    log.error(...arguments)
     const el = $('#error-line')
     el.style.opacity = 1
     setTimeout(() => {
