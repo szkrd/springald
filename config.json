@@ -5,6 +5,7 @@
   "borderlessWindow": false,
   "showOnStartup": false,
   "centerOnShow": true,
+  "autoSelectAll": true,
   "toggleKey": ["Super+`", "CmdOrCtrl+Alt+Shift+`"],
   "logicalAndSeparator": " ",
   "desktopFilesLocation": "/usr/share/applications/",

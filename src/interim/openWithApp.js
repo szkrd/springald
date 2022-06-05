@@ -35,6 +35,13 @@ function openWithApp(item, withApp, config) {
     return spawnProcess(command)
   }
 
+  // this is the simple scenario, where the user defined the app name in the config json
+  // TODO: would it be useful to have an array of executables?
+  // OR define a custom list of executables, like { node: '/usr/bin/node', chrome: '...' }
+  if (typeof withApp === 'string' && withApp) {
+    return spawnProcess(`${quote(withApp)} "${item.command}"`)
+  }
+
   // desktops, pathexecs or fluxbox commands (the latter is kinda weird I guess)
   // this of course can create interesting scenarios (like opening a fluxbox
   // command with a mediaplayer, but let's assume the user knows what he or she does)

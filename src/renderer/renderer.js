@@ -47,6 +47,10 @@
       return false
     }
     int.openWithApp(item, store.ghost || store.withApp, config)
+    // after successful launch, when the user reopens the window, should we preselect the text?
+    if (config.autoSelectAll) {
+      $('#search').select()
+    }
     // reset manually changed app only (pure ghosts can stay, those were programmatic)
     if ($('#app').value) {
       $('#app').value = store.withApp = $('#ghost').innerHTML = ''
