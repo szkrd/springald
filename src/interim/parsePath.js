@@ -51,7 +51,11 @@ async function getDesktopFriendlies() {
     }))
     files = files.concat(currentFiles)
   }
-  log.info(`Read ${readCount} location(s) from "desktopFilesLocation", found ${files.length} desktop files.`)
+  if (readCount > 0 && files.length > 0) {
+    log.info(`Read ${readCount} location(s) from "desktopFilesLocation", found ${files.length} desktop files.`)
+  } else {
+    log.info('No .desktop files found.')
+  }
   return files
 }
 
