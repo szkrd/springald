@@ -52,7 +52,6 @@ async function getDesktopFriendlies() {
     files = files.concat(currentFiles)
   }
   log.info(`Read ${readCount} location(s) from "desktopFilesLocation", found ${files.length} desktop files.`)
-  log.info(files)
   return files
 }
 
@@ -134,7 +133,6 @@ function parsePath() {
   }
   dirs = dirs.filter((dir) => fs.existsSync(dir))
   const all = [getDesktopFriendlies(true), ...dirs.map((dir) => readDir(dir))]
-  log.info(all)
   return Promise.all(all).then(
     (packs) => {
       // first item is an array of desktop files, let's use that for the .desktop flag detection
