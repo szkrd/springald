@@ -47,6 +47,9 @@ async function initWindow() {
       // yes, new electron is new, probably this whole app will need some HUGE changes
       // see: https://github.com/electron/electron/blob/main/docs/tutorial/context-isolation.md
       contextIsolation: false,
+      // another problem is that now we have no "require" (node module access) in the renderer
+      // thread (changed around electron 5-ish), because that's a security risk (obviously),
+      // but since this is pretty much a personal project with zero dependencies, I will ignore that...
       nodeIntegration: true,
       enableRemoteModule: true,
     },
