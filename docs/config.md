@@ -28,13 +28,17 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   // auto select text in the search field after a successful launch and reopen?
   "autoSelectAll": true,
 
+  // tray icon size; `small` = 16x16, `large` = 64x64 (will use the selected png from assets)
+  "trayIconSize": "large",
+
   // window toggle key, see electron launcher keys at https://www.electronjs.org/docs/api/accelerator
   "toggleKey": ["Super+`", "CmdOrCtrl+Alt+Shift+`"],
 
   // all words separated by this string are used in an AND relation for searching
   "logicalAndSeparator": " ",
 
-  // gnome .desktop files' location, can be a string or string[]
+  // gnome .desktop files' location, can be a string or string[], disable it with null or undefined
+  // examples: `["/usr/share/applications/", "~/.local/share/applications"]`, `[]`, `null`
   "desktopFilesLocation": "/usr/share/applications/",
 
   // files included in the search, array of regex strings

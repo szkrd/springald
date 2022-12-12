@@ -42,7 +42,7 @@ async function initBackend() {
   }
   if (initialized) return backend
   const config = await getConfig(app.getPath('userData'))
-  const tray = initTray()
+  const tray = await initTray()
   const store = {}
   const globalShortcuts = await initGlobalShortcuts()
   const win = await initWindow()

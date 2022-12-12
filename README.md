@@ -71,3 +71,7 @@ Available tasks: **lint** (as build, use `ctrl + shift + b`), **lint:fix**.
 - use `"borderlessWindow": true` on windows to fix the height calculation
 - files in `C:\WINDOWS*` are skipped
 - launch in terminal is kinda pointless
+
+### TODO
+
+The `.desktop` file support is still a work in progress.

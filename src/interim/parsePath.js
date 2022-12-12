@@ -12,12 +12,11 @@ const IGNORE_WIN_ROOT = true
 
 let counter = 0
 
-// linux only: get global .desktop files, strip the "extensions"
-// and return only the basename part (no path either)
+// linux only: .desktop files
 async function getDesktopFriendlies() {
   const config = window.app.config
   let locations = config.desktopFilesLocation
-  if (locations === undefined) return []
+  if (locations === undefined || locations === null) return []
   if (typeof locations === 'string') locations = [locations]
   if (!Array.isArray(locations)) {
     log.warn(
@@ -26,21 +25,35 @@ async function getDesktopFriendlies() {
     )
     return []
   }
+  if (locations.length === 0) return []
   let files = []
+  let readCount = 0
+  let deskItemCount = 0
   for (let idx = 0; idx < locations.length; idx++) {
     const location = String(locations[idx]).replace(/^~/, homeDir)
     let currentFiles = []
     try {
       currentFiles = await fsReaddir(location)
+      readCount++
     } catch (err) {
-      log.warn(`Could not read "desktopFilesLocation" item "${location}".`)
       currentFiles = []
     }
+    // the old (not string[], only string) version lazily returned only the filenames
+    currentFiles = currentFiles.filter((fn) => /\.desktop$/.test(fn))
+    currentFiles = currentFiles.map((fn) => ({
+      id: `D${deskItemCount++}`,
+      executable: true,
+      type: 'DESKTOPITEM',
+      desktop: true,
+      path: location,
+      name: fn.replace(/\.desktop$/, ''),
+      command: path.join(location, fn), // this should be taken from inside the .desktop file?!
+    }))
     files = files.concat(currentFiles)
   }
-  const onlyDesktopExtensions = (fn) => /\.desktop$/.test(fn)
-  const baseNameOnly = (fn) => fn.replace(/\.desktop$/, '')
-  return files.filter(onlyDesktopExtensions).map(baseNameOnly)
+  log.info(`Read ${readCount} location(s) from "desktopFilesLocation", found ${files.length} desktop files.`)
+  log.info(files)
+  return files
 }
 
 // node injects the project's local bin directory to the path
@@ -120,12 +133,17 @@ function parsePath() {
       .filter((dir) => !/^C:\\WINDOWS\\.*/.test(dir.toUpperCase()))
   }
   dirs = dirs.filter((dir) => fs.existsSync(dir))
-  const all = [getDesktopFriendlies(), ...dirs.map((dir) => readDir(dir))]
+  const all = [getDesktopFriendlies(true), ...dirs.map((dir) => readDir(dir))]
+  log.info(all)
   return Promise.all(all).then(
     (packs) => {
-      // first item is an array of desktop files, let's remove that
-      // (in this list `/usr/share/applications/foobar.desktop` is just `foobar`)
-      const desktops = packs.shift()
+      // first item is an array of desktop files, let's use that for the .desktop flag detection
+      const desktops = packs[0].map((item) => item.name)
+
+      // since .desktop support is WORK IN PROGRESS, I'll throw all of them away for now
+      // TODO: get .desktop's internal content and use the proper launcher command (with support for terminal=true)
+      // TODO: remove the "plain" executables (or the .desktop ones) to avoid duplicates (like /usr/bin/foo vs foo.desktop)
+      packs.shift()
 
       // then rest are individual executables found in path dirs
       packs.forEach((pack) => result.push.apply(result, pack))
@@ -146,7 +164,6 @@ function parsePath() {
           const idxInDesktopsArray = desktops.indexOf(fn.name)
           if (idxInDesktopsArray > -1) {
             fn.desktop = true
-            desktops[idxInDesktopsArray] = null
           }
         })
       }
