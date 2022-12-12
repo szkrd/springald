@@ -1,8 +1,10 @@
 const path = require('path')
+const os = require('os')
 const fs = require('fs')
 const fsReaddir = require('fs').promises.readdir
 const log = require('./log')
 const isExec = require('./isExecutable')
+const homeDir = os.homedir()
 
 // skips C:\WINDOWS\* which is not a "healthy thing" to parse
 // (lots of files, special permissions etc.)
@@ -14,12 +16,27 @@ let counter = 0
 // and return only the basename part (no path either)
 async function getDesktopFriendlies() {
   const config = window.app.config
-  const location = config.desktopFilesLocation
+  let locations = config.desktopFilesLocation
+  if (locations === undefined) return []
+  if (typeof locations === 'string') locations = [locations]
+  if (!Array.isArray(locations)) {
+    log.warn(
+      'Configuration value "desktopFilesLocation" must be a string ' +
+        `or array of strings (was type "${typeof locations}").`
+    )
+    return []
+  }
   let files = []
-  try {
-    files = await fsReaddir(location)
-  } catch (err) {
-    files = []
+  for (let idx = 0; idx < locations.length; idx++) {
+    const location = String(locations[idx]).replace(/^~/, homeDir)
+    let currentFiles = []
+    try {
+      currentFiles = await fsReaddir(location)
+    } catch (err) {
+      log.warn(`Could not read "desktopFilesLocation" item "${location}".`)
+      currentFiles = []
+    }
+    files = files.concat(currentFiles)
   }
   const onlyDesktopExtensions = (fn) => /\.desktop$/.test(fn)
   const baseNameOnly = (fn) => fn.replace(/\.desktop$/, '')

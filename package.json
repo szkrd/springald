@@ -9,7 +9,8 @@
     "start": "electron .",
     "dev": "cross-env NODE_ENV=development electron .",
     "lint": "eslint src",
-    "lint:fix": "eslint --fix src"
+    "lint:fix": "eslint --fix src",
+    "format": "prettier --write src"
   },
   "devDependencies": {
     "cross-env": "7.0.2",

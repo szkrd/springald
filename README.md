@@ -1,7 +1,7 @@
 # springald
 
 Springald is a simple launcher, similar to Launchy. It is written in _vanilla-js™_
-uses no dependencies apart from  ~~nwjs~~ electron.
+uses no dependencies apart from ~~nwjs~~ electron.
 
 It can parse a fluxbox menu file, read directories from path or from a config file,
 can launch .desktop files. That's it.
@@ -28,6 +28,7 @@ you can **shallow override** them with a local config:
 - linux: `~/.config/springald/config.json`
 - windows: `C:\Users\%USERNAME%\AppData\Roaming\springald\config.json`
 - mac: `~/Library/Application Support/springald\config.json`
+- or in the application dir: `./config.local.json`
 
 ### shortcuts
 

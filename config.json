@@ -8,10 +8,10 @@
   "autoSelectAll": true,
   "toggleKey": ["Super+`", "CmdOrCtrl+Alt+Shift+`"],
   "logicalAndSeparator": " ",
-  "desktopFilesLocation": "/usr/share/applications/",
-  "includeFiles": [ "\\.(txt|md|html|docx|pdf|jpe?g|png|avi|mkv|mp4)$" ],
-  "excludeFiles": [ "^\\._" ],
-  "excludedDirs": [ "^node_modules$", "^\\." ],
+  "desktopFilesLocation": ["/usr/share/applications/", "~/.local/share/applications"],
+  "includeFiles": ["\\.(txt|md|html|docx|pdf|jpe?g|png|avi|mkv|mp4)$"],
+  "excludeFiles": ["^\\._"],
+  "excludedDirs": ["^node_modules$", "^\\."],
   "excludeHidSys": true,
   "terminalCommand": "gnome-terminal -- %CMD%",
   "appShortcuts": {
@@ -21,9 +21,5 @@
   "openWith": {
     "\\.(txt|md)$": "code"
   },
-  "directories": [
-    "~/Downloads",
-    "~/Pictures",
-    "~/Videos"
-  ]
+  "directories": ["~/Downloads", "~/Pictures", "~/Videos"]
 }

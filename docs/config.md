@@ -13,7 +13,7 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   // main window width
   "winWidth": 800,
 
-  // flucbox menu file location
+  // fluxbox menu file location
   "fluxboxMenuFile": "~/.fluxbox/menu",
 
   // start with a borderless window?
@@ -34,17 +34,17 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   // all words separated by this string are used in an AND relation for searching
   "logicalAndSeparator": " ",
 
-  // gnome .desktop files' location
+  // gnome .desktop files' location, can be a string or string[]
   "desktopFilesLocation": "/usr/share/applications/",
 
   // files included in the search, array of regex strings
-  "includeFiles": [ "\\.(txt|md|html|docx|pdf|jpe?g|png|avi|mkv|mp4)$" ],
+  "includeFiles": ["\\.(txt|md|html|docx|pdf|jpe?g|png|avi|mkv|mp4)$"],
 
   // files excluded from the search
-  "excludeFiles": [ "^\\._" ],
+  "excludeFiles": ["^\\._"],
 
   // directories excluded from the search
-  "excludedDirs": [ "^node_modules$", "^\\." ],
+  "excludedDirs": ["^node_modules$", "^\\."],
 
   // exclude hidden and system files (Windows), NOT YET SUPPORTED
   "excludeHidSys": true,
@@ -64,10 +64,6 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   },
 
   // directories to index, home "~" marker is supported
-  "directories": [
-    "~/Downloads",
-    "~/Pictures",
-    "~/Videos"
-  ]
+  "directories": ["~/Downloads", "~/Pictures", "~/Videos"]
 }
 ```
