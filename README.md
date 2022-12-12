@@ -74,4 +74,5 @@ Available tasks: **lint** (as build, use `ctrl + shift + b`), **lint:fix**.
 
 ### TODO
 
-The `.desktop` file support is still a work in progress.
+- [ ] add `.desktop` file support (still a work in progress).
+- [ ] list uwp apps (see EPERM part in `parsePath.js`).

@@ -86,8 +86,9 @@ function readDir(location) {
           // on windows uwp reparse points (zero byte executables that
           // setup a security context) are unreadable (https://stackoverflow.com/q/58296925)
           const unreadableError = file.endsWith('.exe') && String(err).startsWith('Error: UNKNOWN:')
+          const isUwpApp = file.includes('\\WindowsApps\\')
           const noPermission = String(err).startsWith('Error: EPERM:')
-          if (err && !unreadableError && !noPermission) {
+          if (err && !unreadableError && !noPermission && !isUwpApp) {
             // on Ubuntu some packages may leave broken symlinks behind, so
             // getting a file not found error is not that uncommon
             // in that case go and delete that file yourself...
