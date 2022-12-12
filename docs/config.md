@@ -25,6 +25,10 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   // auto center window position on show?
   "centerOnShow": true,
 
+  // do not center by default, use fixed coords (in case auto centering/resizing fails)
+  // examples: `[]`, `[100, 50]`, `null` or `undefined`
+  "fixPosition": [200, 100],
+
   // auto select text in the search field after a successful launch and reopen?
   "autoSelectAll": true,
 

@@ -9,6 +9,18 @@ const handleMessage = require('./modules/messages/handleMesssage')
 let initialized = false
 let backend // win, tray, config
 
+// fuck this shit, really; get position and set position fails before/after
+// a resize, so the window slowly moves towards 0 0, maybe because
+// of the non 1:1 desktop size I have, but I'm not sure (it doesn't
+// happen in a vm, only on the "real" hardware (a thinkpad t480s)
+function fixPosition() {
+  const cfg = backend.config
+  if (Array.isArray(cfg.fixPosition) && cfg.fixPosition.length === 2) {
+    log.info(cfg.fixPosition)
+    backend.win.setPosition(...cfg.fixPosition)
+  }
+}
+
 // do NOT forget to set these message is messages.js
 // along with a helpful comment about what it does
 function setupMessageListener() {
@@ -19,6 +31,7 @@ function setupMessageListener() {
 
   handleMessage('MSG_RESIZE_WINDOW', (payload) => {
     backend.win.setSize(payload.width, payload.height)
+    fixPosition()
   })
 
   handleMessage('MSG_TOGGLE_WINDOW', () => {

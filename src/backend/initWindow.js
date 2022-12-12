@@ -37,9 +37,15 @@ class Window extends BrowserWindow {
 async function initWindow() {
   const config = await getConfig()
   const isDev = config.development
+  let coords = {}
+  const useFixedCoords = Array.isArray(config.fixPosition) && config.fixPosition.length === 2
+  if (useFixedCoords) {
+    coords = { x: config.fixPosition[0], y: config.fixPosition[1] }
+  }
   const win = new Window({
     width: config.winWidth,
     height: 40,
+    ...coords,
     show: config.showOnStartup || isDev,
     frame: !config.borderlessWindow,
     resizable: true, // if you set to false, then resizing will be buggy!
@@ -56,7 +62,7 @@ async function initWindow() {
   })
   win.loadFile('index.html')
   win.setMenuBarVisibility(false)
-  win.center(config.centerOnShow)
+  if (!useFixedCoords) win.center(config.centerOnShow)
   // TODO indicate problems without popping open the devtool?
   if (isDev || log.getWarningAndErrorCount() > 0) {
     win.openDevTools()

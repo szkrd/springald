@@ -3,6 +3,7 @@
   "winWidth": 800,
   "fluxboxMenuFile": "~/.fluxbox/menu",
   "borderlessWindow": false,
+  "fixPosition": [],
   "showOnStartup": false,
   "centerOnShow": true,
   "autoSelectAll": true,
