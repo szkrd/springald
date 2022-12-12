@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "cross-env": "7.0.2",
-    "electron": "9.0.4",
+    "electron": "21.3.3",
     "eslint": "7.1.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-prettier": "3.1.3",

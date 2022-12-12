@@ -44,7 +44,11 @@ async function initWindow() {
     frame: !config.borderlessWindow,
     resizable: true, // if you set to false, then resizing will be buggy!
     webPreferences: {
+      // yes, new electron is new, probably this whole app will need some HUGE changes
+      // see: https://github.com/electron/electron/blob/main/docs/tutorial/context-isolation.md
+      contextIsolation: false,
       nodeIntegration: true,
+      enableRemoteModule: true,
     },
   })
   win.loadFile('index.html')
