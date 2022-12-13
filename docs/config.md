@@ -92,6 +92,7 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
 
 ```json
 {
+  "theme": "aquamint",
   "borderlessWindow": true,
   "trayIconSize": "large",
   "toggleKey": ["Super+Shift+space"],
