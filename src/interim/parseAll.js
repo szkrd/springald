@@ -10,9 +10,19 @@ function parseAll(searchItems) {
   const startedAt = Date.now()
   const config = window.app.config
   const fbMenuFile = config.fluxboxMenuFile
-  return Promise.all([parseFluxboxMenu(fbMenuFile), parsePath(), parseDirs()]).then(
+  const dirCount = Array.isArray(config.directories) ? config.directories.length : 0
+
+  // tha main parsing (fluxbox, paths, dirs)
+  const promises = [
+    config.fluxboxMenuFile === false ? null : parseFluxboxMenu(fbMenuFile),
+    config.skipPathParsing === true ? null : parsePath(),
+    dirCount > 0 ? parseDirs() : null,
+  ].filter((x) => x)
+
+  return Promise.all(promises).then(
     (itemPacks) => {
-      const counts = { flux: itemPacks[0].length, path: itemPacks[1].length, dirs: itemPacks[2].length }
+      const count = (val) => (Array.isArray(val) ? val.length : 0)
+      const counts = { flux: count(itemPacks[0]), path: count(itemPacks[1]), dirs: count(itemPacks[2]) }
       itemPacks.forEach((items) => searchItems.push.apply(searchItems, items))
 
       // add the searchable text, which shall be unified for all item types

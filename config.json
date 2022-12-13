@@ -16,6 +16,7 @@
   "excludeFiles": ["^\\._"],
   "excludedDirs": ["^node_modules$", "^\\."],
   "excludeHidSys": true,
+  "skipPathParsing": false,
   "terminalCommand": "gnome-terminal -- %CMD%",
   "appShortcuts": {
     "showItemInFolder": "F",

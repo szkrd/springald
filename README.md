@@ -55,7 +55,8 @@ for details see [unixSocket.js](./src/backend//modules/unixSocket.js).
 
 ## development
 
-If you are _me_ and you (I) haven't touched this project in a while, then you might be wondering what is this mess. Dear me, please read your notes in the [docs](./docs/dev.md) folder.
+If you are _me_ and you (I) haven't touched this project in a while, then you might be wondering what is this mess.
+Dear me, please read your notes in the [docs](./docs/dev.md) folder.
 
 Other than that, `npm run dev` from the console.
 
@@ -77,6 +78,12 @@ Available tasks: **lint** (as build, use `ctrl + shift + b`), **lint:fix**.
 - use `"borderlessWindow": true` on windows to fix the height calculation
 - files in `C:\WINDOWS*` are skipped
 - launch in terminal is kinda pointless
+
+### linux
+
+- use `trayIconSize: 'large'` if your tray supports hires icons
+- use `fixPosition` and `modifyResize` to fix window size problems
+- if the global `toggleKey` misbehaves, you will have to fall back to unix sockets
 
 ### TODO
 

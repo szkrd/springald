@@ -13,8 +13,12 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   // main window width
   "winWidth": 800,
 
-  // fluxbox menu file location
+  // fluxbox menu file location, you can disable parsing with an explicit `false`
   "fluxboxMenuFile": "~/.fluxbox/menu",
+
+  // you can explicitly disable the path parsing with `true`, for debugging or if you
+  // have a ton of executables on your path (and they are not particularly useful)
+  "skipPathParsing": false,
 
   // start with a borderless window?
   "borderlessWindow": false,
