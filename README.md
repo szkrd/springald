@@ -47,6 +47,12 @@ be sure to set an override in your user config, string for single key, array for
 Available global electron shortcuts are [here](https://www.electronjs.org/docs/api/accelerator),
 modifiers are `Cmd`, `Ctrl`, `CmdOrCtrl`, `Alt`, `Option`, `AltGr`, `Shift`, `Super`.
 
+If your linux desktop environment has problems with electron global keys, you can use
+the `/tmp/springald.sock` **unix socket** to toggle the instance (either through `launcher.sh`
+or by directly sending a message with [socat](https://linux.die.net/man/1/socat):
+`echo toggle | socat UNIX:/tmp/springald.sock -`);
+for details see [unixSocket.js](./src/backend//modules/unixSocket.js).
+
 ## development
 
 If you are _me_ and you (I) haven't touched this project in a while, then you might be wondering what is this mess. Dear me, please read your notes in the [docs](./docs/dev.md) folder.

@@ -6,6 +6,7 @@ const initWindow = require('./initWindow')
 const initGlobalShortcuts = require('./initGlobalShortcuts')
 const handleMessage = require('./modules/messages/handleMesssage')
 const isCoord = require('./utils/isCoord')
+const unixSocket = require('./modules/unixSocket')
 
 let initialized = false
 let backend // win, tray, config
@@ -33,28 +34,35 @@ function fixSizing(obj) {
 // do NOT forget to set these message is messages.js
 // along with a helpful comment about what it does
 function setupMessageListener() {
-  handleMessage('MSG_QUIT', () => app.quit())
-  handleMessage('MSG_GET_CONFIG', () => backend.config)
-  handleMessage('MSG_GET_LOG_BUFFER', () => log.getBuffer())
-  handleMessage('MSG_REFRESH_CONFIG', getConfig.inject)
-
-  handleMessage('MSG_RESIZE_WINDOW', (payload) => {
-    const { width, height } = fixSizing(payload)
-    backend.win.setSize(width, height)
-    fixPosition()
-  })
-
-  handleMessage('MSG_TOGGLE_WINDOW', () => {
-    backend.win.toggle()
-  })
-
-  handleMessage('MSG_CENTER_WINDOW', () => {
-    backend.win.center()
-  })
-
-  handleMessage('MSG_TOGGLE_DEV_TOOLS', () => {
-    backend.win.toggleDevTools()
-  })
+  const handlers = {
+    quit: () => app.quit(),
+    getConfig: () => backend.config,
+    getLogBuffer: () => log.getBuffer(),
+    refreshConfig: getConfig.inject,
+    resizeWindow: (payload) => {
+      const { width, height } = fixSizing(payload)
+      backend.win.setSize(width, height)
+      fixPosition()
+    },
+    toggleWindow: () => {
+      backend.win.toggle()
+    },
+    centerWindow: () => {
+      backend.win.center()
+    },
+    toggleDevTools: () => {
+      backend.win.toggleDevTools()
+    },
+  }
+  handleMessage('MSG_QUIT', handlers.quit)
+  handleMessage('MSG_GET_CONFIG', handlers.getConfig)
+  handleMessage('MSG_GET_LOG_BUFFER', handlers.getLogBuffer)
+  handleMessage('MSG_REFRESH_CONFIG', handlers.refreshConfig)
+  handleMessage('MSG_RESIZE_WINDOW', handlers.resizeWindow)
+  handleMessage('MSG_TOGGLE_WINDOW', handlers.toggleWindow)
+  handleMessage('MSG_CENTER_WINDOW', handlers.centerWindow)
+  handleMessage('MSG_TOGGLE_DEV_TOOLS', handlers.toggleDevTools)
+  unixSocket.create(handlers)
 }
 
 async function initBackend() {

@@ -1,4 +1,10 @@
 #!/bin/bash
+# if socat is installed and we have a running instance's socket, then just toggle that instance
+if [[ $(command -v socat | wc -l) -eq 1 && -S "/tmp/springald.sock" ]]; then
+  echo "socket /tmp/springald.sock exists, toggling instance"
+  echo toggle | socat UNIX:/tmp/springald.sock -
+  exit 0
+fi
 # check if we symlinked the launcher
 SRC="${BASH_SOURCE[0]}"
 SYMLNKSRC="$(readlink -f $SRC)"
@@ -18,5 +24,7 @@ if [ "$(node --version | cut -d . -f 1 | cut -c 2-)" -lt 12 ]; then
   echo "node too old, use v12+"
   exit 2
 fi
+# no electron, install it
 if [ ! -f "./node_modules/.bin/electron" ]; then npm install; fi
+# finally, run the app
 node ./node_modules/.bin/electron . > output.log
