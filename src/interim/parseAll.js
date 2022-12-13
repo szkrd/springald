@@ -16,8 +16,8 @@ function parseAll(searchItems) {
   const promises = [
     config.fluxboxMenuFile === false ? null : parseFluxboxMenu(fbMenuFile),
     config.skipPathParsing === true ? null : parsePath(),
-    dirCount > 0 ? parseDirs() : null,
-  ].filter((x) => x)
+    dirCount === 0 ? null : parseDirs(),
+  ]
 
   return Promise.all(promises).then(
     (itemPacks) => {

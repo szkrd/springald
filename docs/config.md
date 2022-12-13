@@ -17,7 +17,8 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   "fluxboxMenuFile": "~/.fluxbox/menu",
 
   // you can explicitly disable the path parsing with `true`, for debugging or if you
-  // have a ton of executables on your path (and they are not particularly useful)
+  // have a ton of executables on your path (and they are not particularly useful),
+  // but be careful, this will render the application input filed useless
   "skipPathParsing": false,
 
   // start with a borderless window?
@@ -82,5 +83,26 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
 
   // directories to index, home "~" marker is supported
   "directories": ["~/Downloads", "~/Pictures", "~/Videos"]
+}
+```
+
+## examples
+
+### linux mint cinnamon
+
+```json
+{
+  "borderlessWindow": true,
+  "trayIconSize": "large",
+  "toggleKey": ["Super+Shift+space"],
+  "openWith": {
+    "\\.(txt|md)$": "xed"
+  },
+  "centerOnShow": false,
+  "fixPosition": [275, 350],
+  "modifyResize": [0, -3],
+  "skipPathParsing": true,
+  "fluxboxMenuFile": false,
+  "directories": ["~/Downloads", "~/Videos", "~/Nextcloud/Documents"]
 }
 ```
