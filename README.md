@@ -90,6 +90,8 @@ Available tasks: **lint** (as build, use `ctrl + shift + b`), **lint:fix**.
     you will still need to use the full path: `/home/johndoe/bin/springald`)
   - if you want only a toggle, then the launcher must first launch bash:  
     `bash -c 'echo toggle | socat UNIX:/tmp/springald.sock -'`
+  - the same is true for the "create a new launcher" feature
+    (and then the launcher can be added to the autolaunch items)
 
 ### TODO
 
