@@ -12,6 +12,7 @@ function parseAll(searchItems) {
   const fbMenuFile = config.fluxboxMenuFile
   return Promise.all([parseFluxboxMenu(fbMenuFile), parsePath(), parseDirs()]).then(
     (itemPacks) => {
+      const counts = { flux: itemPacks[0].length, path: itemPacks[1].length, dirs: itemPacks[2].length }
       itemPacks.forEach((items) => searchItems.push.apply(searchItems, items))
 
       // add the searchable text, which shall be unified for all item types
@@ -20,7 +21,10 @@ function parseAll(searchItems) {
         item.searchableText = getSearchableText(item)
       })
       const endedAt = Date.now()
-      log.info(`Parsed ${searchItems.length} items in ${endedAt - startedAt} ms.`)
+      log.info(
+        `Parsed ${searchItems.length} items in ${endedAt - startedAt} ms.\n` +
+          `(fluxbox: ${counts.flux}, paths: ${counts.path}, dirs: ${counts.dirs})`
+      )
       return searchItems
     },
     (err) => {

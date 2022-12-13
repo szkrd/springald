@@ -29,6 +29,10 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   // examples: `[]`, `[100, 50]`, `null` or `undefined`
   "fixPosition": [200, 100],
 
+  // change the resize values, width and height (in case auto resizing fails)
+  // examples: `[]`, `[0, -3]` (subtracts 3 pixels from the new height), `null` or `undefined`
+  "modifyResize": [0, -3],
+
   // auto select text in the search field after a successful launch and reopen?
   "autoSelectAll": true,
 
@@ -42,6 +46,7 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   "logicalAndSeparator": " ",
 
   // gnome .desktop files' location, can be a string or string[], disable it with null or undefined
+  // only the first "item" will be used for bin duplicate detection
   // examples: `["/usr/share/applications/", "~/.local/share/applications"]`, `[]`, `null`
   "desktopFilesLocation": "/usr/share/applications/",
 

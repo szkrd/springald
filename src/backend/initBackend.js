@@ -5,6 +5,7 @@ const initTray = require('./initTray')
 const initWindow = require('./initWindow')
 const initGlobalShortcuts = require('./initGlobalShortcuts')
 const handleMessage = require('./modules/messages/handleMesssage')
+const isCoord = require('./utils/isCoord')
 
 let initialized = false
 let backend // win, tray, config
@@ -15,10 +16,18 @@ let backend // win, tray, config
 // happen in a vm, only on the "real" hardware (a thinkpad t480s)
 function fixPosition() {
   const cfg = backend.config
-  if (Array.isArray(cfg.fixPosition) && cfg.fixPosition.length === 2) {
-    log.info(cfg.fixPosition)
-    backend.win.setPosition(...cfg.fixPosition)
+  if (isCoord(cfg.fixPosition)) backend.win.setPosition(...cfg.fixPosition)
+}
+
+// just like fix position, "sometimes" on linux the height calculation
+// is off by a couple of pixels and of course this doesn't happen in a vm
+function fixSizing(obj) {
+  const cfg = backend.config
+  if (isCoord(cfg.modifyResize)) {
+    obj.width += cfg.modifyResize[0]
+    obj.height += cfg.modifyResize[1]
   }
+  return obj
 }
 
 // do NOT forget to set these message is messages.js
@@ -30,7 +39,8 @@ function setupMessageListener() {
   handleMessage('MSG_REFRESH_CONFIG', getConfig.inject)
 
   handleMessage('MSG_RESIZE_WINDOW', (payload) => {
-    backend.win.setSize(payload.width, payload.height)
+    const { width, height } = fixSizing(payload)
+    backend.win.setSize(width, height)
     fixPosition()
   })
 

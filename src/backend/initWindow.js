@@ -1,6 +1,7 @@
 const { BrowserWindow } = require('electron')
 const log = require('../interim/log')
 const getConfig = require('../interim/getConfig')
+const isCoord = require('./utils/isCoord')
 
 class Window extends BrowserWindow {
   constructor(options) {
@@ -37,15 +38,19 @@ class Window extends BrowserWindow {
 async function initWindow() {
   const config = await getConfig()
   const isDev = config.development
-  let coords = {}
-  const useFixedCoords = Array.isArray(config.fixPosition) && config.fixPosition.length === 2
+  let position = {}
+  const useFixedCoords = isCoord(config.fixPosition)
   if (useFixedCoords) {
-    coords = { x: config.fixPosition[0], y: config.fixPosition[1] }
+    position = { x: config.fixPosition[0], y: config.fixPosition[1] }
+  }
+  let size = { width: config.winWidth, height: 40 }
+  if (isCoord(config.modifyResize)) {
+    size.width += config.modifyResize[0]
+    size.height += config.modifyResize[1]
   }
   const win = new Window({
-    width: config.winWidth,
-    height: 40,
-    ...coords,
+    ...size,
+    ...position,
     show: config.showOnStartup || isDev,
     frame: !config.borderlessWindow,
     resizable: true, // if you set to false, then resizing will be buggy!

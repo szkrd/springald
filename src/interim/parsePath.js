@@ -42,6 +42,8 @@ async function getDesktopFriendlies() {
     currentFiles = currentFiles.filter((fn) => /\.desktop$/.test(fn))
     currentFiles = currentFiles.map((fn) => ({
       id: `D${deskItemCount++}`,
+      // only the first group (the .desktop files setup by the de) should be used for duplicate detection
+      group: idx,
       executable: true,
       type: 'DESKTOPITEM',
       desktop: true,
@@ -127,6 +129,8 @@ function parsePath() {
   const result = []
   const pathItems = process.env.PATH.split(dl)
   let dirs = [...new Set(pathItems)]
+  // let's try to find path duplicates, BUT it's possible that we have duplicates on Windows
+  // coming from the git installation and those can not be found (or fixed) in the system properties
   if (pathItems.length !== dirs.length) {
     const duplicates = [...new Set(pathItems.filter((item, index) => pathItems.indexOf(item) !== index))]
     log.warn(`You have duplicate items in your PATH! (${duplicates.join(', ')})`)
@@ -141,7 +145,8 @@ function parsePath() {
   return Promise.all(all).then(
     (packs) => {
       // first item is an array of desktop files, let's use that for the .desktop flag detection
-      const desktops = packs[0].map((item) => item.name)
+      const desktops = packs[0].map((item) => item.name.toLowerCase())
+      const deDesktops = desktops.filter((item) => item.group === 0)
 
       // since .desktop support is WORK IN PROGRESS, I'll throw all of them away for now
       // TODO: get .desktop's internal content and use the proper launcher command (with support for terminal=true)
@@ -162,9 +167,9 @@ function parsePath() {
       // and this method will not deal with those, for example
       // `gnome-keyboard-panel.desktop` launches `gnome-control-center keyboard`
       // which is an executable AND a parameter)
-      if (desktops.length) {
+      if (deDesktops.length) {
         result.forEach((fn) => {
-          const idxInDesktopsArray = desktops.indexOf(fn.name)
+          const idxInDesktopsArray = deDesktops.indexOf(String(fn.name).toLowerCase())
           if (idxInDesktopsArray > -1) {
             fn.desktop = true
           }

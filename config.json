@@ -4,6 +4,7 @@
   "fluxboxMenuFile": "~/.fluxbox/menu",
   "borderlessWindow": false,
   "fixPosition": [],
+  "modifyResize": [],
   "showOnStartup": false,
   "centerOnShow": true,
   "autoSelectAll": true,
