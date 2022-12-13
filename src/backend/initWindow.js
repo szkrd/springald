@@ -51,7 +51,7 @@ async function initWindow() {
   const win = new Window({
     ...size,
     ...position,
-    show: config.showOnStartup || isDev,
+    show: false,
     frame: !config.borderlessWindow,
     resizable: true, // if you set to false, then resizing will be buggy!
     webPreferences: {
@@ -71,6 +71,11 @@ async function initWindow() {
   // TODO indicate problems without popping open the devtool?
   if (isDev || log.getWarningAndErrorCount() > 0) {
     win.openDevTools()
+  }
+  if (config.showOnStartup || isDev) {
+    // the ready-to-show event did not really help
+    if (config.paintDelay) setTimeout(() => win.show(), config.paintDelay)
+    else win.show()
   }
   return win
 }

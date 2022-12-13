@@ -5,6 +5,7 @@
   "borderlessWindow": false,
   "fixPosition": [],
   "modifyResize": [],
+  "paintDelay": 0,
   "showOnStartup": false,
   "centerOnShow": true,
   "autoSelectAll": true,

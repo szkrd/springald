@@ -84,6 +84,12 @@ Available tasks: **lint** (as build, use `ctrl + shift + b`), **lint:fix**.
 - use `trayIconSize: 'large'` if your tray supports hires icons
 - use `fixPosition` and `modifyResize` to fix window size problems
 - if the global `toggleKey` misbehaves, you will have to fall back to unix sockets
+- gnome/cinnamon:
+  - you can create a keyboard shortcut for a launcher, in the launcher
+    use the full path to the shellscript (or if you symlinked it into `~/bin/springald`
+    you will still need to use the full path: `/home/johndoe/bin/springald`)
+  - if you want only a toggle, then the launcher must first launch bash:  
+    `bash -c 'echo toggle | socat UNIX:/tmp/springald.sock -'`
 
 ### TODO
 

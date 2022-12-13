@@ -30,6 +30,9 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   // auto center window position on show?
   "centerOnShow": true,
 
+  // window show timeout in msec, to avoid the initial blink caused by the unpainted white bg
+  "paintDelay": 0,
+
   // do not center by default, use fixed coords (in case auto centering/resizing fails)
   // examples: `[]`, `[100, 50]`, `null` or `undefined`
   "fixPosition": [200, 100],
@@ -93,6 +96,7 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
 ```json
 {
   "theme": "aquamint",
+  "showOnStartup": true,
   "borderlessWindow": true,
   "trayIconSize": "large",
   "toggleKey": ["Super+Shift+space"],
@@ -102,6 +106,7 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   "centerOnShow": false,
   "fixPosition": [275, 350],
   "modifyResize": [0, -3],
+  "paintDelay": 300,
   "skipPathParsing": true,
   "fluxboxMenuFile": false,
   "directories": ["~/Downloads", "~/Videos", "~/Nextcloud/Documents"]
