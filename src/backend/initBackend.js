@@ -35,7 +35,10 @@ function fixSizing(obj) {
 // along with a helpful comment about what it does
 function setupMessageListener() {
   const handlers = {
-    quit: () => app.quit(),
+    quit: () => {
+      if (unixSocket) unixSocket.destroy()
+      app.quit()
+    },
     getConfig: () => backend.config,
     getLogBuffer: () => log.getBuffer(),
     refreshConfig: getConfig.inject,
@@ -63,6 +66,7 @@ function setupMessageListener() {
   handleMessage('MSG_CENTER_WINDOW', handlers.centerWindow)
   handleMessage('MSG_TOGGLE_DEV_TOOLS', handlers.toggleDevTools)
   unixSocket.create(handlers)
+  process.on('SIGINT', handlers.quit)
 }
 
 async function initBackend() {

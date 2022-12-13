@@ -1,4 +1,9 @@
 #!/bin/bash
+# if there is no running instance of this script, but there's a socket file, then we shall clear that up
+if [[ $(ps a | grep "springald/launcher.sh" | wc -l) -eq 1 && -S "/tmp/springald.sock" ]]; then
+  echo "deleting leftover socket file"
+  rm /tmp/springald.sock
+fi
 # if socat is installed and we have a running instance's socket, then just toggle that instance
 if [[ $(command -v socat | wc -l) -eq 1 && -S "/tmp/springald.sock" ]]; then
   echo "socket /tmp/springald.sock exists, toggling instance"

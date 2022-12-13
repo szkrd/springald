@@ -31,7 +31,6 @@ unixSocket.create = ({ toggleWindow, refreshConfig, quit }) => {
       } else if (isCommand(data, CMD_RELOAD)) {
         refreshConfig()
       } else if (isCommand(data, CMD_QUIT)) {
-        unixServer.close()
         quit()
       }
     })
