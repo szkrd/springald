@@ -82,6 +82,12 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
     "\\.(txt|md)$": "code"
   },
 
+  // override the launched executable's parameters (by default it's the filename with its full path)
+  // (path + name = command); valid replacables: %PATH%, %NAME%, %COMMAND%, %TYPE%, %ID%
+  "openWithParams": {
+    "gtk-launch": "%NAME%"
+  },
+
   // directories to index, home "~" marker is supported
   "directories": ["~/Downloads", "~/Pictures", "~/Videos"]
 }
@@ -99,13 +105,23 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   "trayIconSize": "large",
   "toggleKey": ["Super+Shift+space"],
   "openWith": {
-    "\\.(txt|md)$": "xed"
+    "\\.(txt|md)$": "xed",
+    "\\.(desktop)$": "gtk-launch"
+  },
+  "openWithParams": {
+    "gtk-launch": "%NAME%"
   },
   "centerOnShow": false,
   "fixPosition": [275, 350],
   "modifyResize": [0, -3],
   "paintDelay": 300,
   "fluxboxMenuFile": false,
-  "directories": ["~/Downloads", "~/Videos", "~/Nextcloud/Documents"]
+  "directories": [
+    "~/Downloads",
+    "~/Videos",
+    "~/Nextcloud/Documents",
+    "/usr/share/applications/",
+    "~/.local/share/applications/"
+  ]
 }
 ```

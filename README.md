@@ -95,5 +95,5 @@ Available tasks: **lint** (as build, use `ctrl + shift + b`), **lint:fix**.
 
 ### TODO
 
-- [ ] add `.desktop` file support (still a work in progress).
-- [ ] list uwp apps (see EPERM part in `parsePath.js`).
+- [ ] add proper `.desktop` file support (`gtk-launch` is a workaround for now)?
+- [ ] list uwp apps (see EPERM part in `parsePath.js`)?
