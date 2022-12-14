@@ -36,7 +36,7 @@ function fixSizing(obj) {
 function setupMessageListener() {
   const handlers = {
     quit: () => {
-      if (unixSocket) unixSocket.destroy()
+      if (unixSocket && typeof unixSocket.destroy === 'function') unixSocket.destroy()
       app.quit()
     },
     getConfig: () => backend.config,

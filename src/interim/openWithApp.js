@@ -29,6 +29,7 @@ function openWithApp(item, withApp, config) {
 
   // shortcut for open with default file manager
   if (withApp === config.appShortcuts.showItemInFolder) {
+    log.info('Shell command (show in folder): ' + item.command)
     return shell.showItemInFolder(item.command) // this is NOT a Promise
   }
 
@@ -42,7 +43,7 @@ function openWithApp(item, withApp, config) {
   // and not the full path+filename combo (honestly, only gtk-launch was this shitty so far,
   // and if I implemented a simple .desktop parser, then I wouldn't really need it...
   // Arch AUR has "dex" (not the editor) which is a .desktop launcher, but that's buggy too)
-  const paramOverride = config.openWithParams[withAppIsObj ? withApp.name : withApp] // for example '-a -b -x -y %NAME%'
+  const paramOverride = (config.openWithParams || {})[withAppIsObj ? withApp.name : withApp] // for example '-a -b -x -y %NAME%'
   let param = item.command // default is the proper command (which is: path + name = command)
   if (paramOverride) {
     param = paramOverride
@@ -69,6 +70,7 @@ function openWithApp(item, withApp, config) {
   if (item.executable) {
     return spawnProcess(item.command)
   } else {
+    log.info('Shell command (open path): ' + item.command)
     return shell.openPath(item.command) // this is a Promise
   }
 }

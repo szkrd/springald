@@ -40,7 +40,7 @@ unixSocket.create = ({ toggleWindow, refreshConfig, quit }) => {
 
 unixSocket.destroy = (callback) => {
   if (!unixServer) {
-    callback()
+    if (typeof callback === 'function') callback()
     return
   }
   unixServer.close(callback)
