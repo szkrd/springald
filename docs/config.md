@@ -16,9 +16,8 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   // fluxbox menu file location, you can disable parsing with an explicit `false`
   "fluxboxMenuFile": "~/.fluxbox/menu",
 
-  // you can explicitly disable the path parsing with `true`, for debugging or if you
-  // have a ton of executables on your path (and they are not particularly useful),
-  // but be careful, this will render the application input filed useless
+  // you can explicitly disable the path parsing with `true`, mostly for debugging
+  // but this will render the exec input field useless
   "skipPathParsing": false,
 
   // start with a borderless window?
@@ -106,7 +105,6 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   "fixPosition": [275, 350],
   "modifyResize": [0, -3],
   "paintDelay": 300,
-  "skipPathParsing": true,
   "fluxboxMenuFile": false,
   "directories": ["~/Downloads", "~/Videos", "~/Nextcloud/Documents"]
 }
