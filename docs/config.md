@@ -53,9 +53,8 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   // all words separated by this string are used in an AND relation for searching
   "logicalAndSeparator": " ",
 
-  // gnome .desktop files' location, can be a string or string[], disable it with null or undefined
-  // only the first "item" will be used for bin duplicate detection
-  // examples: `["/usr/share/applications/", "~/.local/share/applications"]`, `[]`, `null`
+  // gnome .desktop files' location, this is only used for a basic "is desktop executable" detection
+  // (while checking executables on the path), this is NOT for launching .desktop files
   "desktopFilesLocation": "/usr/share/applications/",
 
   // files included in the search, array of regex strings

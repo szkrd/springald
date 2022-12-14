@@ -1,10 +1,8 @@
 const path = require('path')
-const os = require('os')
 const fs = require('fs')
 const fsReaddir = require('fs').promises.readdir
 const log = require('./log')
 const isExec = require('./isExecutable')
-const homeDir = os.homedir()
 
 // skips C:\WINDOWS\* which is not a "healthy thing" to parse
 // (lots of files, special permissions etc.)
@@ -12,53 +10,20 @@ const IGNORE_WIN_ROOT = true
 
 let counter = 0
 
-// linux only: .desktop files
+// linux only: get global .desktop files, strip the "extensions"
+// and return only the basename part (no path either)
 async function getDesktopFriendlies() {
   const config = window.app.config
-  let locations = config.desktopFilesLocation
-  if (locations === undefined || locations === null) return []
-  if (typeof locations === 'string') locations = [locations]
-  if (!Array.isArray(locations)) {
-    log.warn(
-      'Configuration value "desktopFilesLocation" must be a string ' +
-        `or array of strings (was type "${typeof locations}").`
-    )
-    return []
-  }
-  if (locations.length === 0) return []
+  const location = config.desktopFilesLocation
   let files = []
-  let readCount = 0
-  let deskItemCount = 0
-  for (let idx = 0; idx < locations.length; idx++) {
-    const location = String(locations[idx]).replace(/^~/, homeDir)
-    let currentFiles = []
-    try {
-      currentFiles = await fsReaddir(location)
-      readCount++
-    } catch (err) {
-      currentFiles = []
-    }
-    // the old (not string[], only string) version lazily returned only the filenames
-    currentFiles = currentFiles.filter((fn) => /\.desktop$/.test(fn))
-    currentFiles = currentFiles.map((fn) => ({
-      id: `D${deskItemCount++}`,
-      // only the first group (the .desktop files setup by the de) should be used for duplicate detection
-      group: idx,
-      executable: true,
-      type: 'DESKTOPITEM',
-      desktop: true,
-      path: location,
-      name: fn.replace(/\.desktop$/, ''),
-      command: path.join(location, fn), // this should be taken from inside the .desktop file?!
-    }))
-    files = files.concat(currentFiles)
+  try {
+    files = await fsReaddir(location)
+  } catch (err) {
+    files = []
   }
-  if (readCount > 0 && files.length > 0) {
-    log.info(`Read ${readCount} location(s) from "desktopFilesLocation", found ${files.length} desktop files.`)
-  } else {
-    log.info('No .desktop files found.')
-  }
-  return files
+  const onlyDesktopExtensions = (fn) => /\.desktop$/.test(fn)
+  const baseNameOnly = (fn) => fn.replace(/\.desktop$/, '')
+  return files.filter(onlyDesktopExtensions).map(baseNameOnly)
 }
 
 // node injects the project's local bin directory to the path
@@ -141,17 +106,12 @@ function parsePath() {
       .filter((dir) => !/^C:\\WINDOWS\\.*/.test(dir.toUpperCase()))
   }
   dirs = dirs.filter((dir) => fs.existsSync(dir))
-  const all = [getDesktopFriendlies(true), ...dirs.map((dir) => readDir(dir))]
+  const all = [getDesktopFriendlies(), ...dirs.map((dir) => readDir(dir))]
   return Promise.all(all).then(
     (packs) => {
-      // first item is an array of desktop files, let's use that for the .desktop flag detection
-      const desktops = packs[0].map((item) => item.name.toLowerCase())
-      const deDesktops = desktops.filter((item) => item.group === 0)
-
-      // since .desktop support is WORK IN PROGRESS, I'll throw all of them away for now
-      // TODO: get .desktop's internal content and use the proper launcher command (with support for terminal=true)
-      // TODO: remove the "plain" executables (or the .desktop ones) to avoid duplicates (like /usr/bin/foo vs foo.desktop)
-      packs.shift()
+      // first item is an array of desktop files, let's remove that
+      // (in this list `/usr/share/applications/foobar.desktop` is just `foobar`)
+      const desktops = packs.shift()
 
       // then rest are individual executables found in path dirs
       packs.forEach((pack) => result.push.apply(result, pack))
@@ -167,11 +127,12 @@ function parsePath() {
       // and this method will not deal with those, for example
       // `gnome-keyboard-panel.desktop` launches `gnome-control-center keyboard`
       // which is an executable AND a parameter)
-      if (deDesktops.length) {
+      if (desktops.length) {
         result.forEach((fn) => {
-          const idxInDesktopsArray = deDesktops.indexOf(String(fn.name).toLowerCase())
+          const idxInDesktopsArray = desktops.indexOf(fn.name)
           if (idxInDesktopsArray > -1) {
             fn.desktop = true
+            desktops[idxInDesktopsArray] = null
           }
         })
       }
