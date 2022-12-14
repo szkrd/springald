@@ -39,7 +39,7 @@ function openWithApp(item, withApp, config) {
   // TODO: would it be useful to have an array of executables?
   // OR define a custom list of executables, like { node: '/usr/bin/node', chrome: '...' }
   if (typeof withApp === 'string' && withApp) {
-    return spawnProcess(`${quote(withApp)} "${item.name}"`)
+    return spawnProcess(`${quote(withApp)} "${item.command}"`)
   }
 
   // WARN: withApp is always a string so far (I think), this is NYI
