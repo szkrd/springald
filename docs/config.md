@@ -116,6 +116,7 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   "modifyResize": [0, -3],
   "paintDelay": 300,
   "fluxboxMenuFile": false,
+  "includeFiles": ["\\.(txt|md|html|docx|pdf|jpe?g|png|desktop)$"],
   "directories": [
     "~/Downloads",
     "~/Videos",
