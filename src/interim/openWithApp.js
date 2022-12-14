@@ -42,7 +42,6 @@ function openWithApp(item, withApp, config) {
     return spawnProcess(`${quote(withApp)} "${item.command}"`)
   }
 
-  // WARN: withApp is always a string so far (I think), this is NYI
   // desktops, pathexecs or fluxbox commands (the latter is kinda weird I guess)
   // this of course can create interesting scenarios (like opening a fluxbox
   // command with a mediaplayer, but let's assume the user knows what he or she does)
