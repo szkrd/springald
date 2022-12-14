@@ -6,7 +6,13 @@ uses no dependencies apart from ~~nwjs~~ electron.
 It can parse a fluxbox menu file, read directories from path or from a config file,
 can launch .desktop files. That's it.
 
+Ambience theme:
+
 ![looks like this](./docs/demo.jpg)
+
+Aquamint theme:
+
+![screen recording](./docs/demo.gif)
 
 This is a rather messy tool, you probably need something more robust, like
 [Albert](https://github.com/albertlauncher/albert),
