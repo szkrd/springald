@@ -82,6 +82,7 @@ Available tasks: **lint** (as build, use `ctrl + shift + b`), **lint:fix**.
 ### linux
 
 - use `trayIconSize: 'large'` if your tray supports hires icons
+- the tray tooltip may or may not work (see: https://github.com/electron/electron/issues/28131)
 - use `fixPosition` and `modifyResize` to fix window size problems
 - if the global `toggleKey` misbehaves, you will have to fall back to unix sockets
 - gnome/cinnamon:
