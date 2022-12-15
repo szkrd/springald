@@ -22,8 +22,6 @@ function spawnProcess(commandLine, options = {}) {
   return spawn(commandLine, spawnOpt)
 }
 
-// TODO support for withApp parameter
-// see for example: https://github.com/sindresorhus/opn
 function openWithApp(item, withApp, config) {
   const withAppIsObj = typeof withApp === 'object' && withApp !== null
 

@@ -89,7 +89,10 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   },
 
   // directories to index, home "~" marker is supported
-  "directories": ["~/Downloads", "~/Pictures", "~/Videos"]
+  "directories": ["~/Downloads", "~/Pictures", "~/Videos"],
+
+  // dumb feature flag switch
+  "betaFeatures": false
 }
 ```
 

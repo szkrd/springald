@@ -26,5 +26,6 @@
   "openWith": {
     "\\.(txt|md)$": "code"
   },
-  "directories": ["~/Downloads", "~/Pictures", "~/Videos"]
+  "directories": ["~/Downloads", "~/Pictures", "~/Videos"],
+  "betaFeatures": false
 }
