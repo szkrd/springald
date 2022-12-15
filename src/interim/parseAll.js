@@ -21,8 +21,11 @@ function parseAll(searchItems) {
 
   return Promise.all(promises).then(
     (itemPacks) => {
+      // collect stats for log info
       const count = (val) => (Array.isArray(val) ? val.length : 0)
       const counts = { flux: count(itemPacks[0]), path: count(itemPacks[1]), dirs: count(itemPacks[2]) }
+
+      // flatten results
       itemPacks.forEach((items) => searchItems.push.apply(searchItems, items))
 
       // add the searchable text, which shall be unified for all item types
