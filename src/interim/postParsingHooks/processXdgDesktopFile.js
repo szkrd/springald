@@ -6,8 +6,15 @@ async function processXdgDesktopFile(item) {
   contents = await readFile(fn, 'utf-8') // TODO try catch and err.meta (like .module)
   const lines = contents.split(/\n/)
   const xdgObj = {}
+  let currentGroup = ''
   lines.forEach((line) => {
     line = line.trim()
+    // skip comments and empty lines
+    if (!line || line.startsWith('#')) return
+    // groups
+    if (line.startsWith('[') && line.endsWith(']')) currentGroup = line.substring(1, line.length - 1)
+    // process only "[Desktop Entry]" groups
+    if (currentGroup !== 'Desktop Entry') return
     const splits = line.split(/=(.*)/s) // TODO handle escaping?
     if (splits.length > 1 && !splits[0].includes('[')) {
       let val = splits[1]
