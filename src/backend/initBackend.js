@@ -5,33 +5,68 @@ const initTray = require('./initTray')
 const initWindow = require('./initWindow')
 const initGlobalShortcuts = require('./initGlobalShortcuts')
 const handleMessage = require('./modules/messages/handleMesssage')
+const isCoord = require('./utils/isCoord')
+const unixSocket = require('./modules/unixSocket')
 
 let initialized = false
 let backend // win, tray, config
 
+// fuck this shit, really; get position and set position fails before/after
+// a resize, so the window slowly moves towards 0 0, maybe because
+// of the non 1:1 desktop size I have, but I'm not sure (it doesn't
+// happen in a vm, only on the "real" hardware (a thinkpad t480s)
+function fixPosition() {
+  const cfg = backend.config
+  if (isCoord(cfg.fixPosition)) backend.win.setPosition(...cfg.fixPosition)
+}
+
+// just like fix position, "sometimes" on linux the height calculation
+// is off by a couple of pixels and of course this doesn't happen in a vm
+function fixSizing(obj) {
+  const cfg = backend.config
+  if (isCoord(cfg.modifyResize)) {
+    obj.width += cfg.modifyResize[0]
+    obj.height += cfg.modifyResize[1]
+  }
+  return obj
+}
+
 // do NOT forget to set these message is messages.js
 // along with a helpful comment about what it does
 function setupMessageListener() {
-  handleMessage('MSG_QUIT', () => app.quit())
-  handleMessage('MSG_GET_CONFIG', () => backend.config)
-  handleMessage('MSG_GET_LOG_BUFFER', () => log.getBuffer())
-  handleMessage('MSG_REFRESH_CONFIG', getConfig.inject)
-
-  handleMessage('MSG_RESIZE_WINDOW', (payload) => {
-    backend.win.setSize(payload.width, payload.height)
-  })
-
-  handleMessage('MSG_TOGGLE_WINDOW', () => {
-    backend.win.toggle()
-  })
-
-  handleMessage('MSG_CENTER_WINDOW', () => {
-    backend.win.center()
-  })
-
-  handleMessage('MSG_TOGGLE_DEV_TOOLS', () => {
-    backend.win.toggleDevTools()
-  })
+  const handlers = {
+    quit: () => {
+      if (unixSocket && typeof unixSocket.destroy === 'function') unixSocket.destroy()
+      app.quit()
+    },
+    getConfig: () => backend.config,
+    getLogBuffer: () => log.getBuffer(),
+    refreshConfig: getConfig.inject,
+    resizeWindow: (payload) => {
+      const { width, height } = fixSizing(payload)
+      backend.win.setSize(width, height)
+      fixPosition()
+    },
+    toggleWindow: () => {
+      backend.win.toggle()
+    },
+    centerWindow: () => {
+      backend.win.center()
+    },
+    toggleDevTools: () => {
+      backend.win.toggleDevTools()
+    },
+  }
+  handleMessage('MSG_QUIT', handlers.quit)
+  handleMessage('MSG_GET_CONFIG', handlers.getConfig)
+  handleMessage('MSG_GET_LOG_BUFFER', handlers.getLogBuffer)
+  handleMessage('MSG_REFRESH_CONFIG', handlers.refreshConfig)
+  handleMessage('MSG_RESIZE_WINDOW', handlers.resizeWindow)
+  handleMessage('MSG_TOGGLE_WINDOW', handlers.toggleWindow)
+  handleMessage('MSG_CENTER_WINDOW', handlers.centerWindow)
+  handleMessage('MSG_TOGGLE_DEV_TOOLS', handlers.toggleDevTools)
+  unixSocket.create(handlers)
+  process.on('SIGINT', handlers.quit)
 }
 
 async function initBackend() {
@@ -42,7 +77,7 @@ async function initBackend() {
   }
   if (initialized) return backend
   const config = await getConfig(app.getPath('userData'))
-  const tray = initTray()
+  const tray = await initTray()
   const store = {}
   const globalShortcuts = await initGlobalShortcuts()
   const win = await initWindow()

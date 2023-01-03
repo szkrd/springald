@@ -1,6 +1,6 @@
 {
   "name": "springald",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Simple application launcher, similar to Launchy.",
   "author": "Szabolcs Kurdi",
   "license": "ISC",
@@ -9,11 +9,12 @@
     "start": "electron .",
     "dev": "cross-env NODE_ENV=development electron .",
     "lint": "eslint src",
-    "lint:fix": "eslint --fix src"
+    "lint:fix": "eslint --fix src",
+    "format": "prettier --write src"
   },
   "devDependencies": {
     "cross-env": "7.0.2",
-    "electron": "9.0.4",
+    "electron": "21.3.3",
     "eslint": "7.1.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-prettier": "3.1.3",

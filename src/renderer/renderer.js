@@ -116,7 +116,9 @@
     // if you haven't modified the app field, then "prefill" it with ghost text
     // (searchableText is the pretty text, like "d:~/foo/bar/baz.txt")
     if (!$('#app').value && Object.keys(config.openWith || {}).length > 0) {
-      const appGhostText = rt.getPreferredOpenWith(found.searchableText)
+      const forAsIs = rt.getPreferredOpenWith(found.searchableText) // first we match against the visible text
+      const forCommand = rt.getPreferredOpenWith(found.command) // if that fails, then we fall back to the command (=path+name)
+      const appGhostText = forAsIs || forCommand
       onAppChange(appGhostText)
     }
   }

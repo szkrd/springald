@@ -1,12 +1,16 @@
 const { Menu, Tray } = require('electron')
+const getConfig = require('../interim/getConfig')
 const sendMessage = require('./modules/messages/sendMessage')
 
 let initialized = false
 let tray
 
-function initTray() {
+async function initTray() {
   if (initialized) return tray
-  tray = new Tray('assets/icon-16x16.png')
+  const config = await getConfig()
+  let iconFileName = 'icon-16x16.png'
+  if (config.trayIconSize === 'large') iconFileName = 'icon-64x64.png'
+  tray = new Tray('assets/' + iconFileName)
   const contextMenu = Menu.buildFromTemplate([
     { label: 'toggle window', type: 'normal', click: () => sendMessage('MSG_TOGGLE_WINDOW') },
     { label: 'quit', type: 'normal', click: () => sendMessage('MSG_QUIT') },

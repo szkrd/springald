@@ -16,12 +16,38 @@ body.theme-ambiance {
 /* selected item */
 body.theme-ambiance .result.selected {
   font-weight: normal;
-  background: linear-gradient(180deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, .1));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
 }
 
 /* two text inputs on the top */
 body.theme-ambiance .search,
 body.theme-ambiance .app {
-  background: linear-gradient(180deg, rgba(0, 0, 0, .2) 1%, rgba(0, 0, 0, 0));
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 1%, rgba(0, 0, 0, 0));
+  border-bottom: 1px solid var(--main-bg-color);
+}
+
+/**
+ * AQUAMINT
+ */
+body.theme-aquamint {
+  --main-bg-color: #303131;
+  --main-fg-color: #fff;
+  --selected-fg-color: #6aa0bd;
+  --underline-fg-color: #d8f3ff;
+  --scrollbar-thumb-color: #717272;
+  --scrollbar-thumb-hover-color: #616262;
+  --scrollbar-thumb-active-color: #6aa0bd;
+}
+
+/* selected item */
+body.theme-aquamint .result.selected {
+  font-weight: normal;
+  background: linear-gradient(180deg, rgba(106, 160, 189, 1), rgba(106, 160, 189, 0.8));
+}
+
+/* two text inputs on the top */
+body.theme-aquamint .search,
+body.theme-aquamint .app {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 1%, rgba(65, 66, 67, 0.3));
   border-bottom: 1px solid var(--main-bg-color);
 }

@@ -53,8 +53,9 @@ function readDir(location) {
           // on windows uwp reparse points (zero byte executables that
           // setup a security context) are unreadable (https://stackoverflow.com/q/58296925)
           const unreadableError = file.endsWith('.exe') && String(err).startsWith('Error: UNKNOWN:')
+          const isUwpApp = file.includes('\\WindowsApps\\')
           const noPermission = String(err).startsWith('Error: EPERM:')
-          if (err && !unreadableError && !noPermission) {
+          if (err && !unreadableError && !noPermission && !isUwpApp) {
             // on Ubuntu some packages may leave broken symlinks behind, so
             // getting a file not found error is not that uncommon
             // in that case go and delete that file yourself...
@@ -93,6 +94,8 @@ function parsePath() {
   const result = []
   const pathItems = process.env.PATH.split(dl)
   let dirs = [...new Set(pathItems)]
+  // let's try to find path duplicates, BUT it's possible that we have duplicates on Windows
+  // coming from the git installation and those can not be found (or fixed) in the system properties
   if (pathItems.length !== dirs.length) {
     const duplicates = [...new Set(pathItems.filter((item, index) => pathItems.indexOf(item) !== index))]
     log.warn(`You have duplicate items in your PATH! (${duplicates.join(', ')})`)

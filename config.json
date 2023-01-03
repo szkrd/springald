@@ -3,16 +3,21 @@
   "winWidth": 800,
   "fluxboxMenuFile": "~/.fluxbox/menu",
   "borderlessWindow": false,
+  "fixPosition": [],
+  "modifyResize": [],
+  "paintDelay": 0,
   "showOnStartup": false,
   "centerOnShow": true,
   "autoSelectAll": true,
+  "trayIconSize": "small",
   "toggleKey": ["Super+`", "CmdOrCtrl+Alt+Shift+`"],
   "logicalAndSeparator": " ",
   "desktopFilesLocation": "/usr/share/applications/",
-  "includeFiles": [ "\\.(txt|md|html|docx|pdf|jpe?g|png|avi|mkv|mp4)$" ],
-  "excludeFiles": [ "^\\._" ],
-  "excludedDirs": [ "^node_modules$", "^\\." ],
+  "includeFiles": ["\\.(txt|md|html|docx|pdf|jpe?g|png|avi|mkv|mp4)$"],
+  "excludeFiles": ["^\\._"],
+  "excludedDirs": ["^node_modules$", "^\\."],
   "excludeHidSys": true,
+  "skipPathParsing": false,
   "terminalCommand": "gnome-terminal -- %CMD%",
   "appShortcuts": {
     "showItemInFolder": "F",
@@ -21,9 +26,6 @@
   "openWith": {
     "\\.(txt|md)$": "code"
   },
-  "directories": [
-    "~/Downloads",
-    "~/Pictures",
-    "~/Videos"
-  ]
+  "directories": ["~/Downloads", "~/Pictures", "~/Videos"],
+  "betaFeatures": false
 }
