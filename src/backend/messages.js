@@ -14,10 +14,10 @@ const messages = {
   MSG_CENTER_WINDOW: '',
   MSG_TOGGLE_WINDOW: '',
   MSG_TOGGLE_DEV_TOOLS: '',
-}
+};
 
 Object.keys(messages).forEach((key) => {
-  messages[key] = key
-})
+  messages[key] = key;
+});
 
-module.exports = messages
+module.exports = messages;

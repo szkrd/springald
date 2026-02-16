@@ -1,19 +1,19 @@
-const os = require('os')
-const net = require('net')
+const os = require('os');
+const net = require('net');
 
-const unixSocket = {}
-let unixServer = null
+const unixSocket = {};
+let unixServer = null;
 
-const SOCKET_NAME = '/tmp/springald.sock'
-const CMD_TOGGLE = 'toggle'
-const CMD_RELOAD = 'reload'
-const CMD_QUIT = ['quit', 'close']
+const SOCKET_NAME = '/tmp/springald.sock';
+const CMD_TOGGLE = 'toggle';
+const CMD_RELOAD = 'reload';
+const CMD_QUIT = ['quit', 'close'];
 
 function isCommand(input = '', cmd = []) {
   if (typeof cmd === 'string') {
-    cmd = [cmd]
+    cmd = [cmd];
   }
-  return cmd.includes((input.toString() || '').trim())
+  return cmd.includes((input.toString() || '').trim());
 }
 
 /**
@@ -22,28 +22,28 @@ function isCommand(input = '', cmd = []) {
  */
 unixSocket.create = ({ toggleWindow, refreshConfig, quit }) => {
   if (os.platform() !== 'linux') {
-    return
+    return;
   }
   unixServer = net.createServer((client) => {
     client.on('data', (data) => {
       if (isCommand(data, CMD_TOGGLE)) {
-        toggleWindow()
+        toggleWindow();
       } else if (isCommand(data, CMD_RELOAD)) {
-        refreshConfig()
+        refreshConfig();
       } else if (isCommand(data, CMD_QUIT)) {
-        quit()
+        quit();
       }
-    })
-  })
-  unixServer.listen(SOCKET_NAME)
-}
+    });
+  });
+  unixServer.listen(SOCKET_NAME);
+};
 
 unixSocket.destroy = (callback) => {
   if (!unixServer) {
-    if (typeof callback === 'function') callback()
-    return
+    if (typeof callback === 'function') callback();
+    return;
   }
-  unixServer.close(callback)
-}
+  unixServer.close(callback);
+};
 
-module.exports = unixSocket
+module.exports = unixSocket;

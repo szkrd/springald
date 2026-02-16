@@ -1,11 +1,11 @@
-;(function () {
+(function () {
   function resultItems() {
-    const { MAX_RESULT_ITEMS } = window.app.constants
-    let ret = ''
+    const { MAX_RESULT_ITEMS } = window.app.constants;
+    let ret = '';
     for (let i = 0; i < MAX_RESULT_ITEMS; i++) {
-      ret += `<div class="result type-UNSET" id="result-${i}" style="display:none">${i}</div>`
+      ret += `<div class="result type-UNSET" id="result-${i}" style="display:none">${i}</div>`;
     }
-    return ret
+    return ret;
   }
 
   // TODO restore override css support? maybe not, in the end I never used it
@@ -22,8 +22,8 @@
     <div class="results">${resultItems()}</div>
   `
       .replace(/\s+/g, ' ')
-      .replace(/> </g, '><')
+      .replace(/> </g, '><');
   }
 
-  window.app.runtime.renderPage = renderPage
-})()
+  window.app.runtime.renderPage = renderPage;
+})();

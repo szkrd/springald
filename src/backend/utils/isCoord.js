@@ -3,7 +3,7 @@
  * @returns boolean
  */
 function isCoord(val) {
-  return Array.isArray(val) && val.length === 2 && val.every((item) => typeof item === 'number')
+  return Array.isArray(val) && val.length === 2 && val.every((item) => typeof item === 'number');
 }
 
-module.exports = isCoord
+module.exports = isCoord;

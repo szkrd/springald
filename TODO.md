@@ -1,0 +1,9 @@
+- update all deps
+- print memory usage
+- kill cross-env (?)
+- plugin system (??) todo, scratchpad, sticky notes, whatever (hey, I have an electron)
+- vscode tasks.json compatibility (?)
+- windows:
+  - launching files with spaces in the pathname (bug, win11?)
+  - launch as admin (?)
+  - alternative to fluxbox config (some json maybe)
