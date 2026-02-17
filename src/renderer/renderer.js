@@ -1,7 +1,7 @@
 // RENDERER
 // ========
 //
-// - This is pure frontend code, no `require` allowed.
+// - This is pure frontend code, no `require` (for local file import) allowed.
 // - Every dependency is accessed via `window.app`.
 // - The `window.app` objects are created through _../index.html_.
 // - Final `DOMContentLoaded` will happen here.
