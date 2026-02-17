@@ -1,7 +1,7 @@
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
-const log = require('./log');
+const log = require('../log');
 
 let counter = 0;
 const homeDir = os.homedir();

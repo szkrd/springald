@@ -1,10 +1,10 @@
 const sharedConfig = require('../renderer/shared/sharedConfig');
 const log = require('./log');
-const parseDirs = require('./parseDirs');
-const parsePath = require('./parsePath');
-const parseFluxboxMenu = require('./parseFluxboxMenu');
-const getSearchableText = require('./getSearchableText');
-const processPostParseHooks = require('./postParsingHooks/processPostParseHooks');
+const parseDirs = require('./parsing/parseDirs');
+const parsePath = require('./parsing/parsePath');
+const parseFluxboxMenu = require('./parsing/parseFluxboxMenu');
+const getSearchableText = require('./parsing/getSearchableText');
+const processPostParseHooks = require('./parsing/postParsingHooks/processPostParseHooks');
 
 async function parseAll(searchItems) {
   searchItems = searchItems || [];

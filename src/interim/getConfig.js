@@ -1,7 +1,7 @@
 const path = require('path');
 const log = require('./log');
 const appConfig = require('../../config.json');
-const readJsonFile = require('../interim/readJsonFile');
+const readJsonFile = require('./utils/readJsonFile');
 let localAppConfig = {};
 try {
   localAppConfig = require('../../config.local.json');

@@ -4,6 +4,10 @@ const sharedConfig = require('../shared/sharedConfig');
 const sharedStore = require('../shared/sharedStore');
 const { dom } = require('../utils/utils');
 
+/**
+ * Sends a `MSG_RESIZE_WINDOW` message to the backend
+ * with the width and height (based on the list of found items).
+ */
 function setWindowSize() {
   const { MAX_VISIBLE_ITEM_COUNT, FALLBACK_WIN_WIDTH } = constants;
   const { $ } = dom;
@@ -16,8 +20,7 @@ function setWindowSize() {
   let height = itemHeight + itemHeight * itemMax;
   height += foundItemCount ? itemHeight : 0;
   const width = sharedConfig.winWidth || FALLBACK_WIN_WIDTH;
-  const payload = { width, height };
-  sendMessage('MSG_RESIZE_WINDOW', payload);
+  sendMessage('MSG_RESIZE_WINDOW', { width, height });
 }
 
 module.exports = setWindowSize;

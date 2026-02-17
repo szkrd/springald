@@ -17,15 +17,6 @@
   Object.assign(sharedConfig, config);
   let electronLayoutFixed = false;
 
-  function initStore() {
-    Object.assign(sharedStore, {
-      current: 0,
-      ghost: null,
-      searchItems: [],
-      found: [],
-    });
-  }
-
   function resetInputFields() {
     onSearchChange('');
     onAppChange('');
@@ -163,7 +154,6 @@
   $(() => {
     log.info('App renderer activated. You can access app internals inside renderer via "window.app".');
     $(window).on('error', runtime.handleError);
-    initStore();
     runtime.setAppLoading(true);
     parseAll()
       .then((result) => {

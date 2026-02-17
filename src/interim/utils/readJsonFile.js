@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const log = require('./log');
+const log = require('../log');
 
 async function readJsonFile(fileName) {
   try {

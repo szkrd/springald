@@ -1,9 +1,9 @@
 const path = require('path');
 const fs = require('fs');
 const fsReaddir = require('fs').promises.readdir;
-const log = require('./log');
-const isExec = require('./isExecutable');
-const sharedConfig = require('../renderer/shared/sharedConfig');
+const log = require('../log');
+const isExecutable = require('../utils/isExecutable');
+const sharedConfig = require('../../renderer/shared/sharedConfig');
 
 // skips C:\WINDOWS\* which is not a "healthy thing" to parse
 // (lots of files, special permissions etc.)
@@ -69,7 +69,7 @@ function readDir(location) {
           if (stats && stats.isFile()) {
             const parsed = path.parse(file);
             // on the path non executables are not interesting
-            if (isExec(parsed.ext, stats.mode) && !isLocalNodeBin(file)) {
+            if (isExecutable(parsed.ext, stats.mode) && !isLocalNodeBin(file)) {
               results.push({
                 id: `p${counter++}`,
                 executable: true,
