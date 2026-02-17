@@ -66,7 +66,8 @@ async function initWindow() {
       contextIsolation: false,
       // another problem is that now we have no "require" (node module access) in the renderer
       // thread (changed around electron 5-ish), because that's a security risk (obviously),
-      // but since this is pretty much a personal project with zero dependencies, I will ignore that...
+      // but since this is pretty much a personal project with zero runtime dependencies,
+      // I will bravely ignore that...
       nodeIntegration: true,
       enableRemoteModule: true,
     },

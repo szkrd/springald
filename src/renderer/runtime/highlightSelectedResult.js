@@ -1,23 +1,23 @@
-(function () {
-  function highlightSelectedResult() {
-    const { $, $$ } = window.app.utils.dom;
-    const { store } = window.app;
-    const all = $$('.result');
-    if (store.current < 0) {
-      store.current = 0;
-    }
-    if (store.current > all.length - 1) {
-      store.current = all.length - 1;
-    }
-    const el = $(`#result-${store.current}`);
-    if (el) {
-      all.forEach((current) => {
-        current.classList.remove('selected');
-      });
-      el.classList.add('selected');
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-  }
+const sharedStore = require('../shared/sharedStore');
+const { dom } = require('../utils/utils');
 
-  window.app.runtime.highlightSelectedResult = highlightSelectedResult;
-})();
+function highlightSelectedResult() {
+  const { $, $$ } = dom;
+  const all = $$('.result');
+  if (sharedStore.current < 0) {
+    sharedStore.current = 0;
+  }
+  if (sharedStore.current > all.length - 1) {
+    sharedStore.current = all.length - 1;
+  }
+  const el = $(`#result-${sharedStore.current}`);
+  if (el) {
+    all.forEach((current) => {
+      current.classList.remove('selected');
+    });
+    el.classList.add('selected');
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+module.exports = highlightSelectedResult;

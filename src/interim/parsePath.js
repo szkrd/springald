@@ -3,6 +3,7 @@ const fs = require('fs');
 const fsReaddir = require('fs').promises.readdir;
 const log = require('./log');
 const isExec = require('./isExecutable');
+const sharedConfig = require('../renderer/shared/sharedConfig');
 
 // skips C:\WINDOWS\* which is not a "healthy thing" to parse
 // (lots of files, special permissions etc.)
@@ -13,7 +14,7 @@ let counter = 0;
 // linux only: get global .desktop files, strip the "extensions"
 // and return only the basename part (no path either)
 async function getDesktopFriendlies() {
-  const config = window.app.config;
+  const config = sharedConfig;
   const location = config.desktopFilesLocation;
   let files;
   try {

@@ -1,21 +1,23 @@
-(function () {
-  function setWindowSize() {
-    const { MAX_VISIBLE_ITEM_COUNT, FALLBACK_WIN_WIDTH } = window.app.constants;
-    const { config } = window.app;
-    const { $ } = window.app.utils.dom;
-    const { sendMessage } = window.app.interim;
-    const foundItems = window.app.store.found || [];
-    const foundItemCount = foundItems.length;
+const sendMessage = require('../../interim/sendMessage');
+const constants = require('../constants');
+const sharedConfig = require('../shared/sharedConfig');
+const sharedStore = require('../shared/sharedStore');
+const { dom } = require('../utils/utils');
 
-    const style = window.getComputedStyle($('#current'), null);
-    const itemHeight = parseInt(style.height.replace(/px/, ''), 10);
-    const itemMax = Math.min(foundItemCount, MAX_VISIBLE_ITEM_COUNT);
-    let height = itemHeight + itemHeight * itemMax;
-    height += foundItemCount ? itemHeight : 0;
-    const width = config.winWidth || FALLBACK_WIN_WIDTH;
-    const payload = { width, height };
-    sendMessage('MSG_RESIZE_WINDOW', payload);
-  }
+function setWindowSize() {
+  const { MAX_VISIBLE_ITEM_COUNT, FALLBACK_WIN_WIDTH } = constants;
+  const { $ } = dom;
+  const foundItems = sharedStore.found || [];
+  const foundItemCount = foundItems.length;
 
-  window.app.runtime.setWindowSize = setWindowSize;
-})();
+  const style = window.getComputedStyle($('#current'), null);
+  const itemHeight = parseInt(style.height.replace(/px/, ''), 10);
+  const itemMax = Math.min(foundItemCount, MAX_VISIBLE_ITEM_COUNT);
+  let height = itemHeight + itemHeight * itemMax;
+  height += foundItemCount ? itemHeight : 0;
+  const width = sharedConfig.winWidth || FALLBACK_WIN_WIDTH;
+  const payload = { width, height };
+  sendMessage('MSG_RESIZE_WINDOW', payload);
+}
+
+module.exports = setWindowSize;

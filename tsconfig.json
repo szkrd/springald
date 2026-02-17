@@ -9,7 +9,7 @@
     "strict": true,
     "skipLibCheck": true,
     "target": "ES2022",
-    "module": "NodeNext", // to disable the require/import warning
+    "module": "commonjs", // to disable the require/import warning
     "ignoreDeprecations": "5.0"
   },
   "include": ["src"]

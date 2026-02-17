@@ -1,25 +1,22 @@
-(function () {
-  function escapeRegExp(str) {
-    return str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
-  }
+const { U_PREFIX, U_POSTFIX } = require('../constants');
 
-  // escape html, but allow underlines
-  function escapeHtml(unsafe) {
-    const consts = window.app.constants;
-    const prefix = consts.U_PREFIX;
-    const postfix = consts.U_POSTFIX;
-    return unsafe
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;')
-      .replace(new RegExp(escapeRegExp(prefix), 'g'), '<u>')
-      .replace(new RegExp(escapeRegExp(postfix), 'g'), '</u>');
-  }
+function escapeRegExp(str) {
+  return str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
+}
 
-  window.app.utils.string = {
-    escapeRegExp,
-    escapeHtml,
-  };
-})();
+// escape html, but allow underlines
+function escapeHtml(unsafe) {
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+    .replace(new RegExp(escapeRegExp(U_PREFIX), 'g'), '<u>')
+    .replace(new RegExp(escapeRegExp(U_POSTFIX), 'g'), '</u>');
+}
+
+module.exports = {
+  escapeRegExp,
+  escapeHtml,
+};

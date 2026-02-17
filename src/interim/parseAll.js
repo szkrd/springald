@@ -1,3 +1,4 @@
+const sharedConfig = require('../renderer/shared/sharedConfig');
 const log = require('./log');
 const parseDirs = require('./parseDirs');
 const parsePath = require('./parsePath');
@@ -9,7 +10,7 @@ async function parseAll(searchItems) {
   searchItems = searchItems || [];
   searchItems.length = 0;
   const startedAt = Date.now();
-  const config = window.app.config;
+  const config = sharedConfig;
   const fbMenuFile = config.fluxboxMenuFile;
   const dirCount = Array.isArray(config.directories) ? config.directories.length : 0;
 

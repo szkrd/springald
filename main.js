@@ -1,25 +1,24 @@
-// RENDERER
-// ========
-//
-// - This is pure frontend code, no `require` (for local file import) allowed.
-// - Every dependency is accessed via `window.app`.
-// - The `window.app` objects are created through _../index.html_.
-// - Final `DOMContentLoaded` will happen here.
-//
 (function () {
-  const interim = window.app.interim;
-  const { sendMessage, log } = interim;
-  const { dom } = window.app.utils;
-  const str = window.app.utils.string;
-  const { $ } = dom;
-  const { store } = window.app;
-  const rt = window.app.runtime;
-  const { MAX_VISIBLE_ITEM_COUNT } = window.app.constants;
-  let config = (window.app.config = sendMessage('MSG_GET_CONFIG'));
+  const log = require('./src/interim/log');
+  const sendMessage = require('./src/interim/sendMessage');
+  const openWithApp = require('./src/interim/openWithApp');
+  const parseAll = require('./src/interim/parseAll');
+  const getConfig = require('./src/interim/getConfig');
+  const utils = require('./src/renderer/utils/utils');
+  const runtime = require('./src/renderer/runtime/runtime');
+  const sharedStore = require('./src/renderer/shared/sharedStore');
+  const sharedConfig = require('./src/renderer/shared/sharedConfig');
+  const { MAX_VISIBLE_ITEM_COUNT } = require('./src/renderer/constants');
+
+  const { $, inputFocusClassToBody, disableKeyDownForElement } = utils.dom;
+  const { escapeHtml } = utils.string;
+
+  let config = sendMessage('MSG_GET_CONFIG');
+  Object.assign(sharedConfig, config);
   let electronLayoutFixed = false;
 
   function initStore() {
-    Object.assign(store, {
+    Object.assign(sharedStore, {
       current: 0,
       ghost: null,
       searchItems: [],
@@ -30,39 +29,39 @@
   function resetInputFields() {
     onSearchChange('');
     onAppChange('');
-    $('#search').value = $('#app').value = store.withApp = $('#ghost').innerHTML = '';
+    $('#search').value = $('#app').value = sharedStore.withApp = $('#ghost').innerHTML = '';
     $('#search').focus();
   }
 
   function reparse() {
-    rt.setAppLoading(true);
-    return interim // probably you've added new dirs in your local config, so let's reread the cfg
-      .getConfig(config.dataPath, true)
+    runtime.setAppLoading(true);
+    return getConfig(config.dataPath, true) // probably you've added new dirs in your local config, so let's reread the cfg
       .then((cfg) => {
         sendMessage('MSG_REFRESH_CONFIG', cfg);
-        config = window.app.config = cfg;
-        return parseAll(); // eslint-disable-line no-undef
+        config = cfg;
+        Object.assign(sharedConfig, cfg);
+        return parseAll();
       })
-      .finally(() => rt.setAppLoading(false));
+      .finally(() => runtime.setAppLoading(false));
   }
 
   function launch() {
-    if (!store.found.length) {
+    if (!sharedStore.found.length) {
       return false;
     }
-    const item = store.found[store.current];
+    const item = sharedStore.found[sharedStore.current];
     if (!item) {
       return false;
     }
-    interim.openWithApp(item, store.ghost || store.withApp, config);
+    openWithApp(item, sharedStore.ghost || sharedStore.withApp, config);
     // after successful launch, when the user reopens the window, should we preselect the text?
     if (config.autoSelectAll) {
       $('#search').select();
     }
     // reset manually changed app only (pure ghosts can stay, those were programmatic)
     if ($('#app').value) {
-      $('#app').value = store.withApp = $('#ghost').innerHTML = '';
-      store.ghost = null;
+      $('#app').value = sharedStore.withApp = $('#ghost').innerHTML = '';
+      sharedStore.ghost = null;
     }
     return true;
   }
@@ -102,30 +101,30 @@
     if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown'].includes(e.key)) {
       e.stopPropagation();
       if (e.key === 'ArrowUp') {
-        store.current = (store.current - 1) % store.found.length;
+        sharedStore.current = (sharedStore.current - 1) % sharedStore.found.length;
       } else if (e.key === 'ArrowDown') {
-        store.current = (store.current + 1) % store.found.length;
+        sharedStore.current = (sharedStore.current + 1) % sharedStore.found.length;
       } else if (e.key === 'PageUp') {
-        store.current = Math.max(store.current - MAX_VISIBLE_ITEM_COUNT, 0);
+        sharedStore.current = Math.max(sharedStore.current - MAX_VISIBLE_ITEM_COUNT, 0);
       } else if (e.key === 'PageDown') {
-        store.current = Math.min(store.current + MAX_VISIBLE_ITEM_COUNT, store.found.length - 1);
+        sharedStore.current = Math.min(sharedStore.current + MAX_VISIBLE_ITEM_COUNT, sharedStore.found.length - 1);
       }
-      rt.highlightSelectedResult();
+      runtime.highlightSelectedResult();
       setCurrentAndApp();
     }
   }
 
   function setCurrentAndApp() {
-    if (!store.found.length || !store.found[store.current]) {
+    if (!sharedStore.found.length || !sharedStore.found[sharedStore.current]) {
       return;
     }
-    const found = store.found[store.current];
+    const found = sharedStore.found[sharedStore.current];
     $('#current').textContent = found.command;
     // if you haven't modified the app field, then "prefill" it with ghost text
     // (searchableText is the pretty text, like "d:~/foo/bar/baz.txt")
     if (!$('#app').value && Object.keys(config.openWith || {}).length > 0) {
-      const forAsIs = rt.getPreferredOpenWith(found.searchableText); // first we match against the visible text
-      const forCommand = rt.getPreferredOpenWith(found.command); // if that fails, then we fall back to the command (=path+name)
+      const forAsIs = runtime.getPreferredOpenWith(found.searchableText); // first we match against the visible text
+      const forCommand = runtime.getPreferredOpenWith(found.command); // if that fails, then we fall back to the command (=path+name)
       const appGhostText = forAsIs || forCommand;
       onAppChange(appGhostText);
     }
@@ -135,27 +134,27 @@
     const val = (typeof e === 'string' ? e : e.target.value || '').trim();
     const longEnoughToTrigger = val.length > 1;
     let matchingApp;
-    store.withApp = val;
+    sharedStore.withApp = val;
     if (longEnoughToTrigger) {
-      const desktopItems = store.searchItems.filter((item) => item.desktop);
+      const desktopItems = sharedStore.searchItems.filter((item) => item.desktop);
       // if we can't find it in the desktop friendly list, then try harder
       matchingApp =
         desktopItems.find((item) => item.name.startsWith(val)) ||
-        store.searchItems.find((item) => item.name.startsWith(val) && item.executable);
+        sharedStore.searchItems.find((item) => item.name.startsWith(val) && item.executable);
     }
-    $('#ghost').innerHTML = matchingApp ? str.escapeHtml(matchingApp.name) : '';
-    store.ghost = matchingApp || null;
+    $('#ghost').innerHTML = matchingApp ? escapeHtml(matchingApp.name) : '';
+    sharedStore.ghost = matchingApp || null;
   }
 
   function onSearchChange(e) {
     const val = (typeof e === 'string' ? e : e.target.value || '').trim();
     const words = val ? val.split(config.logicalAndSeparator) : [];
-    store.found = rt.filterSearchItems(store.searchItems, words);
-    store.current = 0;
+    sharedStore.found = runtime.filterSearchItems(sharedStore.searchItems, words);
+    sharedStore.current = 0;
     setCurrentAndApp();
-    rt.renderResults(words);
-    rt.highlightSelectedResult();
-    rt.setWindowSize();
+    runtime.renderResults(words);
+    runtime.highlightSelectedResult();
+    runtime.setWindowSize();
   }
 
   // +--------------------+
@@ -163,28 +162,27 @@
   // +--------------------+
   $(() => {
     log.info('App renderer activated. You can access app internals inside renderer via "window.app".');
-    $(window).on('error', rt.handleError);
+    $(window).on('error', runtime.handleError);
     initStore();
-    rt.setAppLoading(true);
-    interim
-      .parseAll()
+    runtime.setAppLoading(true);
+    parseAll()
       .then((result) => {
-        rt.setAppLoading(false);
-        store.searchItems = result;
+        runtime.setAppLoading(false);
+        sharedStore.searchItems = result;
       })
-      .catch(rt.handleError);
+      .catch(runtime.handleError);
 
     $('body').classList.add(`theme-${config.theme}`);
-    $('body').innerHTML = rt.renderPage();
+    $('body').innerHTML = runtime.renderPage();
 
     // add a helper class to the body, so that we can move the focus
     // indicator line below the focused input with css animation
-    dom.inputFocusClassToBody('#search');
-    dom.inputFocusClassToBody('#app');
+    inputFocusClassToBody('#search');
+    inputFocusClassToBody('#app');
 
     // disable jumping to start / end of input.value
-    dom.disableKeyDownForElement('#search', ['ArrowUp', 'ArrowDown']);
-    dom.disableKeyDownForElement('#app', ['ArrowUp', 'ArrowDown']);
+    disableKeyDownForElement('#search', ['ArrowUp', 'ArrowDown']);
+    disableKeyDownForElement('#app', ['ArrowUp', 'ArrowDown']);
 
     $('#search').focus();
     $('document').on('keyup', onDocumentKey);

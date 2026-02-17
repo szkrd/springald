@@ -2,9 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const log = require('./log');
+const sharedConfig = require('../renderer/shared/sharedConfig');
 
 let counter = 0;
-const getConfig = () => window.app.config;
+const getConfig = () => sharedConfig;
 
 function isAllowedFile(name) {
   const regTest = (r, n) => new RegExp(r).test(n);
