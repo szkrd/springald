@@ -20,8 +20,8 @@ are ignored (use it to "comment out" keys), merging with builtin config is **sha
   // but this will render the exec input field useless
   "skipPathParsing": false,
 
-  // start with a borderless window?
-  "borderlessWindow": false,
+  // start with a borderless window? `false` may cause height problems on Windows
+  "borderlessWindow": true,
 
   // show the main window on startup?
   "showOnStartup": false,

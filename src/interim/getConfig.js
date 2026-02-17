@@ -12,7 +12,7 @@ try {
 let initialized = false;
 let config = {
   ...appConfig,
-  // set from NODE_ENV
+  // set from argv using `--development` or `-d`
   development: false,
   // same as in nwjs (~/.config/appName)
   dataPath: '',
@@ -35,12 +35,7 @@ async function getConfig(dataPath = '', flush = false) {
   Object.assign(config, appConfig, localAppConfig, userConfig || {});
   log.debug('Merged config contains:', config);
   config.dataPath = config.dataPath || dataPath;
-  config.development = process.env.NODE_ENV === 'development';
-  if (!userConfig && !config.development) {
-    // let's hide window borders even if we failed to parse the user config
-    // (the bordered window with zero height content looks really scary)
-    config.borderlessWindow = true;
-  }
+  config.development = process.argv.includes('--development') || process.argv.includes('-d');
   initialized = true;
   return config;
 }

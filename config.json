@@ -2,7 +2,7 @@
   "theme": "default",
   "winWidth": 800,
   "fluxboxMenuFile": "~/.fluxbox/menu",
-  "borderlessWindow": false,
+  "borderlessWindow": true,
   "fixPosition": [],
   "modifyResize": [],
   "paintDelay": 0,

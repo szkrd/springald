@@ -1,4 +1,5 @@
 const { BrowserWindow } = require('electron');
+const os = require('os');
 const log = require('../interim/log');
 const getConfig = require('../interim/getConfig');
 const isCoord = require('./utils/isCoord');
@@ -48,6 +49,11 @@ async function initWindow() {
     size.width += config.modifyResize[0];
     size.height += config.modifyResize[1];
   }
+  if (!config.borderlessWindow && os.platform() === 'win32') {
+    // window.resizeBy could help, but it needs to be called on every height change and the
+    // size change is kinda wonky (not what I specify, would need even more debugging).
+    log.warn('Config.borderlessWindow is buggy on windows! Content area collapses to 1 pixel.');
+  }
   const win = new Window({
     ...size,
     ...position,
@@ -74,8 +80,11 @@ async function initWindow() {
   }
   if (config.showOnStartup || isDev) {
     // the ready-to-show event did not really help
-    if (config.paintDelay) setTimeout(() => win.show(), config.paintDelay);
-    else win.show();
+    if (config.paintDelay) {
+      setTimeout(() => win.show(), config.paintDelay);
+    } else {
+      win.show();
+    }
   }
   return win;
 }
