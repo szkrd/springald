@@ -1,0 +1,23 @@
+import { sendMessage } from '../../interim/sendMessage';
+import { constants } from '../constants';
+import { sharedConfig } from '../shared/sharedConfig';
+import { sharedStore } from '../shared/sharedStore';
+import { $ } from '../utils/dom';
+
+/**
+ * Sends a `MSG_RESIZE_WINDOW` message to the backend
+ * with the width and height (based on the list of found items).
+ */
+export function setWindowSize() {
+  const { MAX_VISIBLE_ITEM_COUNT, FALLBACK_WIN_WIDTH } = constants;
+  const foundItems = sharedStore.found || [];
+  const foundItemCount = foundItems.length;
+
+  const style = window.getComputedStyle($('#current'), null);
+  const itemHeight = parseInt(style.height.replace(/px/, ''), 10);
+  const itemMax = Math.min(foundItemCount, MAX_VISIBLE_ITEM_COUNT);
+  let height = itemHeight + itemHeight * itemMax;
+  height += foundItemCount ? itemHeight : 0;
+  const width = sharedConfig.winWidth || FALLBACK_WIN_WIDTH;
+  sendMessage('MSG_RESIZE_WINDOW', { width, height });
+}

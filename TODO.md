@@ -7,3 +7,7 @@
   - launching files with spaces in the pathname (bug, win11?)
   - launch as admin (?)
   - alternative to fluxbox config (some json maybe)
+- ts:
+  - disable esModuleInterop + read json config without ts module import
+- refact:
+  - `dom` and `$`, make it ts friendly (see also: `document.querySelectorAll`)

@@ -5,3 +5,5 @@
 node_modules/
 build
 config.local.json
+dist
+main.js

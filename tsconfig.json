@@ -1,16 +1,14 @@
 {
-  // This file helps neuter vscode ts warnings (thay are simply invalid and misleading),
-  // tsc is NOT installed and shall not be, unless I migrate the project to ts!
   "compilerOptions": {
-    "allowJs": true,
-    "noImplicitAny": false,
-    "checkJs": false, // TODO explore if I can enable this, it would be helpful, but so far the window.app namespace is in the way
-    "noEmit": true,
+    "target": "ES2020",
+    "module": "CommonJS",
+    "rootDir": "src",
+    "outDir": "dist",
+    "lib": ["dom"],
     "strict": true,
-    "skipLibCheck": true,
-    "target": "ES2022",
-    "module": "commonjs", // to disable the require/import warning
-    "ignoreDeprecations": "5.0"
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   },
   "include": ["src"]
 }
