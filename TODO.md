@@ -11,3 +11,5 @@
   - disable esModuleInterop + read json config without ts module import
 - refact:
   - `dom` and `$`, make it ts friendly (see also: `document.querySelectorAll`)
+  - hide `$` and use `appDom`
+  - convert interim to shared where appropriate

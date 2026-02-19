@@ -8,9 +8,9 @@ import { runtime } from './renderer/runtime/runtime';
 import { sharedStore } from './renderer/shared/sharedStore';
 import { sharedConfig } from './renderer/shared/sharedConfig';
 import { constants } from './renderer/constants';
+import { $ } from './renderer/utils/dom';
 
 const { MAX_VISIBLE_ITEM_COUNT } = constants;
-const { $, inputFocusClassToBody, disableKeyDownForElement } = utils.dom;
 const { escapeHtml } = utils.string;
 
 let config = sendMessage('MSG_GET_CONFIG');
@@ -20,8 +20,12 @@ let electronLayoutFixed = false;
 function resetInputFields() {
   onSearchChange('');
   onAppChange('');
-  $('#search').value = $('#app').value = sharedStore.withApp = $('#ghost').innerHTML = '';
-  $('#search').focus();
+  ($.getById('search') as HTMLInputElement)!.value =
+    ($.getById('app') as HTMLInputElement).value =
+    sharedStore.withApp =
+    $.getById('ghost')!.innerHTML =
+      '';
+  $.getById('search')!.focus();
 }
 
 function reparse() {
@@ -47,11 +51,11 @@ function launch() {
   openWithApp(item, sharedStore.ghost || sharedStore.withApp, config);
   // after successful launch, when the user reopens the window, should we preselect the text?
   if (config.autoSelectAll) {
-    $('#search').select();
+    ($.getById('search') as HTMLInputElement)!.select();
   }
   // reset manually changed app only (pure ghosts can stay, those were programmatic)
-  if ($('#app').value) {
-    $('#app').value = sharedStore.withApp = $('#ghost').innerHTML = '';
+  if (($.getById('app') as HTMLInputElement)!.value) {
+    ($.getById('app') as HTMLInputElement)!.value = sharedStore.withApp = $.getById('ghost')!.innerHTML = '';
     sharedStore.ghost = null;
   }
   return true;
@@ -61,7 +65,7 @@ function onDocumentKey(e) {
   if (!electronLayoutFixed) {
     // if the app starts hidden and shown later,
     // then the body's top is outside the viewport for some reason
-    $('#current').style.display = 'block';
+    $.getById('current')!.style.display = 'block';
     electronLayoutFixed = true;
   }
   if (e.key === 'Enter') {
@@ -110,10 +114,10 @@ function setCurrentAndApp() {
     return;
   }
   const found = sharedStore.found[sharedStore.current];
-  $('#current').textContent = found.command;
+  $.getById('current')!.textContent = found.command;
   // if you haven't modified the app field, then "prefill" it with ghost text
   // (searchableText is the pretty text, like "d:~/foo/bar/baz.txt")
-  if (!$('#app').value && Object.keys(config.openWith || {}).length > 0) {
+  if (!($.getById('app') as HTMLInputElement)!.value && Object.keys(config.openWith || {}).length > 0) {
     const forAsIs = runtime.getPreferredOpenWith(found.searchableText); // first we match against the visible text
     const forCommand = runtime.getPreferredOpenWith(found.command); // if that fails, then we fall back to the command (=path+name)
     const appGhostText = forAsIs || forCommand;
@@ -133,7 +137,7 @@ function onAppChange(e) {
       desktopItems.find((item) => item.name.startsWith(val)) ||
       sharedStore.searchItems.find((item) => item.name.startsWith(val) && item.executable);
   }
-  $('#ghost').innerHTML = matchingApp ? escapeHtml(matchingApp.name) : '';
+  $.getById('ghost')!.innerHTML = matchingApp ? escapeHtml(matchingApp.name) : '';
   sharedStore.ghost = matchingApp || null;
 }
 
@@ -151,9 +155,9 @@ function onSearchChange(e) {
 // +--------------------+
 // | DOM CONTENT LOADED |
 // +--------------------+
-$(() => {
+$.getDocument().addEventListener('DOMContentLoaded', () => {
   log.info('App renderer activated. You can access app internals inside renderer via "window.app".');
-  $(window).on('error', runtime.handleError);
+  $.getWindow().addEventListener('error', runtime.handleError);
   runtime.setAppLoading(true);
   parseAll()
     .then((result) => {
@@ -162,22 +166,22 @@ $(() => {
     })
     .catch(runtime.handleError);
 
-  $('body').classList.add(`theme-${config.theme}`);
-  $('body').innerHTML = runtime.renderPage();
+  $.getBody().classList.add(`theme-${config.theme}`);
+  $.getBody().innerHTML = runtime.renderPage();
 
   // add a helper class to the body, so that we can move the focus
   // indicator line below the focused input with css animation
-  inputFocusClassToBody('#search');
-  inputFocusClassToBody('#app');
+  $.inputFocusClassToBody('search');
+  $.inputFocusClassToBody('app');
 
   // disable jumping to start / end of input.value
-  disableKeyDownForElement('#search', ['ArrowUp', 'ArrowDown']);
-  disableKeyDownForElement('#app', ['ArrowUp', 'ArrowDown']);
+  $.disableKeyDownForElement('search', ['ArrowUp', 'ArrowDown']);
+  $.disableKeyDownForElement('app', ['ArrowUp', 'ArrowDown']);
 
-  $('#search').focus();
-  $('document').on('keyup', onDocumentKey);
-  $('#search').on('input', onSearchChange);
-  $('#app').on('input', onAppChange);
+  $.getById('search')?.focus();
+  $.getDocument().addEventListener('keyup', onDocumentKey);
+  $.getById('search')?.addEventListener('input', onSearchChange);
+  $.getById('app')?.addEventListener('input', onAppChange);
 
   // if we had errors in the backend's log buffer, then let's show that
   // (this of course can be checked by launching from the commandline)

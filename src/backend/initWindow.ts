@@ -4,7 +4,9 @@ import { log } from '../interim/log';
 import { getConfig } from '../interim/getConfig';
 import { isCoord } from './utils/isCoord';
 
-class Window extends BrowserWindow {
+export type IAppWindow = AppWindow;
+
+class AppWindow extends BrowserWindow {
   hidden: boolean;
 
   constructor(options) {
@@ -36,6 +38,10 @@ class Window extends BrowserWindow {
   openDevTools() {
     this.webContents.openDevTools({ mode: 'undocked' });
   }
+
+  toggleDevTools() {
+    this.webContents.toggleDevTools();
+  }
 }
 
 export async function initWindow() {
@@ -56,7 +62,7 @@ export async function initWindow() {
     // size change is kinda wonky (not what I specify, would need even more debugging).
     log.warn('Config.borderlessWindow is buggy on windows! Content area collapses to 1 pixel.');
   }
-  const win = new Window({
+  const win: IAppWindow = new AppWindow({
     ...size,
     ...position,
     show: false,

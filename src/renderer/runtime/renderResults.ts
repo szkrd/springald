@@ -25,11 +25,11 @@ function createName(item, needles) {
 
 export function renderResults(needles) {
   const items = sharedStore.found;
-  document.querySelectorAll('.result').forEach((el) => ((el as HTMLDivElement).style.display = 'none'));
+  $.getByClassName('result').forEach((el) => ((el as HTMLDivElement).style.display = 'none'));
 
   for (let i = 0, l = items.length; i < l; i++) {
     const item = items[i];
-    const el = $(`#result-${i}`);
+    const el = $.getById(`result-${i}`);
     if (!el) {
       return;
     }

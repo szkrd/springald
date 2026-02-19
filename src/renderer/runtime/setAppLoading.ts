@@ -9,7 +9,7 @@ function _setAppLoading(enable) {
   if (enable) {
     lastActiveInput = document.activeElement;
   }
-  $('body').classList[enable ? 'add' : 'remove']('loading');
+  $.getBody().classList[enable ? 'add' : 'remove']('loading');
   if (!enable) {
     lastActiveInput.focus();
   }

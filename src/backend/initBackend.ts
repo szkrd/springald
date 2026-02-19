@@ -1,15 +1,24 @@
 import { app } from 'electron';
 import { log } from '../interim/log';
-import { getConfig } from '../interim/getConfig';
-import { initTray } from './initTray';
-import { initWindow } from './initWindow';
+import { getConfig, IAppConfig } from '../interim/getConfig';
+import { initWindow, IAppWindow } from './initWindow';
 import { initGlobalShortcuts } from './initGlobalShortcuts';
 import { handleMessage } from './modules/messages/handleMesssage';
 import { isCoord } from './utils/isCoord';
 import { unixSocket } from './modules/unixSocket';
 
+interface IBackend {
+  config: IAppConfig;
+  win: IAppWindow;
+}
+
+interface IWidthHeight {
+  width: number;
+  height: number;
+}
+
 let initialized = false;
-let backend; // win, tray, config
+let backend: IBackend; // win, config
 
 /**
  * Get position and set position fails before/after
@@ -19,18 +28,20 @@ let backend; // win, tray, config
  */
 function fixPosition() {
   const cfg = backend.config;
-  if (isCoord(cfg.fixPosition)) backend.win.setPosition(...cfg.fixPosition);
+  if (isCoord(cfg.fixPosition)) {
+    backend.win.setPosition(...cfg.fixPosition);
+  }
 }
 
 /**
  * Just like fix position, "sometimes" on linux the height calculation
  * is off by a couple of pixels and of course this doesn't happen in a vm
  */
-function fixSizing(obj) {
+function fixSizing(obj: IWidthHeight) {
   const cfg = backend.config;
   if (isCoord(cfg.modifyResize)) {
-    obj.width += cfg.modifyResize[0];
-    obj.height += cfg.modifyResize[1];
+    obj.width += cfg.modifyResize[0] ?? 0;
+    obj.height += cfg.modifyResize[1] ?? 0;
   }
   return obj;
 }
@@ -40,7 +51,7 @@ function fixSizing(obj) {
  * The **renderer** can use its `sendMessages` to have the backend execute commands.
  * Some of these are also used as unix socket messages.
  *
- * Do NOT forget to set these message is _messages.ts_ along with a helpful comment about what it does!
+ * Do NOT forget to set these message is _messages.ts_ along with a helpful comment about what the action does!
  */
 function setupMessageListener() {
   const handlers = {
@@ -51,7 +62,7 @@ function setupMessageListener() {
     getConfig: () => backend.config,
     getLogBuffer: () => log.getBuffer(),
     refreshConfig: getConfig.inject,
-    resizeWindow: (payload) => {
+    resizeWindow: (payload: IWidthHeight) => {
       const { width, height } = fixSizing(payload);
       backend.win.setSize(width, height);
       fixPosition();
@@ -78,20 +89,24 @@ function setupMessageListener() {
   process.on('SIGINT', handlers.quit);
 }
 
-export async function initBackend() {
+/**
+ * Initializes Electron backend.
+ * The backend has no public interfaces outside this file;
+ * all communications can be done using ipc `sendMessage`.
+ */
+export async function initBackend(): Promise<void> {
   if (!app.requestSingleInstanceLock()) {
     throw Object.assign(new Error('Already running! This is a single instance app.'), {
       alreadyRunning: true,
     });
   }
-  if (initialized) return backend;
+  if (initialized) {
+    return;
+  }
   const config = await getConfig(app.getPath('userData'));
-  const tray = await initTray();
-  const store = {};
-  const globalShortcuts = await initGlobalShortcuts();
+  await initGlobalShortcuts();
   const win = await initWindow();
-  backend = { config, tray, store, win, globalShortcuts };
+  backend = { config, win }; // exposed for message handlers
   setupMessageListener();
   initialized = true;
-  return backend;
 }

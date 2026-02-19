@@ -1,9 +1,10 @@
 import { ipcMain } from 'electron';
 import { messages } from '../../messages';
-import { eventBus } from './eventBus';
+import { backendEventBus } from './backendEventBus';
 
 const registered: string[] = [];
 
+/** Handles message from the backend **and** the renderer. */
 export function handleMessage(messageId: keyof typeof messages, callback) {
   if (!messages[messageId]) {
     throw new Error('Unknown message id');
@@ -21,5 +22,5 @@ export function handleMessage(messageId: keyof typeof messages, callback) {
   });
 
   // backend
-  eventBus.on(messageId, callback);
+  backendEventBus.on(messageId, callback);
 }

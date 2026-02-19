@@ -13,8 +13,7 @@ export function setWindowSize() {
   const foundItems = sharedStore.found || [];
   const foundItemCount = foundItems.length;
 
-  const style = window.getComputedStyle($('#current'), null);
-  const itemHeight = parseInt(style.height.replace(/px/, ''), 10);
+  const itemHeight = $.getComputedHeightById('current');
   const itemMax = Math.min(foundItemCount, MAX_VISIBLE_ITEM_COUNT);
   let height = itemHeight + itemHeight * itemMax;
   height += foundItemCount ? itemHeight : 0;

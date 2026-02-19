@@ -3,9 +3,41 @@ import { log } from './log';
 import appConfig from '../../config.json';
 import { readJsonFile } from './utils/readJsonFile';
 
-console.log(appConfig);
+export interface IAppConfig {
+  theme: 'default' | 'ambiance' | 'aquamint';
+  winWidth: number;
+  fluxboxMenuFile: string;
+  borderlessWindow: boolean;
+  fixPosition: [number, number];
+  modifyResize: [number, number];
+  paintDelay: number;
+  showOnStartup: boolean;
+  centerOnShow: boolean;
+  autoSelectAll: boolean;
+  trayIconSize: 'small' | 'large';
+  toggleKey: string[];
+  logicalAndSeparator: string;
+  desktopFilesLocation: string;
+  includeFiles: string[];
+  excludeFiles: string[];
+  excludedDirs: string[];
+  excludeHidSys: boolean;
+  skipPathParsing: boolean;
+  terminalCommand: string;
+  appShortcuts: {
+    showItemInFolder: string;
+    launchInTerminal: string;
+  };
+  openWith: Record<string, string>;
+  directories: string[];
+  betaFeatures: boolean;
+  /** Internal: set from argv using `--development` or `-d` */
+  development: boolean;
+  /** Internal: same as in nwjs (~/.config/appName) */
+  dataPath: string;
+}
 
-let localAppConfig = {};
+let localAppConfig: Partial<IAppConfig> = {};
 try {
   localAppConfig = require('../../config.local.json'); // TODO use read json?
 } catch {
@@ -13,22 +45,20 @@ try {
 }
 
 let initialized = false;
-let config = {
-  ...appConfig,
-  // set from argv using `--development` or `-d`
+let config: IAppConfig = {
+  ...(appConfig as any as Omit<IAppConfig, 'development' | 'dataPath'>),
   development: false,
-  // same as in nwjs (~/.config/appName)
   dataPath: '',
 };
 
 /**
  * returns a merged config from app dir and user data dir; callable from
  * both backend and renderer (but the in memory versions will differ!)
- * @param dataPath
- * @param flush
  */
-export async function getConfig(dataPath = '', flush = false) {
-  if (initialized && !flush) return config;
+export async function getConfig(dataPath = '', flush = false): Promise<IAppConfig> {
+  if (initialized && !flush) {
+    return config;
+  }
   const localLoaded = Object.keys(localAppConfig).length > 0;
   const localPath = join(__dirname, '../../config.local.json');
   log.info(`Local config ${localLoaded ? 'loaded from' : 'failed to load from'} "${localPath}".`);

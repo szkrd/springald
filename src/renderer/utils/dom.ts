@@ -1,47 +1,43 @@
-// useful for swallowing down and up arrow press on the input itself
-// (so that we can disable jumping to the beginning or the end of the input value)
-export function disableKeyDownForElement(selector = '', keyNames: string[] = []) {
-  $(selector).on('keydown', (event: KeyboardEvent) => {
+/**
+ * Useful for swallowing down and up arrow press on input fields
+ * (so that we can disable jumping to the beginning or the end of the input value).
+ */
+function disableKeyDownForElement(elementId, keyNames: string[] = []) {
+  $.getById(elementId)?.addEventListener('keydown', (event: KeyboardEvent) => {
     if (keyNames.includes(event.key)) {
       event.preventDefault();
     }
   });
 }
 
-// when an input is focused the body will get a marker class
-export function inputFocusClassToBody(selector = '') {
-  const elementId = selector.replace(/[^a-z-_0-9]/g, '');
+/**
+ * When an input is focused the body will get a marker class based on that element's id.
+ *
+ * For example input by id `search` is focused, then body will get a `search-focused` css class.
+ */
+function inputFocusClassToBody(elementId: 'search' | 'app') {
   const className = `${elementId}-focused`;
-  $(selector).on('focus', () => $('body').classList.add(className));
-  $(selector).on('blur', () => $('body').classList.remove(className));
+  const body = $.getBody();
+  $.getById(elementId)?.addEventListener('focus', () => body.classList.add(className));
+  $.getById(elementId)?.addEventListener('blur', () => body.classList.remove(className));
 }
 
-// poor man's jQuery
-// (the only thing I like this for is that it's pretty easy to
-// spot a selector in the code, plus of course lazyness)
-
-function on(eventName, action) {
-  return this.addEventListener(eventName, action);
+/** Get the computed height element located by id. */
+function getComputedHeightById(elementId: string) {
+  const el = $.getById(elementId);
+  if (!el) throw Error(`Invalid element #${elementId}`);
+  const style = window.getComputedStyle(el, null);
+  return parseInt(style.height.replace(/px/, ''), 10);
 }
 
-export function $(selector) {
-  if (typeof selector === 'function' && arguments.length === 1) {
-    return $('document').on('DOMContentLoaded', selector); // onDomReady
-  }
-  let el;
-  if (selector === 'window' || selector === window) {
-    el = window;
-  } else if (selector === 'document' || selector === document) {
-    el = document;
-  } else if (selector === 'body') {
-    el = document.body;
-  } else if (selector.startsWith('#')) {
-    el = document.getElementById(selector.replace(/^#/, ''));
-  } else {
-    el = document.querySelector(selector);
-  }
-  if (el) {
-    el.on = el.on || on.bind(el);
-  }
-  return el;
-}
+/** Low level DOM wrappers. */
+export const $ = {
+  getWindow: () => window,
+  getDocument: () => document,
+  getBody: () => document.body,
+  getById: (elementId: string) => document.getElementById(elementId),
+  getByClassName: (selector: string) => document.querySelectorAll('.' + selector),
+  getComputedHeightById,
+  disableKeyDownForElement,
+  inputFocusClassToBody,
+};
