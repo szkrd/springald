@@ -8,4 +8,4 @@ window.app.constants = {
   MAX_VISIBLE_ITEM_COUNT: 6,
   // only if the user config has a falsy override
   FALLBACK_WIN_WIDTH: 600,
-}
+};

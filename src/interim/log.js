@@ -7,20 +7,20 @@ const buffer = {
   log: [],
   warn: [],
   error: [],
-}
+};
 
 const _rawLog = (action = 'log', ...args) => {
   // TODO: add proper isDev or isDebug check? though debug DOES go to the buffer
-  if (action === 'debug') return
+  if (action === 'debug') return;
   // TODO: add proper prefix? like '[APP]', but with zero libs all messages are indeed mine
-  console[action](...args)
-}
+  console[action](...args);
+};
 
 const _log = (action = 'log', ...args) => {
-  if (!Object.keys(buffer).includes(action)) throw new Error('Invalid log action!')
-  buffer[action].push({ at: Date.now(), args })
-  _rawLog(action, ...args)
-}
+  if (!Object.keys(buffer).includes(action)) throw new Error('Invalid log action!');
+  buffer[action].push({ at: Date.now(), args });
+  _rawLog(action, ...args);
+};
 
 const log = {
   debug: (...args) => _log('debug', ...args),
@@ -38,6 +38,6 @@ const log = {
   getBuffer: () => buffer, // be careful, this is NOT a clone
   getErrorCount: (inputBuffer) => (inputBuffer || buffer).error.length,
   getWarningAndErrorCount: (inputBuffer) => (inputBuffer || buffer).error.length + (inputBuffer || buffer).warn.length,
-}
+};
 
-module.exports = log
+module.exports = log;

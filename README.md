@@ -81,7 +81,7 @@ Available tasks: **lint** (as build, use `ctrl + shift + b`), **lint:fix**.
 ### win
 
 - create a user config to override defaults
-- use `"borderlessWindow": true` on windows to fix the height calculation
+- please always use `"borderlessWindow": true` on Windows to fix the broken height calculation
 - files in `C:\WINDOWS*` are skipped
 - launch in terminal is kinda pointless
 

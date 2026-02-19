@@ -1,36 +1,36 @@
-;(function () {
-  const gracePeriod = 500
-  let inGracePeriod = false
-  let lastActiveInput
-  let timer
+(function () {
+  const gracePeriod = 500;
+  let inGracePeriod = false;
+  let lastActiveInput;
+  let timer;
 
   function _setAppLoading(enable) {
-    const { $ } = window.app.utils.dom
+    const { $ } = window.app.utils.dom;
     if (enable) {
-      lastActiveInput = document.activeElement
+      lastActiveInput = document.activeElement;
     }
-    $('body').classList[enable ? 'add' : 'remove']('loading')
+    $('body').classList[enable ? 'add' : 'remove']('loading');
     if (!enable) {
-      lastActiveInput.focus()
+      lastActiveInput.focus();
     }
   }
 
   function setAppLoading(enable) {
     if (enable && !inGracePeriod) {
-      inGracePeriod = true
+      inGracePeriod = true;
       timer = setTimeout(() => {
-        inGracePeriod = false
-        _setAppLoading(true)
-      }, gracePeriod)
-      return
+        inGracePeriod = false;
+        _setAppLoading(true);
+      }, gracePeriod);
+      return;
     }
     if (!enable && inGracePeriod) {
-      inGracePeriod = false
-      clearTimeout(timer)
-      return
+      inGracePeriod = false;
+      clearTimeout(timer);
+      return;
     }
-    _setAppLoading(false)
+    _setAppLoading(false);
   }
 
-  window.app.runtime.setAppLoading = setAppLoading
-})()
+  window.app.runtime.setAppLoading = setAppLoading;
+})();

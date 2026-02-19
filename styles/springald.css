@@ -35,8 +35,10 @@
 
 /* ---- */
 
-html, body, input {
-  font-family:  Arial, 'Helvetica Neue', Helvetica, sans-serif;
+html,
+body,
+input {
+  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
 }
 
 html {
@@ -45,7 +47,9 @@ html {
   height: 100%;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
@@ -62,12 +66,13 @@ body {
   padding: 0;
 }
 
-input[type=text], .ghost {
+input[type='text'],
+.ghost {
   background-color: var(--main-bg-color);
   color: var(--main-fg-color);
   border: 0;
   margin: 0;
-  padding: 0 .5rem;
+  padding: 0 0.5rem;
   height: 2rem;
   font-size: 0.8rem;
 }
@@ -80,7 +85,7 @@ input[type=text], .ghost {
   height: 1px;
   opacity: 0;
   background: linear-gradient(90deg, rgba(0, 0, 0, 0), var(--selected-fg-color), rgba(0, 0, 0, 0));
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 body.search-focused .input-focus-indicator {
   opacity: 1;
@@ -97,7 +102,8 @@ body.app-focused .input-focus-indicator {
   width: calc(100% - 10rem);
 }
 
-.app, .ghost {
+.app,
+.ghost {
   width: 10rem;
 }
 
@@ -112,8 +118,9 @@ body.app-focused .input-focus-indicator {
   pointer-events: none;
 }
 
-.current, .result {
-  padding: 0 .5rem;
+.current,
+.result {
+  padding: 0 0.5rem;
   line-height: 2rem;
   height: 2rem;
   white-space: nowrap;
@@ -125,7 +132,7 @@ body.app-focused .input-focus-indicator {
 }
 
 .result {
-  font-size: .7rem;
+  font-size: 0.7rem;
 }
 
 .result u {
@@ -152,7 +159,7 @@ body.app-focused .input-focus-indicator {
   background: var(--error-color);
   box-shadow: 0 0 15px 3px var(--error-color);
   border-radius: 50%;
-  transition: all .5s ease-in-out;
+  transition: all 0.5s ease-in-out;
   opacity: 0;
   pointer-events: none;
   z-index: 1;
@@ -182,10 +189,18 @@ body.loading .loader ~ * {
   animation: spin 1.1s infinite linear;
 }
 @-webkit-keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
