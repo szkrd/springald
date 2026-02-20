@@ -1,17 +1,16 @@
-import { log } from './interim/log';
-import { sendMessage } from './interim/sendMessage';
-import { openWithApp } from './interim/openWithApp';
-import { parseAll } from './interim/parseAll';
-import { getConfig } from './interim/getConfig';
-import { utils } from './renderer/utils/utils';
-import { runtime } from './renderer/runtime/runtime';
-import { sharedStore } from './renderer/shared/sharedStore';
-import { sharedConfig } from './renderer/shared/sharedConfig';
 import { constants } from './renderer/constants';
+import { openWithApp } from './renderer/runtime/openWithApp';
+import { parseAll } from './renderer/runtime/parseAll';
+import { runtime } from './renderer/runtime/runtime';
+import { sendMessage } from './renderer/runtime/sendMessage';
+import { sharedConfig } from './renderer/shared/sharedConfig';
+import { sharedStore } from './renderer/shared/sharedStore';
 import { $ } from './renderer/utils/dom';
+import { escapeHtml } from './renderer/utils/string';
+import { getConfig } from './shared/getConfig';
+import { log } from './shared/log';
 
 const { MAX_VISIBLE_ITEM_COUNT } = constants;
-const { escapeHtml } = utils.string;
 
 let config = sendMessage('MSG_GET_CONFIG');
 Object.assign(sharedConfig, config);

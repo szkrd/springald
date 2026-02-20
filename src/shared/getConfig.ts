@@ -52,8 +52,11 @@ let config: IAppConfig = {
 };
 
 /**
- * returns a merged config from app dir and user data dir; callable from
- * both backend and renderer (but the in memory versions will differ!)
+ * Returns a merged config from app dir and user data dir; callable from
+ * both backend and renderer (but the in memory versions will differ!).
+ *
+ * The only time this is called by the **renderer** is during a _request for reparse everything_
+ * and then the config will be sent back to the server (to keep things in sync).
  */
 export async function getConfig(dataPath = '', flush = false): Promise<IAppConfig> {
   if (initialized && !flush) {

@@ -1,7 +1,7 @@
 import { BrowserWindow } from 'electron';
 import { platform } from 'os';
-import { log } from '../interim/log';
-import { getConfig } from '../interim/getConfig';
+import { log } from '../shared/log';
+import { getConfig } from '../shared/getConfig';
 import { isCoord } from './utils/isCoord';
 
 export type IAppWindow = AppWindow;

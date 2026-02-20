@@ -1,9 +1,9 @@
-import { sharedConfig } from '../renderer/shared/sharedConfig';
-import { log } from './log';
-import { parseDirs } from './parsing/parseDirs';
-import { parsePath } from './parsing/parsePath';
-import { parseFluxboxMenu } from './parsing/parseFluxboxMenu';
+import { log } from '../../shared/log';
+import { sharedConfig } from '../shared/sharedConfig';
 import { getSearchableText } from './parsing/getSearchableText';
+import { parseDirs } from './parsing/parseDirs';
+import { parseFluxboxMenu } from './parsing/parseFluxboxMenu';
+import { parsePath } from './parsing/parsePath';
 import { processPostParseHooks } from './parsing/postParsingHooks/processPostParseHooks';
 
 export async function parseAll(searchItems) {

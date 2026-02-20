@@ -1,7 +1,7 @@
+import fs from 'fs';
 import { homedir } from 'os';
 import path from 'path';
-import fs from 'fs';
-import { log } from '../log';
+import { log } from '../../../shared/log';
 
 let counter = 0;
 const homeDir = homedir();

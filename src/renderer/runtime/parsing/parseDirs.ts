@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import { log } from '../log';
-import { sharedConfig } from '../../renderer/shared/sharedConfig';
+import { log } from 'console';
+import { sharedConfig } from '../../shared/sharedConfig';
 
 let counter = 0;
 const getConfig = () => sharedConfig;

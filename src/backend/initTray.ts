@@ -1,6 +1,6 @@
 import { Menu, Tray } from 'electron';
-import { getConfig } from '../interim/getConfig';
-import { sendMessageAtBackend } from './modules/messages/sendMessageAtBackend';
+import { getConfig } from '../shared/getConfig';
+import { sendMessageAtBackend } from './messaging/sendMessageAtBackend';
 
 const initialized = false;
 let tray: Tray;

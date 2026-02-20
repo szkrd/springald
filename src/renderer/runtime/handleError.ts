@@ -1,6 +1,6 @@
 import { $ } from '../utils/dom';
-import { log } from '../../interim/log';
-import { sendMessage } from '../../interim/sendMessage';
+import { log } from '../../shared/log';
+import { sendMessage } from './sendMessage';
 
 export function handleError() {
   sendMessage('MSG_TOGGLE_DEV_TOOLS');

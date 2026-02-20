@@ -1,9 +1,9 @@
-import path from 'path';
 import fs from 'fs';
 import { readdir as fsReaddir } from 'fs/promises';
-import { log } from '../log';
-import { isExecutable } from '../utils/isExecutable';
-import { sharedConfig } from '../../renderer/shared/sharedConfig';
+import path from 'path';
+import { log } from '../../../shared/log';
+import { sharedConfig } from '../../shared/sharedConfig';
+import { isExecutable } from '../../utils/file';
 
 // skips C:\WINDOWS\* which is not a "healthy thing" to parse
 // (lots of files, special permissions etc.)

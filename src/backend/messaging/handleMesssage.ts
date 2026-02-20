@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron';
-import { messages } from '../../messages';
+import { messages } from '../messages';
 import { backendEventBus } from './backendEventBus';
 
 const registered: string[] = [];

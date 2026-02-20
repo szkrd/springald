@@ -1,7 +1,7 @@
 import { homedir } from 'os';
 import { spawn } from 'child_process';
 import { shell } from 'electron';
-import { log } from './log';
+import { log } from '../../shared/log';
 
 // windows executables may be coming from paths with spaces
 function quote(s) {

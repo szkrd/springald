@@ -1,11 +1,11 @@
 import { app } from 'electron';
-import { log } from '../interim/log';
-import { getConfig, IAppConfig } from '../interim/getConfig';
+import { log } from '../shared/log';
+import { getConfig, IAppConfig } from '../shared/getConfig';
 import { initWindow, IAppWindow } from './initWindow';
 import { initGlobalShortcuts } from './initGlobalShortcuts';
-import { handleMessage } from './modules/messages/handleMesssage';
+import { handleMessage } from './messaging/handleMesssage';
 import { isCoord } from './utils/isCoord';
-import { unixSocket } from './modules/unixSocket';
+import { unixSocket } from './messaging/unixSocket';
 
 interface IBackend {
   config: IAppConfig;
@@ -105,7 +105,7 @@ export async function initBackend(): Promise<void> {
   }
   const config = await getConfig(app.getPath('userData'));
   await initGlobalShortcuts();
-  const win = await initWindow();
+  const win = await initWindow(); // this ensures that renderer can not start before above has finished (especially config)
   backend = { config, win }; // exposed for message handlers
   setupMessageListener();
   initialized = true;

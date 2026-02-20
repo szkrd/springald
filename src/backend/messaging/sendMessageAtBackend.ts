@@ -1,4 +1,4 @@
-import { messages } from '../../messages';
+import { messages } from '../messages';
 import { backendEventBus } from './backendEventBus';
 
 /** Sends message from backend to backend using the **eventbus**. */
