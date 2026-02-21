@@ -1,8 +1,9 @@
 import fs from 'fs';
-import path from 'path';
 import os from 'os';
-import { log } from 'console';
+import path from 'path';
+import { log } from '../../../shared/log';
 import { sharedConfig } from '../../shared/sharedConfig';
+import { ISearchItem } from '../parseAll';
 
 let counter = 0;
 const getConfig = () => sharedConfig;
@@ -29,8 +30,7 @@ function walk(dir, done) {
   // TODO investigate {encoding: 'buffer'} further
   fs.readdir(dir, (err, list) => {
     if (err) {
-      err.file = dir;
-      return done(err); // pretty much this is the only hard error that may stop the walking
+      return done(Object.assign(err, { file: dir })); // pretty much this is the only hard error that may stop the walking
     }
     let pending = list.length;
     const mayEnd = () => {
@@ -84,7 +84,7 @@ function walk(dir, done) {
 }
 
 // parse the "directories" (section from the config)
-export function parseDirs() {
+export function parseDirs(): Promise<ISearchItem[]> {
   return new Promise((resolve, _reject) => {
     // first we replace the ~ with the proper home path
     const homeDir = os.homedir();

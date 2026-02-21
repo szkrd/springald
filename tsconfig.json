@@ -8,7 +8,8 @@
     "strict": true,
     "noImplicitAny": false,
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "inlineSourceMap": true
   },
   "include": ["src"]
 }

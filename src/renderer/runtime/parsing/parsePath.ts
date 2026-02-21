@@ -4,6 +4,7 @@ import path from 'path';
 import { log } from '../../../shared/log';
 import { sharedConfig } from '../../shared/sharedConfig';
 import { isExecutable } from '../../utils/file';
+import { IParseModuleError, ISearchItem } from '../parseAll';
 
 // skips C:\WINDOWS\* which is not a "healthy thing" to parse
 // (lots of files, special permissions etc.)
@@ -90,7 +91,7 @@ function readDir(location) {
   }); // end Promise
 }
 
-export function parsePath() {
+export function parsePath(): Promise<ISearchItem[]> {
   const dl = path.delimiter;
   const result = [];
   const pathItems = process.env.PATH.split(dl);
@@ -140,8 +141,7 @@ export function parsePath() {
       return Promise.resolve(result);
     },
     (err) => {
-      err.module = 'parsePath';
-      return Promise.reject(err);
+      return Promise.reject(Object.assign(err, { module: 'parsePath' }) as IParseModuleError);
     },
   );
 }

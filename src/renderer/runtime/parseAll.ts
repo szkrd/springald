@@ -6,6 +6,30 @@ import { parseFluxboxMenu } from './parsing/parseFluxboxMenu';
 import { parsePath } from './parsing/parsePath';
 import { processPostParseHooks } from './parsing/postParsingHooks/processPostParseHooks';
 
+export interface IParseModuleError extends NodeJS.ErrnoException {
+  /** Location where the parser failed. Directory parsing error is not a show-stopper, that will never reject. */
+  module: 'parseFluxboxMenu' | 'parsePath';
+}
+
+export interface ISearchItem {
+  /** ID of the item: type prefix (fb, p, d) + number. Ex.: `"p299"`. */
+  id: string; // Ex.: "p299",
+  /** Is the file executable? */
+  executable: boolean;
+  /** Item type: **fluxbox** menu item, item found on **path**, item found in config's **directories** section. Ex.: `"PATHITEM"`. */
+  type: 'UNSET' | 'FB_MENUITEM' | 'PATHITEM' | 'DIRITEM';
+  /** Path of the file, without the filename itself. Ex.: `"C:/Program Files/Git/mingw64/bin"`. */
+  path: string;
+  /** Filename part. Ex.: `"curl.exe"`. */
+  name: string;
+  /** Is this a linux _.desktop_ file? */
+  desktop?: boolean;
+  /** Executable command. Ex.: `"C:/Program Files/Git/mingw64/bin/curl.exe"`. */
+  command: string;
+  /** Searchable text. Usually a marker prefix and the full path+filename combo. Ex.: `"p:C:/Program Files/Git/mingw64/bin/curl.exe"`. */
+  searchableText?: string;
+}
+
 export async function parseAll(searchItems) {
   searchItems = searchItems || [];
   searchItems.length = 0;
@@ -16,14 +40,15 @@ export async function parseAll(searchItems) {
 
   // tha main parsing (fluxbox, paths, dirs)
   const promises = [
-    config.fluxboxMenuFile === false ? null : parseFluxboxMenu(fbMenuFile),
+    config.fluxboxMenuFile === false ? null : parseFluxboxMenu(fbMenuFile as string),
     config.skipPathParsing === true ? null : parsePath(),
     dirCount === 0 ? null : parseDirs(),
   ];
 
-  let itemPacks = [];
+  let itemPacks: (ISearchItem[] | null)[] = [null, null, null]; // 0:fb, 1:path, 2:dir
   try {
     itemPacks = await Promise.all(promises);
+    console.log('debug', itemPacks);
   } catch (err) {
     log.error(`☠️ Parse error in parser module "${err.module || 'unknown'}"!\n`, err);
   }

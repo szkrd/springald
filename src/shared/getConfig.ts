@@ -6,7 +6,7 @@ import { readJsonFile } from './utils/readJsonFile';
 export interface IAppConfig {
   theme: 'default' | 'ambiance' | 'aquamint';
   winWidth: number;
-  fluxboxMenuFile: string;
+  fluxboxMenuFile: string | false;
   borderlessWindow: boolean;
   fixPosition: [number, number];
   modifyResize: [number, number];
@@ -45,11 +45,20 @@ try {
 }
 
 let initialized = false;
-let config: IAppConfig = {
-  ...(appConfig as any as Omit<IAppConfig, 'development' | 'dataPath'>),
-  development: false,
-  dataPath: '',
-};
+let config = getDefaultConfig();
+
+/**
+ * Returns the default config the app has been shipped with.
+ * This is mostly for type safety and in time shall be replaced
+ * with the proper merged configuration.
+ */
+export function getDefaultConfig(): IAppConfig {
+  return {
+    ...(appConfig as any as Omit<IAppConfig, 'development' | 'dataPath'>),
+    development: false,
+    dataPath: '',
+  };
+}
 
 /**
  * Returns a merged config from app dir and user data dir; callable from

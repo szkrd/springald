@@ -2,16 +2,17 @@ import fs from 'fs';
 import { homedir } from 'os';
 import path from 'path';
 import { log } from '../../../shared/log';
+import { IParseModuleError, ISearchItem } from '../parseAll';
 
 let counter = 0;
 const homeDir = homedir();
 
-function parse(s, depth = []) {
+function parse(text: string, depth: string[] = []): Promise<ISearchItem[]> {
   return new Promise((resolve, _reject) => {
-    s = s.replace(/\r\n/g, '\n');
-    const itemPath = depth;
-    const ret = [];
-    const lines = s.split(/\n/);
+    text = text.replace(/\r\n/g, '\n');
+    const itemPath: string[] = depth; // name of the current fluxbox menu node; ex. `[submenu] (System)` => `"System"`
+    const ret: ISearchItem[] = [];
+    const lines = text.split(/\n/);
     for (let i = 0, l = lines.length; i < l; i++) {
       const line = lines[i].trim();
       let name = line.replace(/[^(]*\(/, '').replace(/([^\\])\).*/, '$1');
@@ -32,14 +33,15 @@ function parse(s, depth = []) {
       if (/^\[exec]/.test(line)) {
         name = name.replace(/\\\)/g, ')'); // unescape "\)" to ")"
         const command = line.replace(/[^{]*\{/, '').replace(/([^\\])}.*/, '$1');
-        ret.push({
+        const item: ISearchItem = {
           id: `f${counter++}`,
           executable: true,
           type: 'FB_MENUITEM',
           path: '/' + itemPath.join('/'),
           name,
           command,
-        });
+        };
+        ret.push(item);
       }
 
       // included menu
@@ -51,7 +53,14 @@ function parse(s, depth = []) {
   });
 }
 
-export function parseFluxboxMenu(fileName, depth = []) {
+/**
+ * Recursively parse a fluxbox menu file.
+ *
+ * @param fileName Name of the menu file, config default is `"fluxboxMenuFile": "~/.fluxbox/menu"`
+ * @param depth    String array of the menu names (when recursing the tree)
+ * @returns        Search item object
+ */
+export function parseFluxboxMenu(fileName: string, depth: string[] = []): Promise<ISearchItem[]> {
   depth = Array.from(depth);
   fileName = (fileName || '').replace(/~/, homeDir);
   const menuFile = fileName || path.join(homeDir, '.fluxbox', 'menu');
@@ -63,8 +72,7 @@ export function parseFluxboxMenu(fileName, depth = []) {
     }
     fs.readFile(menuFile, 'utf8', (err, contents) => {
       if (err) {
-        err.module = 'parseFluxboxMenu';
-        reject(err);
+        reject(Object.assign(err, { module: 'parseFluxboxMenu' }) as IParseModuleError);
       } else {
         parse(contents, depth).then((result) => resolve(result));
       }
