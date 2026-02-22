@@ -28,9 +28,14 @@ export interface ISearchItem {
   command: string;
   /** Searchable text. Usually a marker prefix and the full path+filename combo. Ex.: `"p:C:/Program Files/Git/mingw64/bin/curl.exe"`. */
   searchableText?: string;
+  /**
+   * Fairly late (post-parse) in the parsing we can decide to mark items as unneeded (for example `NoDisplay` in xdg desktop files);
+   * Since we mutate the search item at this point, deleting will take place in a later step, the `hidden` prop piggybacks here.
+   */
+  hidden?: boolean;
 }
 
-export async function parseAll(searchItems) {
+export async function parseAll(searchItems: ISearchItem[] = []) {
   searchItems = searchItems || [];
   searchItems.length = 0;
   const startedAt = Date.now();
@@ -50,7 +55,7 @@ export async function parseAll(searchItems) {
     itemPacks = await Promise.all(promises);
     console.log('debug', itemPacks);
   } catch (err) {
-    log.error(`☠️ Parse error in parser module "${err.module || 'unknown'}"!\n`, err);
+    log.error(`☠️ Parse error in parser module "${(err as IParseModuleError).module || 'unknown'}"!\n`, err);
   }
 
   // collect stats for log info
@@ -58,7 +63,11 @@ export async function parseAll(searchItems) {
   const counts = { flux: count(itemPacks[0]), path: count(itemPacks[1]), dirs: count(itemPacks[2]) };
 
   // flatten results
-  itemPacks.forEach((items) => searchItems.push.apply(searchItems, items));
+  itemPacks.forEach((items) => {
+    if (items) {
+      searchItems.push.apply(searchItems, items);
+    }
+  });
 
   // add the searchable text, which shall be unified for all item types
   // (and it must be available for the search AND the gui)

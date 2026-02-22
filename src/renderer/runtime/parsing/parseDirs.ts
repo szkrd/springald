@@ -25,7 +25,7 @@ function isAllowedDir(name) {
 
 // as seen on the interwebz
 function walk(dir, done) {
-  let results = [];
+  let results: ISearchItem[] = [];
 
   // TODO investigate {encoding: 'buffer'} further
   fs.readdir(dir, (err, list) => {

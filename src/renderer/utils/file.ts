@@ -1,4 +1,6 @@
 import { platform } from 'os';
+import path from 'path';
+
 const isWin = /^win/.test(platform());
 
 /**
@@ -11,4 +13,17 @@ export function isExecutable(fileExtension, fsStatsMode) {
   const ux = !!((fsStatsMode >> 6) & 1);
   const exe = /\.(exe|bat|cmd)$/.test(fileExtension);
   return isWin ? exe : ux || gx || ox;
+}
+
+/** Returns every directory from the path env var */
+export function getPathItems(uniqueOnly = true): string[] {
+  const { delimiter } = path;
+  const items = (process.env.PATH ?? '').split(delimiter).filter((item) => item.trim());
+  return uniqueOnly ? [...new Set(items)] : items;
+}
+
+/** Returns duplicate directories from the path env var; it's easy to have duplicates. */
+export function getPathDuplicates() {
+  const all = getPathItems(false);
+  return [...new Set(all.filter((item, index) => all.indexOf(item) !== index))];
 }

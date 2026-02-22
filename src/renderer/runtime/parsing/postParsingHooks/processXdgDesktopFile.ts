@@ -1,11 +1,21 @@
 import { readFile } from 'fs/promises';
+import { ISearchItem } from '../../parseAll';
 
-export async function processXdgDesktopFile(item) {
+interface IXdgDesktopFile {
+  Version?: string;
+  Name?: string;
+  Comment?: string;
+  Exec?: string;
+  Icon?: string;
+  NoDisplay?: boolean;
+}
+
+export async function processXdgDesktopFile(item: ISearchItem): Promise<ISearchItem> {
   const fn = item.command;
   let contents = '';
   contents = await readFile(fn, 'utf-8'); // TODO try catch and err.meta (like .module)
   const lines = contents.split(/\n/);
-  const xdgObj = {};
+  const xdgObj: IXdgDesktopFile = {};
   let currentGroup = '';
   lines.forEach((line) => {
     line = line.trim();
@@ -17,7 +27,7 @@ export async function processXdgDesktopFile(item) {
     if (currentGroup !== 'Desktop Entry') return;
     const splits = line.split(/=(.*)/s); // TODO handle escaping?
     if (splits.length > 1 && !splits[0].includes('[')) {
-      let val = splits[1];
+      let val: string | boolean = splits[1];
       if (val === 'true') val = true;
       if (val === 'false') val = false;
       xdgObj[splits[0]] = val;

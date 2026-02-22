@@ -1,9 +1,14 @@
+import { ISearchItem } from '../../parseAll';
 import { processXdgDesktopFile } from './processXdgDesktopFile';
 
 const BATCH_COUNT = 20;
 
-export async function processPostParseHooks(items) {
-  const promises = [];
+/**
+ * Runs post processing on search items.
+ * This will (intenitonally) mutate the item iteself.
+ */
+export async function processPostParseHooks(items: ISearchItem[]): Promise<void> {
+  const promises: Promise<ISearchItem>[] = [];
   for (let idx = 0; idx < items.length; idx++) {
     const item = items[idx];
     if (typeof item.name === 'string') {

@@ -3,7 +3,7 @@ import { readdir as fsReaddir } from 'fs/promises';
 import path from 'path';
 import { log } from '../../../shared/log';
 import { sharedConfig } from '../../shared/sharedConfig';
-import { isExecutable } from '../../utils/file';
+import { getPathDuplicates, getPathItems, isExecutable } from '../../utils/file';
 import { IParseModuleError, ISearchItem } from '../parseAll';
 
 // skips C:\WINDOWS\* which is not a "healthy thing" to parse
@@ -33,9 +33,9 @@ function isLocalNodeBin(s) {
   return /springald[/\\]node_modules/.test(s);
 }
 
-function readDir(location) {
+function readDir(location): Promise<ISearchItem[]> {
   return new Promise((resolve, _reject) => {
-    const results = [];
+    const results: ISearchItem[] = [];
     fs.readdir(location, (err, files) => {
       // not a show stopper, but still annoying
       if (err) {
@@ -92,15 +92,13 @@ function readDir(location) {
 }
 
 export function parsePath(): Promise<ISearchItem[]> {
-  const dl = path.delimiter;
-  const result = [];
-  const pathItems = process.env.PATH.split(dl);
-  let dirs = [...new Set(pathItems)];
+  const result: ISearchItem[] = [];
+  let dirs = getPathItems();
+  const duplicateDirs = getPathDuplicates();
   // let's try to find path duplicates, BUT it's possible that we have duplicates on Windows
   // coming from the git installation and those can not be found (or fixed) in the system properties
-  if (pathItems.length !== dirs.length) {
-    const duplicates = [...new Set(pathItems.filter((item, index) => pathItems.indexOf(item) !== index))];
-    log.warn(`You have duplicate items in your PATH! (${duplicates.join(', ')})`);
+  if (duplicateDirs.length > 0) {
+    log.warn(`You have duplicate items in your PATH! (${duplicateDirs.join(', ')})`);
   }
   if (IGNORE_WIN_ROOT) {
     dirs = dirs

@@ -1,7 +1,10 @@
 import path from 'path';
 import { homedir } from 'os';
 
-// this will be the text we can search against
+/**
+ * This will be the text we can search against.
+ * Usually something like `prefixChar/dir/dir/dir/fileName.ext`.
+ */
 export function getSearchableText(item) {
   let prefix = '';
   let separator = path.sep;
