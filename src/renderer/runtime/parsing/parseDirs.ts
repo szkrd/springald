@@ -5,6 +5,11 @@ import { log } from '../../../shared/log';
 import { sharedConfig } from '../../shared/sharedConfig';
 import { ISearchItem } from '../parseAll';
 
+export interface IDirWalkError extends NodeJS.ErrnoException {
+  /** Location where the parser failed. Directory parsing error is not a show-stopper, that will never reject. */
+  file: string;
+}
+
 let counter = 0;
 const getConfig = () => sharedConfig;
 
@@ -24,7 +29,7 @@ function isAllowedDir(name) {
 }
 
 // as seen on the interwebz
-function walk(dir, done) {
+function walk(dir: string, done: (err: IDirWalkError | null, results?: ISearchItem[]) => void) {
   let results: ISearchItem[] = [];
 
   // TODO investigate {encoding: 'buffer'} further
@@ -55,7 +60,7 @@ function walk(dir, done) {
             walk(file, (err, res) => {
               if (err) {
                 log.error(`Could not read subdirectory "${file}"`);
-              } else {
+              } else if (res) {
                 results = results.concat(res);
               }
               mayEnd();
@@ -95,16 +100,16 @@ export function parseDirs(): Promise<ISearchItem[]> {
     // then check if all the directories exist
     dirs = dirs.filter((dir) => fs.existsSync(dir));
     let processedCount = 0;
-    const results = [];
+    const results: ISearchItem[] = [];
 
     // recursively process all the files in thes directories
-    const walkDirCallback = (err, res) => {
+    const walkDirCallback = (err: IDirWalkError | null, res) => {
       processedCount++;
       if (err) {
         log.error(`☠️ Directory walker error: could not read directory "${err.file}"!`); // nw console error is a bit simple
         return;
       }
-      results.push.apply(results, res);
+      results.push(...res);
       if (processedCount === dirs.length) {
         // we will never reject here, since not being able to
         // parse a directory is not a showstopper

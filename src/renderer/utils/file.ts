@@ -1,7 +1,8 @@
-import { platform } from 'os';
+import { platform, homedir } from 'os';
 import path from 'path';
 
 const isWin = /^win/.test(platform());
+const homeDir = homedir();
 
 /**
  * Determines if a file has executable bit set on Linux,
@@ -26,4 +27,9 @@ export function getPathItems(uniqueOnly = true): string[] {
 export function getPathDuplicates() {
   const all = getPathItems(false);
   return [...new Set(all.filter((item, index) => all.indexOf(item) !== index))];
+}
+
+// TODO use whereever I manually do the homeDir replacement!
+export function resolveHomeDir(fileName: string) {
+  return (fileName || '').replace(/~/, homeDir);
 }

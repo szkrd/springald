@@ -39,6 +39,7 @@ export interface IAppConfig {
 
 let localAppConfig: Partial<IAppConfig> = {};
 try {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   localAppConfig = require('../../config.local.json'); // TODO use read json?
 } catch {
   /* noop */
@@ -54,7 +55,7 @@ let config = getDefaultConfig();
  */
 export function getDefaultConfig(): IAppConfig {
   return {
-    ...(appConfig as any as Omit<IAppConfig, 'development' | 'dataPath'>),
+    ...(appConfig as unknown as Omit<IAppConfig, 'development' | 'dataPath'>),
     development: false,
     dataPath: '',
   };

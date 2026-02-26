@@ -12,8 +12,7 @@ interface IXdgDesktopFile {
 
 export async function processXdgDesktopFile(item: ISearchItem): Promise<ISearchItem> {
   const fn = item.command;
-  let contents = '';
-  contents = await readFile(fn, 'utf-8'); // TODO try catch and err.meta (like .module)
+  const contents = await readFile(fn, 'utf-8'); // TODO try catch and err.meta (like .module)
   const lines = contents.split(/\n/);
   const xdgObj: IXdgDesktopFile = {};
   let currentGroup = '';

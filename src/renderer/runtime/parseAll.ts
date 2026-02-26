@@ -53,7 +53,6 @@ export async function parseAll(searchItems: ISearchItem[] = []) {
   let itemPacks: (ISearchItem[] | null)[] = [null, null, null]; // 0:fb, 1:path, 2:dir
   try {
     itemPacks = await Promise.all(promises);
-    console.log('debug', itemPacks);
   } catch (err) {
     log.error(`☠️ Parse error in parser module "${(err as IParseModuleError).module || 'unknown'}"!\n`, err);
   }
@@ -65,7 +64,7 @@ export async function parseAll(searchItems: ISearchItem[] = []) {
   // flatten results
   itemPacks.forEach((items) => {
     if (items) {
-      searchItems.push.apply(searchItems, items);
+      searchItems.push(...items);
     }
   });
 

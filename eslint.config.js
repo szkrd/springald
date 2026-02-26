@@ -1,4 +1,5 @@
 const eslintJs = require('@eslint/js'); // eslint recommended js rules ended up here lately
+const tsEslint = require('typescript-eslint');
 const globals = require('globals'); // sindre's global definitions
 const prettierConfig = require('eslint-config-prettier'); // turns off all rules that may conflict with prettier
 
@@ -19,18 +20,23 @@ const prettierConfig = require('eslint-config-prettier'); // turns off all rules
 
 module.exports = [
   eslintJs.configs.recommended,
+  ...tsEslint.configs.recommended,
   {
-    files: ['**/*.js'],
+    files: ['src/**/*.ts'],
     languageOptions: {
+      parser: tsEslint.parser,
+      parserOptions: {
+        project: './tsconfig.json',
+        sourceType: 'module',
+      },
       ecmaVersion: 'latest',
       sourceType: 'module',
       globals: { ...globals.node, ...globals.browser },
     },
     rules: {
       'no-var': 'error',
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-      'no-global-assign': 'off', // because of the tampering I do with require
-      'no-useless-assignment': 'off', // `let foo = ''` helps the type system underneath a bit and I want to keep that
+      'prefer-const': 'error',
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     },
   },
   prettierConfig,

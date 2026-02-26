@@ -1,5 +1,5 @@
 import { platform } from 'os';
-import { createServer, Server } from 'net';
+import { createServer, Server, Socket } from 'net';
 
 let unixServer: Server;
 
@@ -9,7 +9,7 @@ const CMD_RELOAD = 'reload';
 const CMD_QUIT = ['quit', 'close'];
 
 /** Checks if input is a valid command. */
-function isCommand(input: any = '', cmd: string | string[] = []) {
+function isCommand(input: Buffer | string = '', cmd: string | string[] = []) {
   if (typeof cmd === 'string') {
     cmd = [cmd];
   }
@@ -25,8 +25,8 @@ export const unixSocket = {
     if (platform() !== 'linux') {
       return;
     }
-    unixServer = createServer((client) => {
-      client.on('data', (data) => {
+    unixServer = createServer((client: Socket) => {
+      client.on('data', (data: Buffer) => {
         if (isCommand(data, CMD_TOGGLE)) {
           toggleWindow();
         } else if (isCommand(data, CMD_RELOAD)) {
@@ -39,7 +39,7 @@ export const unixSocket = {
     unixServer.listen(SOCKET_NAME);
   },
 
-  destroy: (callback?: () => any) => {
+  destroy: (callback?: () => void) => {
     if (!unixServer) {
       if (typeof callback === 'function') callback();
       return;

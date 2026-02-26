@@ -3,7 +3,7 @@ import { readdir as fsReaddir } from 'fs/promises';
 import path from 'path';
 import { log } from '../../../shared/log';
 import { sharedConfig } from '../../shared/sharedConfig';
-import { getPathDuplicates, getPathItems, isExecutable } from '../../utils/file';
+import { getPathDuplicates, getPathItems, isExecutable, resolveHomeDir } from '../../utils/file';
 import { IParseModuleError, ISearchItem } from '../parseAll';
 
 // skips C:\WINDOWS\* which is not a "healthy thing" to parse
@@ -14,9 +14,9 @@ let counter = 0;
 
 // linux only: get global .desktop files, strip the "extensions"
 // and return only the basename part (no path either)
-async function getDesktopFriendlies() {
+async function getDesktopFriendlies(): Promise<string[]> {
   const config = sharedConfig;
-  const location = config.desktopFilesLocation;
+  const location = resolveHomeDir(config.desktopFilesLocation);
   let files;
   try {
     files = await fsReaddir(location);
@@ -111,10 +111,11 @@ export function parsePath(): Promise<ISearchItem[]> {
     (packs) => {
       // first item is an array of desktop files, let's remove that
       // (in this list `/usr/share/applications/foobar.desktop` is just `foobar`)
-      const desktops = packs.shift();
+      const desktops: Array<string | null> = packs.shift() as string[];
+      const searchItems = packs as ISearchItem[][]; // the rest are proper search items
 
       // then rest are individual executables found in path dirs
-      packs.forEach((pack) => result.push.apply(result, pack));
+      searchItems.forEach((pack) => result.push(...pack));
 
       // if an executable file name has a ".desktop" version then it
       // has a desktop file, so we would like to add it to the "with app"
