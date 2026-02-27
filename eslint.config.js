@@ -36,6 +36,7 @@ module.exports = [
     rules: {
       'no-var': 'error',
       'prefer-const': 'error',
+      'typescript-eslint/no-explicit-any': false,
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     },
   },

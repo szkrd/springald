@@ -1,7 +1,7 @@
 import { access, readFile } from 'fs/promises';
 import { log } from '../log';
 
-export async function readJsonFile(fileName): Promise<string | null> {
+export async function readJsonFile(fileName: string): Promise<string | null> {
   try {
     await access(fileName);
   } catch {

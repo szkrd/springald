@@ -2,7 +2,7 @@
  * Useful for swallowing down and up arrow press on input fields
  * (so that we can disable jumping to the beginning or the end of the input value).
  */
-function disableKeyDownForElement(elementId, keyNames: string[] = []) {
+function disableKeyDownForElement(elementId, keyNames: KeyboardEvent['key'][] = []) {
   $.getById(elementId)?.addEventListener('keydown', (event: KeyboardEvent) => {
     if (keyNames.includes(event.key)) {
       event.preventDefault();
