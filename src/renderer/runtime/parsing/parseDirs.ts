@@ -96,7 +96,6 @@ export function parseDirs(): Promise<ISearchItem[]> {
     const config = getConfig();
     let dirs = [...new Set(config.directories || [])];
     dirs = dirs.map(resolveHomeDir).map(fixSlashes);
-    console.log('debug', dirs);
 
     // then check if all the directories exist
     dirs = dirs.filter((dir) => fs.existsSync(dir));

@@ -23,12 +23,14 @@ export interface IAppConfig {
   excludedDirs: string[];
   excludeHidSys: boolean;
   skipPathParsing: boolean;
+  /** Terminal command template, you have to escape it yourself if it has spaces in the path. */
   terminalCommand: string;
   appShortcuts: {
     showItemInFolder: string;
     launchInTerminal: string;
   };
   openWith: Record<string, string>;
+  openWithParams: Record<string, string>;
   directories: string[];
   betaFeatures: boolean;
   /** Internal: set from argv using `--development` or `-d` */

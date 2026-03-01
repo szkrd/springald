@@ -5,17 +5,18 @@ let inGracePeriod = false;
 let lastActiveInput: Element | null;
 let timer: number;
 
-function _setAppLoading(enable) {
+function _setAppLoading(enable: boolean) {
   if (enable) {
     lastActiveInput = document.activeElement;
   }
-  $.getBody().classList[enable ? 'add' : 'remove']('loading');
+  $.toggleBodyClass('loading', enable);
   if (!enable && lastActiveInput instanceof HTMLElement) {
     lastActiveInput.focus();
   }
 }
 
-export function setAppLoading(enable) {
+/** Toggles the "loading" class on the body element with a little debounce. */
+export function setAppLoading(enable: boolean) {
   if (enable && !inGracePeriod) {
     inGracePeriod = true;
     timer = window.setTimeout(() => {

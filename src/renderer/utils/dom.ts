@@ -30,6 +30,10 @@ function getComputedHeightById(elementId: string) {
   return parseInt(style.height.replace(/px/, ''), 10);
 }
 
+function toggleBodyClass(className: string, enable: boolean) {
+  $.getBody().classList[enable ? 'add' : 'remove'](className);
+}
+
 /** Low level DOM wrappers. */
 export const $ = {
   getWindow: () => window,
@@ -40,4 +44,5 @@ export const $ = {
   getComputedHeightById,
   disableKeyDownForElement,
   inputFocusClassToBody,
+  toggleBodyClass,
 };
