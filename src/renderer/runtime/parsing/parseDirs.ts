@@ -1,5 +1,4 @@
 import fs from 'fs';
-import os from 'os';
 import path from 'path';
 import { log } from '../../../shared/log';
 import { sharedConfig } from '../../shared/sharedConfig';

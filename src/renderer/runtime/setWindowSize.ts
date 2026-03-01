@@ -2,7 +2,7 @@ import { constants } from '../constants';
 import { sharedConfig } from '../shared/sharedConfig';
 import { sharedStore } from '../shared/sharedStore';
 import { $ } from '../utils/dom';
-import { sendMessage, sendMessage_resizeWindow } from './sendMessage';
+import { sendMessage_resizeWindow } from './sendMessage';
 
 /**
  * Sends a `MSG_RESIZE_WINDOW` message to the backend
