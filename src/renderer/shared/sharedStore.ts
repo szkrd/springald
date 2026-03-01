@@ -6,7 +6,7 @@ export interface ISharedStore {
   /** Current selected item index. Arrow Up/Down increases/decreases the value. */
   current: number;
   /** Ghost text of the "app" input field. For example by default for "txt" it is "code.cmd". */
-  ghost: string | null;
+  ghost: ISearchItem | null;
   /** Every item that we will search in. */
   searchItems: ISearchItem[];
   /** List of found searchItems that includes (in any way) the text we are looking for. */

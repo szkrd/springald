@@ -7,8 +7,9 @@ import { sharedConfig } from './renderer/shared/sharedConfig';
 import { sharedStore } from './renderer/shared/sharedStore';
 import { $ } from './renderer/utils/dom';
 import { escapeHtml } from './renderer/utils/string';
-import { getConfig } from './shared/getConfig';
+import { getConfig } from './shared/config';
 import { log } from './shared/log';
+import { withoutExt } from './renderer/utils/file';
 
 const { MAX_VISIBLE_ITEM_COUNT } = constants;
 
@@ -60,47 +61,47 @@ function launch() {
   return true;
 }
 
-function onDocumentKey(e) {
+function onDocumentKey(event: KeyboardEvent) {
   if (!electronLayoutFixed) {
     // if the app starts hidden and shown later,
     // then the body's top is outside the viewport for some reason
     $.getById('current')!.style.display = 'block';
     electronLayoutFixed = true;
   }
-  if (e.key === 'Enter') {
+  if (event.key === 'Enter') {
     if (launch()) sendMessage('MSG_TOGGLE_WINDOW');
   }
-  if (e.key === 'F12' && e.shiftKey) {
+  if (event.key === 'F12' && event.shiftKey) {
     // do NOT use the log wrapper here, we don't want this end up in the buffer
     log.noBufferLog({ renderer: log.getBuffer(), backend: sendMessage('MSG_GET_LOG_BUFFER') });
   }
-  if (e.key === 'F12' && !e.shiftKey) {
+  if (event.key === 'F12' && !event.shiftKey) {
     sendMessage('MSG_TOGGLE_DEV_TOOLS');
   }
-  if (e.key === 'F5') {
+  if (event.key === 'F5') {
     reparse();
   }
-  if (e.key === 'c' && e.altKey) {
+  if (event.key === 'c' && event.altKey) {
     sendMessage('MSG_CENTER_WINDOW');
   }
-  if (e.key === 'c' && e.ctrlKey) {
+  if (event.key === 'c' && event.ctrlKey) {
     resetInputFields();
   }
-  if (e.key === 'q' && e.ctrlKey) {
+  if (event.key === 'q' && event.ctrlKey) {
     sendMessage('MSG_QUIT');
   }
-  if (e.key === 'Escape') {
+  if (event.key === 'Escape') {
     sendMessage('MSG_TOGGLE_WINDOW');
   }
-  if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown'].includes(e.key)) {
-    e.stopPropagation();
-    if (e.key === 'ArrowUp') {
+  if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown'].includes(event.key)) {
+    event.stopPropagation();
+    if (event.key === 'ArrowUp') {
       sharedStore.current = (sharedStore.current - 1) % sharedStore.found.length;
-    } else if (e.key === 'ArrowDown') {
+    } else if (event.key === 'ArrowDown') {
       sharedStore.current = (sharedStore.current + 1) % sharedStore.found.length;
-    } else if (e.key === 'PageUp') {
+    } else if (event.key === 'PageUp') {
       sharedStore.current = Math.max(sharedStore.current - MAX_VISIBLE_ITEM_COUNT, 0);
-    } else if (e.key === 'PageDown') {
+    } else if (event.key === 'PageDown') {
       sharedStore.current = Math.min(sharedStore.current + MAX_VISIBLE_ITEM_COUNT, sharedStore.found.length - 1);
     }
     runtime.highlightSelectedResult();
@@ -124,8 +125,8 @@ function setCurrentAndApp() {
   }
 }
 
-function onAppChange(e) {
-  const val = (typeof e === 'string' ? e : e.target.value || '').trim();
+function onAppChange(event: Event | string) {
+  const val = (typeof event === 'string' ? event : (event.target! as HTMLInputElement).value || '').trim();
   const longEnoughToTrigger = val.length > 1;
   let matchingApp;
   sharedStore.withApp = val;
@@ -133,15 +134,17 @@ function onAppChange(e) {
     const desktopItems = sharedStore.searchItems.filter((item) => item.desktop);
     // if we can't find it in the desktop friendly list, then try harder
     matchingApp =
+      desktopItems.find((item) => item.name === val) || // desktop files are primarily for linux, we don't need to mess with file extensions
       desktopItems.find((item) => item.name.startsWith(val)) ||
+      sharedStore.searchItems.find((item) => (item.name === val || withoutExt(item.name) === val) && item.executable) || // first we try an exact match (like `code.exe` instead of `code-tunnel.exe`)
       sharedStore.searchItems.find((item) => item.name.startsWith(val) && item.executable);
   }
   $.getById('ghost')!.innerHTML = matchingApp ? escapeHtml(matchingApp.name) : '';
   sharedStore.ghost = matchingApp || null;
 }
 
-function onSearchChange(e) {
-  const val = (typeof e === 'string' ? e : e.target.value || '').trim();
+function onSearchChange(event: Event | string) {
+  const val = (typeof event === 'string' ? event : (event.target! as HTMLInputElement).value || '').trim();
   const words = val ? val.split(config.logicalAndSeparator) : [];
   sharedStore.found = runtime.filterSearchItems(sharedStore.searchItems, words);
   sharedStore.current = 0;

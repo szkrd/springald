@@ -8,7 +8,7 @@ const homeDir = homedir();
  * Determines if a file has executable bit set on Linux,
  * or is an executable by extension (exe, bat, cmd) on Windows.
  */
-export function isExecutable(fileExtension, fsStatsMode) {
+export function isExecutable(fileExtension: string, fsStatsMode: number) {
   const ox = !!(((fsStatsMode << 6) >> 6) & 1);
   const gx = !!(((fsStatsMode << 3) >> 6) & 1);
   const ux = !!((fsStatsMode >> 6) & 1);
@@ -29,7 +29,25 @@ export function getPathDuplicates() {
   return [...new Set(all.filter((item, index) => all.indexOf(item) !== index))];
 }
 
-// TODO use whereever I manually do the homeDir replacement!
+/**
+ * Replaces dirname separators (`\` or `/`) so that they match the OS default.
+ * Do NOT use it with filenames where params like `/?` may be present.
+ */
+export function fixSlashes(fileName: string): string {
+  return isWin ? fileName.replace(/\//g, path.sep) : fileName.replace(/\\/g, path.sep);
+}
+
+/** Replaces ~ with home dir. */
 export function resolveHomeDir(fileName: string) {
   return (fileName || '').replace(/~/, homeDir);
+}
+
+/** Replaces home dir with ~. */
+export function unresolveHomeDir(fileName: string) {
+  return (fileName || '').replace(homedir(), '~');
+}
+
+/** Returns filename without extension. */
+export function withoutExt(fileName: string) {
+  return path.parse(fileName).name;
 }

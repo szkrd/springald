@@ -1,12 +1,12 @@
 import { constants } from '../constants';
 const { U_PREFIX, U_POSTFIX } = constants;
 
-export function escapeRegExp(str) {
+export function escapeRegExp(str: string) {
   return str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
 }
 
 // escape html, but allow underlines
-export function escapeHtml(unsafe) {
+export function escapeHtml(unsafe: string) {
   return unsafe
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')

@@ -1,6 +1,6 @@
 import { Menu, Tray } from 'electron';
-import { getConfig } from '../shared/getConfig';
-import { sendMessageAtBackend } from './messaging/sendMessageAtBackend';
+import { getConfig } from '../shared/config';
+import { sendMessageAtBackend_quit, sendMessageAtBackend_toggleWindow } from './messaging/sendMessageAtBackend';
 
 const initialized = false;
 let tray: Tray;
@@ -19,10 +19,10 @@ export async function initTray(): Promise<Tray> {
   }
   tray = new Tray('assets/' + iconFileName);
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'toggle window', type: 'normal', click: () => sendMessageAtBackend('MSG_TOGGLE_WINDOW') },
-    { label: 'quit', type: 'normal', click: () => sendMessageAtBackend('MSG_QUIT') },
+    { label: 'toggle window', type: 'normal', click: sendMessageAtBackend_toggleWindow },
+    { label: 'quit', type: 'normal', click: sendMessageAtBackend_quit },
   ]);
-  tray.addListener('click', () => sendMessageAtBackend('MSG_TOGGLE_WINDOW'));
+  tray.addListener('click', sendMessageAtBackend_toggleWindow);
   tray.setContextMenu(contextMenu);
   tray.setToolTip('Springald');
   return tray;

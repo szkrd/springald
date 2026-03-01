@@ -1,11 +1,12 @@
 import path from 'path';
-import { homedir } from 'os';
+import { ISearchItem } from '../parseAll';
+import { unresolveHomeDir } from '../../utils/file';
 
 /**
  * This will be the text we can search against.
  * Usually something like `prefixChar/dir/dir/dir/fileName.ext`.
  */
-export function getSearchableText(item) {
+export function getSearchableText(item: ISearchItem) {
   let prefix = '';
   let separator = path.sep;
   let itemPath = item.path;
@@ -21,7 +22,7 @@ export function getSearchableText(item) {
     prefix = 'd:';
   }
   if (item.type === 'PATHITEM' || item.type === 'DIRITEM') {
-    itemPath = itemPath.replace(homedir(), '~');
+    itemPath = unresolveHomeDir(itemPath);
   }
   return (prefix + itemPath + separator + item.name).replace(/\/+/g, '/'); // fb root level and extra separator
 }

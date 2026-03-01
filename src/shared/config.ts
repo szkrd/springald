@@ -76,7 +76,7 @@ export async function getConfig(dataPath = '', flush = false): Promise<IAppConfi
   const localPath = join(__dirname, '../../config.local.json');
   log.info(`Local config ${localLoaded ? 'loaded from' : 'failed to load from'} "${localPath}".`);
   const configPath = join(dataPath, 'config.json');
-  const userConfig = await readJsonFile(configPath); // has catch
+  const userConfig = await readJsonFile(configPath, true); // has catch
   log.info(`User config ${userConfig ? 'loaded from' : 'failed to load from'} "${configPath}".`);
   Object.assign(config, appConfig, localAppConfig, userConfig || {});
   log.debug('Merged config contains:', config);
@@ -86,9 +86,11 @@ export async function getConfig(dataPath = '', flush = false): Promise<IAppConfi
   return config;
 }
 
-// if the renderer reparses the config,
-// it can push it back here for the backend
-getConfig.inject = (newConfig) => {
+/**
+ * When the renderer reparses the config,
+ * it can push it back here for the backend.
+ */
+export function setConfig(newConfig: IAppConfig) {
   log.info('Config refreshed via renderer.');
   config = newConfig;
-};
+}

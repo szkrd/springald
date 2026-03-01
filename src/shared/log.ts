@@ -8,7 +8,7 @@ interface IBufferedLogEvent {
 
 type ILogAction = 'debug' | 'info' | 'log' | 'warn' | 'error';
 
-type ILogBuffer = Record<ILogAction, IBufferedLogEvent[]>;
+export type ILogBuffer = Record<ILogAction, IBufferedLogEvent[]>;
 
 const buffer: ILogBuffer = {
   debug: [],

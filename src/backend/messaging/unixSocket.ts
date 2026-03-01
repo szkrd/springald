@@ -1,11 +1,11 @@
 import { platform } from 'os';
 import { createServer, Server, Socket } from 'net';
+import { IMessageHandlers } from '../initBackend';
 
 let unixServer: Server;
 
 const SOCKET_NAME = '/tmp/springald.sock';
 const CMD_TOGGLE = 'toggle';
-const CMD_RELOAD = 'reload';
 const CMD_QUIT = ['quit', 'close'];
 
 /** Checks if input is a valid command. */
@@ -20,8 +20,10 @@ export const unixSocket = {
   /**
    * ipc interface setup; use `socat` to send simple messages to the application,
    * for example `echo toggle | socat UNIX:/tmp/springald.sock -`
+   *
+   * If I need, I'll add more messages, so far only `TOGGLE` and `QUIT` are handled.
    */
-  create: ({ toggleWindow, refreshConfig, quit }) => {
+  create: ({ toggleWindow, quit }: IMessageHandlers) => {
     if (platform() !== 'linux') {
       return;
     }
@@ -29,8 +31,6 @@ export const unixSocket = {
       client.on('data', (data: Buffer) => {
         if (isCommand(data, CMD_TOGGLE)) {
           toggleWindow();
-        } else if (isCommand(data, CMD_RELOAD)) {
-          refreshConfig();
         } else if (isCommand(data, CMD_QUIT)) {
           quit();
         }

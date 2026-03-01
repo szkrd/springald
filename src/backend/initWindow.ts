@@ -1,7 +1,7 @@
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
 import { platform } from 'os';
 import { log } from '../shared/log';
-import { getConfig } from '../shared/getConfig';
+import { getConfig } from '../shared/config';
 import { isCoord } from './utils/isCoord';
 
 export type IAppWindow = AppWindow;
@@ -9,7 +9,7 @@ export type IAppWindow = AppWindow;
 class AppWindow extends BrowserWindow {
   hidden: boolean;
 
-  constructor(options) {
+  constructor(options: BrowserWindowConstructorOptions) {
     super(options);
     this.hidden = !options.show;
     if (this.hidden) {
@@ -69,15 +69,16 @@ export async function initWindow() {
     frame: !config.borderlessWindow,
     resizable: true, // if you set to false, then resizing will be buggy!
     webPreferences: {
-      // yes, new electron is new, probably this whole app will need some HUGE changes
+      // New electron is new, probably this whole app will need some HUGE changes
       // see: https://github.com/electron/electron/blob/main/docs/tutorial/context-isolation.md
       contextIsolation: false,
-      // another problem is that now we have no "require" (node module access) in the renderer
+      // Another problem is that now we have no "require" (node module access) in the renderer
       // thread (changed around electron 5-ish), because that's a security risk (obviously),
       // but since this is pretty much a personal project with zero runtime dependencies,
       // I will bravely ignore that...
       nodeIntegration: true,
-      enableRemoteModule: true,
+      // This has been long deprecated, the recommendation is to use ipcRenderer.
+      //enableRemoteModule: true,
     },
   });
   win.loadFile('index.html');

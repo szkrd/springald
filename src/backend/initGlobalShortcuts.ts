@@ -1,7 +1,7 @@
 import { globalShortcut } from 'electron';
 import { log } from '../shared/log';
-import { getConfig } from '../shared/getConfig';
-import { sendMessageAtBackend } from './messaging/sendMessageAtBackend';
+import { getConfig } from '../shared/config';
+import { sendMessageAtBackend_toggleWindow } from './messaging/sendMessageAtBackend';
 
 const initialized = false;
 
@@ -20,7 +20,7 @@ export async function initGlobalShortcuts(): Promise<void> {
   }
   keys.forEach((key) => {
     const toggleAction = () => {
-      sendMessageAtBackend('MSG_TOGGLE_WINDOW');
+      sendMessageAtBackend_toggleWindow();
     };
     const success = globalShortcut.register(key, toggleAction);
     if (!success) {

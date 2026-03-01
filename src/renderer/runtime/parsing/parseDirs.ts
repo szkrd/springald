@@ -4,6 +4,7 @@ import path from 'path';
 import { log } from '../../../shared/log';
 import { sharedConfig } from '../../shared/sharedConfig';
 import { ISearchItem } from '../parseAll';
+import { fixSlashes, resolveHomeDir } from '../../utils/file';
 
 export interface IDirWalkError extends NodeJS.ErrnoException {
   /** Location where the parser failed. Directory parsing error is not a show-stopper, that will never reject. */
@@ -92,10 +93,10 @@ function walk(dir: string, done: (err: IDirWalkError | null, results?: ISearchIt
 export function parseDirs(): Promise<ISearchItem[]> {
   return new Promise((resolve, _reject) => {
     // first we replace the ~ with the proper home path
-    const homeDir = os.homedir();
     const config = getConfig();
     let dirs = [...new Set(config.directories || [])];
-    dirs = dirs.map((dir) => dir.replace(/~/, homeDir).replace(/\\/g, '/')); // TODO normalize for path.sep
+    dirs = dirs.map(resolveHomeDir).map(fixSlashes);
+    console.log('debug', dirs);
 
     // then check if all the directories exist
     dirs = dirs.filter((dir) => fs.existsSync(dir));

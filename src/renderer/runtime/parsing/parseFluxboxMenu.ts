@@ -3,6 +3,7 @@ import { homedir } from 'os';
 import path from 'path';
 import { log } from '../../../shared/log';
 import { IParseModuleError, ISearchItem } from '../parseAll';
+import { resolveHomeDir } from '../../utils/file';
 
 let counter = 0;
 const homeDir = homedir();
@@ -62,7 +63,7 @@ function parse(text: string, depth: string[] = []): Promise<ISearchItem[]> {
  */
 export function parseFluxboxMenu(fileName: string, depth: string[] = []): Promise<ISearchItem[]> {
   depth = Array.from(depth);
-  fileName = (fileName || '').replace(/~/, homeDir);
+  fileName = resolveHomeDir(fileName);
   const menuFile = fileName || path.join(homeDir, '.fluxbox', 'menu');
   return new Promise((resolve, reject) => {
     if (!fs.existsSync(menuFile)) {

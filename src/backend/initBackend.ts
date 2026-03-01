@@ -1,11 +1,23 @@
 import { app } from 'electron';
-import { log } from '../shared/log';
-import { getConfig, IAppConfig } from '../shared/getConfig';
+import { ILogBuffer, log } from '../shared/log';
+import { getConfig, IAppConfig, setConfig } from '../shared/config';
 import { initWindow, IAppWindow } from './initWindow';
 import { initGlobalShortcuts } from './initGlobalShortcuts';
 import { handleMessage } from './messaging/handleMesssage';
 import { isCoord } from './utils/isCoord';
 import { unixSocket } from './messaging/unixSocket';
+import { initTray } from './initTray';
+
+export interface IMessageHandlers {
+  quit: () => void;
+  getConfig: () => IAppConfig;
+  getLogBuffer: () => ILogBuffer;
+  refreshConfig: (newConfig: IAppConfig) => void;
+  resizeWindow: (payload: IWidthHeight) => void;
+  toggleWindow: () => void;
+  centerWindow: () => void;
+  toggleDevTools: () => void;
+}
 
 interface IBackend {
   config: IAppConfig;
@@ -54,14 +66,14 @@ function fixSizing(obj: IWidthHeight) {
  * Do NOT forget to set these message is _messages.ts_ along with a helpful comment about what the action does!
  */
 function setupMessageListener() {
-  const handlers = {
+  const handlers: IMessageHandlers = {
     quit: () => {
       if (unixSocket && typeof unixSocket.destroy === 'function') unixSocket.destroy();
       app.quit();
     },
     getConfig: () => backend.config,
     getLogBuffer: () => log.getBuffer(),
-    refreshConfig: getConfig.inject,
+    refreshConfig: setConfig,
     resizeWindow: (payload: IWidthHeight) => {
       const { width, height } = fixSizing(payload);
       backend.win.setSize(width, height);
@@ -104,6 +116,7 @@ export async function initBackend(): Promise<void> {
     return;
   }
   const config = await getConfig(app.getPath('userData'));
+  await initTray();
   await initGlobalShortcuts();
   const win = await initWindow(); // this ensures that renderer can not start before above has finished (especially config)
   backend = { config, win }; // exposed for message handlers

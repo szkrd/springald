@@ -16,6 +16,8 @@ export const messages = {
   MSG_TOGGLE_DEV_TOOLS: '',
 };
 
+export type IMessageKey = keyof typeof messages;
+
 Object.keys(messages).forEach((key) => {
-  messages[key] = key;
+  messages[key as IMessageKey] = key;
 });
