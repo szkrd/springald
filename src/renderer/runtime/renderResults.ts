@@ -3,8 +3,9 @@ import { sharedStore } from '../shared/sharedStore';
 import { getScore } from '../utils/search';
 import { escapeRegExp, escapeHtml } from '../utils/string';
 import { $ } from '../utils/dom';
+import { ISearchItem } from './parseAll';
 
-function underline(text, needles) {
+function underline(text: string, needles: string[]) {
   const consts = constants;
   const prefix = consts.U_PREFIX;
   const postfix = consts.U_POSTFIX;
@@ -15,15 +16,15 @@ function underline(text, needles) {
   return text;
 }
 
-function createName(item, needles) {
-  let text = item.searchableText;
+function createName(item: ISearchItem, needles: string[]) {
+  let text = item.searchableText!;
   if (getScore(text, needles) > 0) {
     text = underline(text, needles);
   }
   return text;
 }
 
-export function renderResults(needles) {
+export function renderResults(needles: string[]) {
   const items = sharedStore.found;
   $.getByClassName('result').forEach((el) => ((el as HTMLDivElement).style.display = 'none'));
 

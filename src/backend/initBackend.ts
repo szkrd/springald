@@ -1,32 +1,16 @@
 import { app } from 'electron';
-import { ILogBuffer, log } from '../shared/log';
+import { log } from '../shared/log';
 import { getConfig, IAppConfig, setConfig } from '../shared/config';
 import { initWindow, IAppWindow } from './initWindow';
 import { initGlobalShortcuts } from './initGlobalShortcuts';
-import { handleMessage } from './messaging/handleMesssage';
+import { handleMessage, IMessageHandlers, IWidthHeight } from './messaging/handleMesssage';
 import { isCoord } from './utils/isCoord';
 import { unixSocket } from './messaging/unixSocket';
 import { initTray } from './initTray';
 
-export interface IMessageHandlers {
-  quit: () => void;
-  getConfig: () => IAppConfig;
-  getLogBuffer: () => ILogBuffer;
-  refreshConfig: (newConfig: IAppConfig) => void;
-  resizeWindow: (payload: IWidthHeight) => void;
-  toggleWindow: () => void;
-  centerWindow: () => void;
-  toggleDevTools: () => void;
-}
-
 interface IBackend {
   config: IAppConfig;
   win: IAppWindow;
-}
-
-interface IWidthHeight {
-  width: number;
-  height: number;
 }
 
 let initialized = false;
@@ -73,7 +57,7 @@ function setupMessageListener() {
     },
     getConfig: () => backend.config,
     getLogBuffer: () => log.getBuffer(),
-    refreshConfig: setConfig,
+    refreshConfig: setConfig, // TODO is this broken? refresh config seems to have stopped working from the renderer
     resizeWindow: (payload: IWidthHeight) => {
       const { width, height } = fixSizing(payload);
       backend.win.setSize(width, height);

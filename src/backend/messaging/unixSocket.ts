@@ -1,6 +1,6 @@
 import { platform } from 'os';
 import { createServer, Server, Socket } from 'net';
-import { IMessageHandlers } from '../initBackend';
+import { IMessageHandlers } from './handleMesssage';
 
 let unixServer: Server;
 

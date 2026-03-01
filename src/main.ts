@@ -2,7 +2,15 @@ import { constants } from './renderer/constants';
 import { openWithApp } from './renderer/runtime/openWithApp';
 import { parseAll } from './renderer/runtime/parseAll';
 import { runtime } from './renderer/runtime/runtime';
-import { sendMessage } from './renderer/runtime/sendMessage';
+import {
+  sendMessage_centerWindow,
+  sendMessage_getConfig,
+  sendMessage_getLogBuffer,
+  sendMessage_quit,
+  sendMessage_refreshConfig,
+  sendMessage_toggleDevTools,
+  sendMessage_toggleWindow,
+} from './renderer/runtime/sendMessage';
 import { sharedConfig } from './renderer/shared/sharedConfig';
 import { sharedStore } from './renderer/shared/sharedStore';
 import { $ } from './renderer/utils/dom';
@@ -13,7 +21,7 @@ import { withoutExt } from './renderer/utils/file';
 
 const { MAX_VISIBLE_ITEM_COUNT } = constants;
 
-let config = sendMessage('MSG_GET_CONFIG');
+let config = sendMessage_getConfig();
 Object.assign(sharedConfig, config);
 let electronLayoutFixed = false;
 
@@ -32,7 +40,7 @@ function reparse() {
   runtime.setAppLoading(true);
   return getConfig(config.dataPath, true) // probably you've added new dirs in your local config, so let's reread the cfg
     .then((cfg) => {
-      sendMessage('MSG_REFRESH_CONFIG', cfg);
+      sendMessage_refreshConfig(cfg);
       config = cfg;
       Object.assign(sharedConfig, cfg);
       return parseAll();
@@ -69,29 +77,29 @@ function onDocumentKey(event: KeyboardEvent) {
     electronLayoutFixed = true;
   }
   if (event.key === 'Enter') {
-    if (launch()) sendMessage('MSG_TOGGLE_WINDOW');
+    if (launch()) sendMessage_toggleWindow();
   }
   if (event.key === 'F12' && event.shiftKey) {
     // do NOT use the log wrapper here, we don't want this end up in the buffer
-    log.noBufferLog({ renderer: log.getBuffer(), backend: sendMessage('MSG_GET_LOG_BUFFER') });
+    log.noBufferLog({ renderer: log.getBuffer(), backend: sendMessage_getLogBuffer() });
   }
   if (event.key === 'F12' && !event.shiftKey) {
-    sendMessage('MSG_TOGGLE_DEV_TOOLS');
+    sendMessage_toggleDevTools();
   }
   if (event.key === 'F5') {
     reparse();
   }
   if (event.key === 'c' && event.altKey) {
-    sendMessage('MSG_CENTER_WINDOW');
+    sendMessage_centerWindow();
   }
   if (event.key === 'c' && event.ctrlKey) {
     resetInputFields();
   }
   if (event.key === 'q' && event.ctrlKey) {
-    sendMessage('MSG_QUIT');
+    sendMessage_quit();
   }
   if (event.key === 'Escape') {
-    sendMessage('MSG_TOGGLE_WINDOW');
+    sendMessage_toggleWindow();
   }
   if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown'].includes(event.key)) {
     event.stopPropagation();
@@ -187,7 +195,7 @@ $.getDocument().addEventListener('DOMContentLoaded', () => {
 
   // if we had errors in the backend's log buffer, then let's show that
   // (this of course can be checked by launching from the commandline)
-  const backendLogBuffer = sendMessage('MSG_GET_LOG_BUFFER');
+  const backendLogBuffer = sendMessage_getLogBuffer();
   if (log.getErrorCount(backendLogBuffer)) {
     log.noBufferWarn(
       [

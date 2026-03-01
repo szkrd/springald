@@ -2,7 +2,7 @@ import { constants } from '../constants';
 import { sharedConfig } from '../shared/sharedConfig';
 import { sharedStore } from '../shared/sharedStore';
 import { $ } from '../utils/dom';
-import { sendMessage } from './sendMessage';
+import { sendMessage, sendMessage_resizeWindow } from './sendMessage';
 
 /**
  * Sends a `MSG_RESIZE_WINDOW` message to the backend
@@ -18,5 +18,5 @@ export function setWindowSize() {
   let height = itemHeight + itemHeight * itemMax;
   height += foundItemCount ? itemHeight : 0;
   const width = sharedConfig.winWidth || FALLBACK_WIN_WIDTH;
-  sendMessage('MSG_RESIZE_WINDOW', { width, height });
+  sendMessage_resizeWindow({ width, height });
 }

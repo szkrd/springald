@@ -1,9 +1,9 @@
 import { $ } from '../utils/dom';
 import { log } from '../../shared/log';
-import { sendMessage } from './sendMessage';
+import { sendMessage_toggleDevTools } from './sendMessage';
 
 export function handleError(...args: unknown[]) {
-  sendMessage('MSG_TOGGLE_DEV_TOOLS');
+  sendMessage_toggleDevTools();
   log.error(...args);
   const el = $.getById('error-line')!;
   el.style.opacity = '1';
