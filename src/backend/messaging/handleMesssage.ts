@@ -1,7 +1,7 @@
 import { ipcMain } from 'electron';
 import { IMessageKey, messages } from '../messages';
 import { backendEventBus } from './backendEventBus';
-import { IAppConfig } from '../../shared/config';
+import { IAppConfig } from '../../shared/config.types';
 import { ILogBuffer } from '../../shared/log';
 
 export interface IWidthHeight {

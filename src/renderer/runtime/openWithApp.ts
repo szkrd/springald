@@ -3,7 +3,7 @@ import { spawn, SpawnOptionsWithoutStdio } from 'child_process';
 import { shell } from 'electron';
 import { log } from '../../shared/log';
 import { ISearchItem } from './parseAll';
-import { IAppConfig } from '../../shared/config';
+import { IAppConfig } from '../../shared/config.types';
 import { quoteSpaces } from '../utils/string';
 
 /** Replaces string chunks like %COMMAND% with values from the given object. */

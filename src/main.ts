@@ -80,14 +80,17 @@ function onDocumentKey(event: KeyboardEvent) {
     if (launch()) sendMessage_toggleWindow();
   }
   if (event.key === 'F12' && event.shiftKey) {
-    // do NOT use the log wrapper here, we don't want this end up in the buffer
-    log.noBufferLog({ renderer: log.getBuffer(), backend: sendMessage_getLogBuffer() });
+    log.prettyPrint({ backend: sendMessage_getLogBuffer(), renderer: log.getBuffer() });
   }
-  if (event.key === 'F12' && !event.shiftKey) {
+  if (event.key === 'F12' && !event.shiftKey && !event.altKey) {
     sendMessage_toggleDevTools();
   }
   if (event.key === 'F5') {
     reparse();
+  }
+  if (event.key === 'm' && event.altKey) {
+    const memoryUsage = process.memoryUsage();
+    log.info(`App Total Memory Usage: ${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`);
   }
   if (event.key === 'c' && event.altKey) {
     sendMessage_centerWindow();
@@ -166,7 +169,7 @@ function onSearchChange(event: Event | string) {
 // | DOM CONTENT LOADED |
 // +--------------------+
 $.getDocument().addEventListener('DOMContentLoaded', () => {
-  log.info('App renderer activated. You can access app internals inside renderer via "window.app".');
+  log.info('App renderer activated.');
   $.getWindow().addEventListener('error', runtime.handleError);
   runtime.setAppLoading(true);
   parseAll()

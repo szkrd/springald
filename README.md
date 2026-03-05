@@ -1,34 +1,33 @@
 # springald
 
-Springald is a simple launcher, similar to Launchy. It is written in _vanilla-js™_
-uses no dependencies apart from ~~nwjs~~ electron.
+Springald is a simple launcher, similar to Launchy.
+It was rewritten in typescript and it uses no runtime dependencies apart from electron.
 
 It can parse a fluxbox menu file, read directories from path or from a config file,
 can launch .desktop files. That's it.
 
-Ambience theme:
+This is a rather messy tool, you probably need something more robust, but it works for me;
+as of this writing (2026 March) I still use it on a daily basis.
+
+## themes
+
+Ambience:
 
 ![looks like this](./docs/demo.jpg)
 
-Aquamint theme:
+Aquamint:
 
 ![screen recording](./docs/demo.gif)
-
-This is a rather messy tool, you probably need something more robust, like
-[Albert](https://github.com/albertlauncher/albert),
-[ULauncher](https://github.com/Ulauncher/Ulauncher/),
-[Rofi](https://github.com/davatorium/rofi),
-[Launchy](https://www.launchy.net/index.php)
-etc.
 
 ## usage
 
 The app is not bundled. Use node:
 
-1. `npm i`
-2. `npm start` (or use `launcher.sh` or `launcher.vbs`)
+1. `npm ci`
+2. `npm run build`
+3. `npm start` (or use `launcher.sh` or `launcher.vbs`)
 
-For options see [config.json](./config.json) and [docs](./docs/config.md);
+For options see [config.json](./config.json) and [type definition](./src/shared/config.types.ts);
 you can **shallow override** them with a local config:
 
 - linux: `~/.config/springald/config.json`
@@ -43,6 +42,7 @@ you can **shallow override** them with a local config:
 - _F5_ = reparse
 - _alt + c_ = center on screen
 - _ctrl + c_ = clear inputs
+- _alt + m_ = log memory usage to console
 - _F12_ = toggle dev toolbar
 - _shift + F12_ = dump both backend and renderer logs to console
 - _tab_ = toggle between the two inputs (path left, open with app right)
@@ -50,31 +50,23 @@ you can **shallow override** them with a local config:
 Global shortcut toggle by default is `logo key + backtick` (and `ctrl + shift + alt + backtick`)
 be sure to set an override in your user config, string for single key, array for multiple keys.
 
-Available global electron shortcuts are [here](https://www.electronjs.org/docs/api/accelerator),
-modifiers are `Cmd`, `Ctrl`, `CmdOrCtrl`, `Alt`, `Option`, `AltGr`, `Shift`, `Super`.
-
 If your linux desktop environment has problems with electron global keys, you can use
 the `/tmp/springald.sock` **unix socket** to toggle the instance (either through `launcher.sh`
 or by directly sending a message with [socat](https://linux.die.net/man/1/socat):
 `echo toggle | socat UNIX:/tmp/springald.sock -`);
-for details see [unixSocket.js](./src/backend//modules/unixSocket.js).
+for details see [unixSocket.js](./src/backend/messaging/unixSocket.ts).
 
 ## development
 
 If you are _me_ and you (I) haven't touched this project in a while, then you might be wondering what is this mess.
 Dear me, please read your notes in the [docs](./docs/dev.md) folder.
 
-Other than that, `npm run dev` from the console.
+Other than that, `npm ci`, `npm run watch` (for ts to js transpilation) and then `npm run dev` from the console.
 
 Notable entry points:
 
-1. [backend.js](./src/backend/backend.js) via [package.json](./package.json)
-2. ([interim.js](./src/interim/interim.js) via [index.html](./index.html))
-3. [renderer.js](./src/renderer/renderer.js) via [index.html](./index.html)
-
-### vscode
-
-Available tasks: **lint** (as build, use `ctrl + shift + b`), **lint:fix**.
+1. [backend](./src/backend/backend.ts) via [package.json](./package.json)
+2. [main](./src/main.ts) via [index.html](./index.html)
 
 ## notes
 
@@ -99,8 +91,3 @@ Available tasks: **lint** (as build, use `ctrl + shift + b`), **lint:fix**.
     `bash -c 'echo toggle | socat UNIX:/tmp/springald.sock -'`
   - the same is true for the "create a new launcher" feature
     (and then the launcher can be added to the autolaunch items)
-
-### TODO
-
-- [ ] add proper `.desktop` file support (`gtk-launch` is a workaround for now)?
-- [ ] list uwp apps (see EPERM part in `parsePath.js`)?

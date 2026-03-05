@@ -1,6 +1,7 @@
 import { app } from 'electron';
 import { log } from '../shared/log';
-import { getConfig, IAppConfig, setConfig } from '../shared/config';
+import { getConfig, setConfig } from '../shared/config';
+import { IAppConfig } from '../shared/config.types';
 import { initWindow, IAppWindow } from './initWindow';
 import { initGlobalShortcuts } from './initGlobalShortcuts';
 import { handleMessage, IMessageHandlers, IWidthHeight } from './messaging/handleMesssage';

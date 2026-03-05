@@ -4,6 +4,7 @@ filenames. That's all it can do.
 
 Since you wanted to minimize memory usage, you used vanilla js, which 
 does have a certain charm, but looks like dog poop. But hey, it works.
+Later you decided to do a quick and dirty rewrite to typescript/
 
 You used **nwjs**, because you thought it was more lightweight than **electron**.
 You were wrong. You migrated this project to electron, because:
@@ -13,14 +14,8 @@ You were wrong. You migrated this project to electron, because:
 - sometimes the app in the most recent nwjs version froze for a minute or so (no logs whatsoever)
 - nwjs logging is painful; in the end you wrote yourself a log listener
   and a dev launcher wrapper (that colored and formatted the stdout stream of nwjs)
-- nwjs tray menu broke a year or so ago and it didn't work for you ever since
+- nwjs tray menu broke long ago and it didn't work for you ever since
 - nwjs tray icon sometimes disappeared or looked messy
-
-> Btw you also gave **typescript** a try, because typescript is <3, but without robust
-> bundling/building `require` and module `import/export` did not mix very well. In fact
-> you probably should accept this project as a hack. You know react, vue, worked with
-> angular, ngrx, redux, sagas - you can do better. But please don't.
-> Go and read a book or watch a movie instead.
 
 ...so you migrated this mess to electron, because you still felt the need for this tool.
 You saved the nwjs codebase in the **development-nwjs** branch. Along the migration things
@@ -35,6 +30,8 @@ that did not make it:
 7. the custom theme support via user css (in `.config/springald`)
 
 ## application structure
+
+TODO update this section!! Some of this was changed after the ts migration.
 
 Electron has a main process, and a renderer process; this is nothing like server and client.
 

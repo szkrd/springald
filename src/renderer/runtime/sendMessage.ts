@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { IMessageKey, messages } from '../../backend/messages';
-import { IAppConfig } from '../../shared/config';
+import { IAppConfig } from '../../shared/config.types';
 import { ILogBuffer } from '../../shared/log';
 import { IWidthHeight } from '../../backend/messaging/handleMesssage';
 

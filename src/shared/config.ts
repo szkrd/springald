@@ -2,42 +2,7 @@ import { join } from 'path';
 import { log } from './log';
 import appConfig from '../../config.json';
 import { readJsonFile } from './utils/readJsonFile';
-
-export interface IAppConfig {
-  theme: 'default' | 'ambiance' | 'aquamint';
-  winWidth: number;
-  fluxboxMenuFile: string | false;
-  borderlessWindow: boolean;
-  fixPosition: [number, number];
-  modifyResize: [number, number];
-  paintDelay: number;
-  showOnStartup: boolean;
-  centerOnShow: boolean;
-  autoSelectAll: boolean;
-  trayIconSize: 'small' | 'large';
-  toggleKey: string[];
-  logicalAndSeparator: string;
-  desktopFilesLocation: string;
-  includeFiles: string[];
-  excludeFiles: string[];
-  excludedDirs: string[];
-  excludeHidSys: boolean;
-  skipPathParsing: boolean;
-  /** Terminal command template, you have to escape it yourself if it has spaces in the path. */
-  terminalCommand: string;
-  appShortcuts: {
-    showItemInFolder: string;
-    launchInTerminal: string;
-  };
-  openWith: Record<string, string>;
-  openWithParams: Record<string, string>;
-  directories: string[];
-  betaFeatures: boolean;
-  /** Internal: set from argv using `--development` or `-d` */
-  development: boolean;
-  /** Internal: same as in nwjs (~/.config/appName) */
-  dataPath: string;
-}
+import { IAppConfig } from './config.types';
 
 let localAppConfig: Partial<IAppConfig> = {};
 try {
