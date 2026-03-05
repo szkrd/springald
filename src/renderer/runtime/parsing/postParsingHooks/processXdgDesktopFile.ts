@@ -14,7 +14,7 @@ export async function processXdgDesktopFile(item: ISearchItem): Promise<ISearchI
   const fn = item.command;
   const contents = await readFile(fn, 'utf-8'); // TODO try catch and err.meta (like .module)
   const lines = contents.split(/\n/);
-  const xdgObj: IXdgDesktopFile = {};
+  const xdgObj: IXdgDesktopFile & Record<string, string | boolean> = {};
   let currentGroup = '';
   lines.forEach((line) => {
     line = line.trim();

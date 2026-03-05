@@ -6,7 +6,7 @@ import { unresolveHomeDir } from '../../utils/file';
  * This will be the text we can search against.
  * Usually something like `prefixChar/dir/dir/dir/fileName.ext`.
  */
-export function getSearchableText(item: ISearchItem) {
+export function getSearchableText(item: ISearchItem): string {
   let prefix = '';
   let separator = path.sep;
   let itemPath = item.path;

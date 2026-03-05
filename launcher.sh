@@ -1,4 +1,14 @@
 #!/bin/bash
+# do NOT use this script under mingw!
+if uname | grep -qiE 'mingw|msys'; then
+    echo "this script will NOT work in a MinGW/MSYS shell, exiting"
+    exit 1
+fi
+# first if we have no dist, then this is a fresh checkout and at least we'll have to run the ts transpiler
+if [ ! -d "dist" ]; then
+  echo "dist not found, transpiling ts to js"
+  npm run build
+fi
 # if there is no running instance of this script, but there's a socket file, then we shall clear that up
 if [[ $(ps a | grep "springald/launcher.sh" | wc -l) -eq 1 && -S "/tmp/springald.sock" ]]; then
   echo "deleting leftover socket file"

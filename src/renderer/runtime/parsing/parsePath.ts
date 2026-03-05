@@ -17,23 +17,23 @@ let counter = 0;
 async function getDesktopFriendlies(): Promise<string[]> {
   const config = sharedConfig;
   const location = resolveHomeDir(config.desktopFilesLocation);
-  let files;
+  let files: string[];
   try {
     files = await fsReaddir(location);
   } catch {
     files = [];
   }
-  const onlyDesktopExtensions = (fn) => /\.desktop$/.test(fn);
-  const baseNameOnly = (fn) => fn.replace(/\.desktop$/, '');
+  const onlyDesktopExtensions = (fn: string) => /\.desktop$/.test(fn);
+  const baseNameOnly = (fn: string) => fn.replace(/\.desktop$/, '');
   return files.filter(onlyDesktopExtensions).map(baseNameOnly);
 }
 
 // node injects the project's local bin directory to the path
-function isLocalNodeBin(s) {
+function isLocalNodeBin(s: string) {
   return /springald[/\\]node_modules/.test(s);
 }
 
-function readDir(location): Promise<ISearchItem[]> {
+function readDir(location: string): Promise<ISearchItem[]> {
   return new Promise((resolve, _reject) => {
     const results: ISearchItem[] = [];
     fs.readdir(location, (err, files) => {
@@ -94,11 +94,11 @@ function readDir(location): Promise<ISearchItem[]> {
 export function parsePath(): Promise<ISearchItem[]> {
   const result: ISearchItem[] = [];
   let dirs = getPathItems();
-  const duplicateDirs = getPathDuplicates();
   // let's try to find path duplicates, BUT it's possible that we have duplicates on Windows
-  // coming from the git installation and those can not be found (or fixed) in the system properties
+  // coming from the git installation and those can not be found (or fixed) in the system properties;
+  const duplicateDirs = getPathDuplicates().filter((name) => !/\\Git\\usr\\bin$/.test(name)); // on Windows from mingw bash git/usr/bin appears twice, probably injected by the shell
   if (duplicateDirs.length > 0) {
-    log.warn(`You have duplicate items in your PATH! (${duplicateDirs.join(', ')})`);
+    log.warn(`You may have duplicate items in your PATH! (${duplicateDirs.join(', ')})`);
   }
   if (IGNORE_WIN_ROOT) {
     dirs = dirs

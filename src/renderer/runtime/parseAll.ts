@@ -26,8 +26,13 @@ export interface ISearchItem {
   desktop?: boolean;
   /** Executable command. Ex.: `"C:/Program Files/Git/mingw64/bin/curl.exe"`. */
   command: string;
-  /** Searchable text. Usually a marker prefix and the full path+filename combo. Ex.: `"p:C:/Program Files/Git/mingw64/bin/curl.exe"`. */
+  /**
+   * Searchable text. Usually a marker prefix and the full path+filename combo. Ex.: `"p:C:/Program Files/Git/mingw64/bin/curl.exe"`.
+   * When the user presses a key, it shall be available, but not during object creation.
+   */
   searchableText?: string;
+  /** Score for search comparison/order; added (mutated) late, during search. */
+  score?: number;
   /**
    * Fairly late (post-parse) in the parsing we can decide to mark items as unneeded (for example `NoDisplay` in xdg desktop files);
    * Since we mutate the search item at this point, deleting will take place in a later step, the `hidden` prop piggybacks here.
@@ -58,7 +63,7 @@ export async function parseAll(searchItems: ISearchItem[] = []) {
   }
 
   // collect stats for log info
-  const count = (val) => (Array.isArray(val) ? val.length : 0);
+  const count = (val: any) => (Array.isArray(val) ? val.length : 0);
   const counts = { flux: count(itemPacks[0]), path: count(itemPacks[1]), dirs: count(itemPacks[2]) };
 
   // flatten results

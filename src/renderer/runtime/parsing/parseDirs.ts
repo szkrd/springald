@@ -10,26 +10,28 @@ export interface IDirWalkError extends NodeJS.ErrnoException {
   file: string;
 }
 
+type IDirWalkCallback = (err: IDirWalkError | null, results?: ISearchItem[]) => void;
+
 let counter = 0;
 const getConfig = () => sharedConfig;
 
-function isAllowedFile(name) {
-  const regTest = (r, n) => new RegExp(r).test(n);
+function isAllowedFile(name: string) {
+  const regTest = (rex: string, n: string) => new RegExp(rex).test(n);
   const config = getConfig();
   const incRules = config.includeFiles;
   const excRules = config.excludeFiles;
   return incRules.every((rule) => regTest(rule, name)) && excRules.every((rule) => !regTest(rule, name));
 }
 
-function isAllowedDir(name) {
+function isAllowedDir(name: string) {
   const config = getConfig();
   const rules = config.excludedDirs;
-  name = name.split('/').pop();
-  return !rules.some((rule) => new RegExp(rule).test(name));
+  const dirName = name.split('/').pop()!;
+  return !rules.some((rule) => new RegExp(rule).test(dirName));
 }
 
 // as seen on the interwebz
-function walk(dir: string, done: (err: IDirWalkError | null, results?: ISearchItem[]) => void) {
+function walk(dir: string, done: IDirWalkCallback) {
   let results: ISearchItem[] = [];
 
   // TODO investigate {encoding: 'buffer'} further
@@ -102,13 +104,13 @@ export function parseDirs(): Promise<ISearchItem[]> {
     const results: ISearchItem[] = [];
 
     // recursively process all the files in thes directories
-    const walkDirCallback = (err: IDirWalkError | null, res) => {
+    const walkDirCallback: IDirWalkCallback = (err, res) => {
       processedCount++;
       if (err) {
         log.error(`☠️ Directory walker error: could not read directory "${err.file}"!`); // nw console error is a bit simple
         return;
       }
-      results.push(...res);
+      if (res) results.push(...res);
       if (processedCount === dirs.length) {
         // we will never reject here, since not being able to
         // parse a directory is not a showstopper
