@@ -90,7 +90,7 @@ function onDocumentKey(event: KeyboardEvent) {
   }
   if (event.key === 'm' && event.altKey) {
     const memoryUsage = process.memoryUsage();
-    log.info(`App Total Memory Usage: ${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`);
+    log.info(`Memory usage: ${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`);
   }
   if (event.key === 'c' && event.altKey) {
     sendMessage_centerWindow();
