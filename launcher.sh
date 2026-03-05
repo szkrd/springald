@@ -4,11 +4,6 @@ if uname | grep -qiE 'mingw|msys'; then
     echo "this script will NOT work in a MinGW/MSYS shell, exiting"
     exit 1
 fi
-# first if we have no dist, then this is a fresh checkout and at least we'll have to run the ts transpiler
-if [ ! -d "dist" ]; then
-  echo "dist not found, transpiling ts to js"
-  npm run build
-fi
 # if there is no running instance of this script, but there's a socket file, then we shall clear that up
 if [[ $(ps a | grep "springald/launcher.sh" | wc -l) -eq 1 && -S "/tmp/springald.sock" ]]; then
   echo "deleting leftover socket file"
@@ -40,6 +35,11 @@ if [ "$(node --version | cut -d . -f 1 | cut -c 2-)" -lt 12 ]; then
   exit 2
 fi
 # no electron, install it
-if [ ! -f "./node_modules/.bin/electron" ]; then npm install; fi
+if [ ! -f "./node_modules/.bin/electron" ]; then npm ci; fi
+# if we have no dist, then this is a fresh checkout and at least we'll have to run the ts transpiler
+if [ ! -d "dist" ]; then
+  echo "dist not found, transpiling ts to js"
+  npm run build
+fi
 # finally, run the app
 node ./node_modules/.bin/electron . > output.log
