@@ -20,6 +20,8 @@ export function getSearchableText(item: ISearchItem): string {
   } else if (item.type === 'DIRITEM') {
     // an item found in the list of extra directories (config)
     prefix = 'd:';
+  } else if (item.type === 'CFGITEM') {
+    return `c:${itemPath}`; // special case, where the title is shown as is
   }
   if (item.type === 'PATHITEM' || item.type === 'DIRITEM') {
     itemPath = unresolveHomeDir(itemPath);

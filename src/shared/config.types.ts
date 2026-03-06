@@ -1,6 +1,8 @@
 // Configuration read errors are logged to the console, unknown values
 // are ignored (use it to "comment out" keys), merging with builtin config is **shallow**.
 
+import { ICustomShortcut } from '../renderer/runtime/parsing/parseCustomShortcuts';
+
 export interface IAppConfig {
   /**
    * Themes:
@@ -165,12 +167,28 @@ export interface IAppConfig {
    */
   betaFeatures: boolean;
 
+  /**
+   * Hardcoded custom shortcuts. Items extend spawn options (without stdio);
+   * see: https://nodejs.org/api/child_process.html#child-processspawncommand-args-options
+   * most important ones are: `cwd`, `env`, `detached`, `shell`, `windowsHide`, `timeout`
+   *
+   * Exmaple:
+   * ```
+   * [
+   *   { "title": "browser/firefox-profiles", "command": "C:\\Program Files\\Mozilla Firefox\\firefox.exe", "args": "-p" },
+   *   { "title": "browser/ungoogled-chromium", "command": "D:/bin/ungoogled-chromium-127/ug-chrome.exe" },
+   *   { "title": "image-editing/gimp", "command": "~/AppData/Local/Programs/GIMP 3/bin/gimp.exe" }
+   * ]
+   * ```
+   */
+  customShortcuts?: ICustomShortcut[];
+
   // INTERNAL CONFIG VALUES
   // ----------------------
 
   /** **Internal**: set from argv using `--development` or `-d` */
   development: boolean;
 
-  /** **Internal**: same as in nwjs (~/.config/appName) */
+  /** **Internal**: same as in nwjs (`~/.config/appName` on linux); see: https://www.electronjs.org/docs/latest/api/app#appgetpathname */
   dataPath: string;
 }

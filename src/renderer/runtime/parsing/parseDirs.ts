@@ -107,7 +107,7 @@ export function parseDirs(): Promise<ISearchItem[]> {
     const walkDirCallback: IDirWalkCallback = (err, res) => {
       processedCount++;
       if (err) {
-        log.error(`☠️ Directory walker error: could not read directory "${err.file}"!`); // nw console error is a bit simple
+        log.error(`Directory walker error: could not read directory "${err.file}"!`); // nw console error is a bit simple
         return;
       }
       if (res) results.push(...res);

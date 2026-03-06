@@ -2,7 +2,7 @@ import { access, readFile } from 'fs/promises';
 import { log } from '../log';
 import { constants } from 'fs';
 
-export async function readJsonFile(fileName: string, quietIfMissing = false): Promise<string | null> {
+export async function readJsonFile(fileName: string, quietIfMissing = false): Promise<Record<string, any> | null> {
   try {
     await access(fileName, constants.F_OK);
   } catch {
@@ -24,11 +24,12 @@ export async function readJsonFile(fileName: string, quietIfMissing = false): Pr
     log.error(`Could not read file "${fileName}".`);
     return null;
   }
+  let parsed: Record<string, any>;
   try {
-    contents = JSON.parse(contents);
+    parsed = JSON.parse(contents);
   } catch (err) {
     log.error(`Could not parse json "${fileName}".`, err);
     return null;
   }
-  return contents;
+  return parsed;
 }

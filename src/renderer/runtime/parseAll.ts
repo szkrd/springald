@@ -1,6 +1,8 @@
+import { SpawnOptionsWithoutStdio } from 'child_process';
 import { log } from '../../shared/log';
 import { sharedConfig } from '../shared/sharedConfig';
 import { getSearchableText } from './parsing/getSearchableText';
+import { parseCustomShortcuts } from './parsing/parseCustomShortcuts';
 import { parseDirs } from './parsing/parseDirs';
 import { parseFluxboxMenu } from './parsing/parseFluxboxMenu';
 import { parsePath } from './parsing/parsePath';
@@ -12,12 +14,12 @@ export interface IParseModuleError extends NodeJS.ErrnoException {
 }
 
 export interface ISearchItem {
-  /** ID of the item: type prefix (fb, p, d) + number. Ex.: `"p299"`. */
+  /** ID of the item: type prefix (fb, p, d, c) + number. Ex.: `"p299"`. */
   id: string; // Ex.: "p299",
   /** Is the file executable? */
   executable: boolean;
   /** Item type: **fluxbox** menu item, item found on **path**, item found in config's **directories** section. Ex.: `"PATHITEM"`. */
-  type: 'UNSET' | 'FB_MENUITEM' | 'PATHITEM' | 'DIRITEM';
+  type: 'UNSET' | 'FB_MENUITEM' | 'PATHITEM' | 'DIRITEM' | 'CFGITEM';
   /** Path of the file, without the filename itself. Ex.: `"C:/Program Files/Git/mingw64/bin"`. */
   path: string;
   /** Filename part. Ex.: `"curl.exe"`. */
@@ -38,6 +40,14 @@ export interface ISearchItem {
    * Since we mutate the search item at this point, deleting will take place in a later step, the `hidden` prop piggybacks here.
    */
   hidden?: boolean;
+  /**
+   * Only applicable with customShortcuts (from config), where we are relatively free to define shortcuts any way we want.
+   */
+  spawnOpts?: SpawnOptionsWithoutStdio;
+  /**
+   * Only applicable with customShortcuts (from config), where we are relatively free to define shortcuts any way we want.
+   */
+  args?: string[];
 }
 
 export async function parseAll(searchItems: ISearchItem[] = []) {
@@ -53,18 +63,24 @@ export async function parseAll(searchItems: ISearchItem[] = []) {
     config.fluxboxMenuFile === false ? null : parseFluxboxMenu(fbMenuFile as string),
     config.skipPathParsing === true ? null : parsePath(),
     dirCount === 0 ? null : parseDirs(),
+    parseCustomShortcuts(),
   ];
 
-  let itemPacks: (ISearchItem[] | null)[] = [null, null, null]; // 0:fb, 1:path, 2:dir
+  let itemPacks: (ISearchItem[] | null)[] = [null, null, null, null]; // 0:fb, 1:path, 2:dir, 3:custom
   try {
     itemPacks = await Promise.all(promises);
   } catch (err) {
-    log.error(`☠️ Parse error in parser module "${(err as IParseModuleError).module || 'unknown'}"!\n`, err);
+    log.error(`Parse error in parser module "${(err as IParseModuleError).module || 'unknown'}"!\n`, err);
   }
 
   // collect stats for log info
   const count = (val: any) => (Array.isArray(val) ? val.length : 0);
-  const counts = { flux: count(itemPacks[0]), path: count(itemPacks[1]), dirs: count(itemPacks[2]) };
+  const counts = {
+    flux: count(itemPacks[0]),
+    path: count(itemPacks[1]),
+    dirs: count(itemPacks[2]),
+    custom: count(itemPacks[3]),
+  };
 
   // flatten results
   itemPacks.forEach((items) => {
@@ -83,7 +99,7 @@ export async function parseAll(searchItems: ISearchItem[] = []) {
     try {
       await processPostParseHooks(searchItems);
     } catch (err) {
-      log.error(`☠️ Post parsing hook error!\n`, err);
+      log.error(`Post parsing hook error!\n`, err);
     }
   }
 
@@ -93,7 +109,7 @@ export async function parseAll(searchItems: ISearchItem[] = []) {
   const endedAt = Date.now();
   log.info(
     `Parsed ${searchItems.length} items in ${endedAt - startedAt} ms.\n` +
-      `(fluxbox: ${counts.flux}, paths: ${counts.path}, dirs: ${counts.dirs})`,
+      `(fluxbox: ${counts.flux}, paths: ${counts.path}, dirs: ${counts.dirs}, custom: ${counts.custom})`,
   );
   return searchItems;
 }

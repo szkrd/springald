@@ -42,9 +42,13 @@ export async function getConfig(dataPath = '', flush = false): Promise<IAppConfi
   const localLoaded = Object.keys(localAppConfig).length > 0;
   const localPath = join(__dirname, '../../config.local.json');
   log.info(`Local config ${localLoaded ? 'loaded from' : 'failed to load from'} "${localPath}".`);
-  const configPath = join(dataPath, 'config.json');
-  const userConfig = await readJsonFile(configPath, true); // has catch
-  log.info(`User config ${userConfig ? 'loaded from' : 'failed to load from'} "${configPath}".`);
+  let userConfig: Record<string, any> | null = null;
+  if (dataPath) {
+    // only backend (first) loads it with the proper data path!
+    const configPath = join(dataPath, 'config.json');
+    userConfig = await readJsonFile(configPath, true); // has catch
+    log.info(`User config ${userConfig ? 'loaded from' : 'failed to load from'} "${configPath}".`);
+  }
   Object.assign(config, appConfig, localAppConfig, userConfig || {});
   log.debug('Merged config contains:', config);
   config.dataPath = config.dataPath || dataPath;

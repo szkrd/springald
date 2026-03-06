@@ -22,9 +22,12 @@ function subst(textWithMarkers: string, keyValObj: Record<string, any>): string 
 }
 
 /** Spawns a process, `commandLine` is both the executable AND the file parameter. */
-function spawnProcess(commandLine: string, options: Partial<SpawnOptionsWithoutStdio> = {}) {
+function spawnProcess(commandLine: string, args: string[] = [], options: SpawnOptionsWithoutStdio = {}) {
   if (!commandLine) return;
-  const spawnOpt = Object.assign(
+  if (args) {
+    commandLine += ' ' + args.join(' '); // TODO escape args?
+  }
+  const spawnOpt: SpawnOptionsWithoutStdio = Object.assign(
     {
       shell: true,
       cwd: homedir(),
@@ -78,8 +81,12 @@ export function openWithApp(item: ISearchItem, withApp: string | ISearchItem, co
 
   // Launch the filename as is (if executable, then spawn, if not, then pass it to the shell)
   if (item.executable) {
+    const quotedCmd = quoteSpaces(item.command);
+    if (item.type === 'CFGITEM') {
+      return spawnProcess(quotedCmd, item.args, item.spawnOpts); // cfgitem is special, it has everything hardcoded
+    }
     // xdg open will not launch shellscripts for instance
-    return spawnProcess(quoteSpaces(item.command));
+    return spawnProcess(quotedCmd);
   } else {
     log.info('Shell command (open path): ' + item.command);
     return shell.openPath(item.command); // this is a Promise

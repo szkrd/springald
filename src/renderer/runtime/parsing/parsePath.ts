@@ -39,7 +39,7 @@ function readDir(location: string): Promise<ISearchItem[]> {
     fs.readdir(location, (err, files) => {
       // not a show stopper, but still annoying
       if (err) {
-        log.error(`☠️ Could not read location "$\{location}", skipping.`);
+        log.error(`Could not read location "$\{location}", skipping.`);
         resolve([]);
         return;
       }
@@ -62,7 +62,7 @@ function readDir(location: string): Promise<ISearchItem[]> {
             // getting a file not found error is not that uncommon
             // in that case go and delete that file yourself...
             // TODO this skips the whole dir, probably we _really_ should check if the file is a dead symlink
-            log.error(`☠️ Could not stat path "${file}", skipping!`, err);
+            log.error(`Could not stat path "${file}", skipping!`, err);
             resolve([]);
             return;
           }
