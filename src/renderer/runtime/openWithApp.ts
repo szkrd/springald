@@ -23,6 +23,8 @@ function subst(textWithMarkers: string, keyValObj: Record<string, any>): string 
 
 /** Spawns a process, `commandLine` is both the executable AND the file parameter. */
 function spawnProcess(commandLine: string, args: string[] = [], options: SpawnOptionsWithoutStdio = {}) {
+  const logAll = false;
+  const logError = false; // mostly for debugging (when launched from vscode terminal, things may misbehave, eg. AppImage launching broke)
   if (!commandLine) return;
   if (args) {
     commandLine += ' ' + args.join(' '); // TODO escape args?
@@ -36,7 +38,21 @@ function spawnProcess(commandLine: string, args: string[] = [], options: SpawnOp
     options,
   );
   log.info('Spawning: ' + commandLine);
-  return spawn(commandLine, spawnOpt);
+  const child = spawn(commandLine, spawnOpt);
+  if (logAll) {
+    child.stdout.on('data', (data) => {
+      log.info(`stdout: ${data}`);
+    });
+  }
+  if (logError) {
+    child.stderr.on('data', (data) => {
+      log.error(`stderr: ${data}`);
+    });
+  }
+  child.on('close', (code) => {
+    if (code) log.error(`Process exited with code ${code}`);
+  });
+  return child;
 }
 
 export function openWithApp(item: ISearchItem, withApp: string | ISearchItem, config: IAppConfig) {
