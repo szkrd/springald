@@ -1,0 +1,20 @@
+- [x] update all deps
+- print memory usage
+- [x] kill cross-env (?)
+- internalize some config defaults
+- plugin system (??) todo, scratchpad, sticky notes, whatever (hey, I have an electron)
+- vscode tasks.json compatibility (?)
+- alternative to fluxbox menu: launchables in config (`[{ name, command }]`)
+- `skipPathParsing` should hide the app input?
+- linux:
+  - centering on screen is broken
+  - ~~electron global key problems~~ use unix socket (or add dbus support)
+- windows:
+  - [x] launching files with spaces in the pathname (bug, win11?)
+  - ~~launch as admin (?)~~ use .lnk or powershell directly
+- ts:
+  - ~~disable esModuleInterop + read json config without ts module import~~ it's not a problem
+- refact:
+  - [x] `dom` and `$`, make it ts friendly (see also: `document.querySelectorAll`)
+  - hide `$` and use `appDom`?
+  - [x] convert interim to shared where appropriate

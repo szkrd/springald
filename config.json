@@ -2,7 +2,7 @@
   "theme": "default",
   "winWidth": 800,
   "fluxboxMenuFile": "~/.fluxbox/menu",
-  "borderlessWindow": false,
+  "borderlessWindow": true,
   "fixPosition": [],
   "modifyResize": [],
   "paintDelay": 0,
@@ -13,7 +13,7 @@
   "toggleKey": ["Super+`", "CmdOrCtrl+Alt+Shift+`"],
   "logicalAndSeparator": " ",
   "desktopFilesLocation": "/usr/share/applications/",
-  "includeFiles": ["\\.(txt|md|html|docx|pdf|jpe?g|png|avi|mkv|mp4)$"],
+  "includeFiles": ["\\.(txt|md|csv|html|docx|pdf|jpe?g|png|avi|mkv|mp4)$"],
   "excludeFiles": ["^\\._"],
   "excludedDirs": ["^node_modules$", "^\\."],
   "excludeHidSys": true,
@@ -24,8 +24,9 @@
     "launchInTerminal": "T"
   },
   "openWith": {
-    "\\.(txt|md)$": "code"
+    "\\.(csv|md)$": "code"
   },
+  "customShortcuts": [],
   "directories": ["~/Downloads", "~/Pictures", "~/Videos"],
   "betaFeatures": false
 }
