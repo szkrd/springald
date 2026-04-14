@@ -8,6 +8,7 @@ import { handleMessage, IMessageHandlers, IWidthHeight } from './messaging/handl
 import { isCoord } from './utils/isCoord';
 import { unixSocket } from './messaging/unixSocket';
 import { initTray } from './initTray';
+import { IPC_CHANNEL_NAME_FROM_BACKEND_TO_RENDERER } from './messages';
 
 interface IBackend {
   config: IAppConfig;
@@ -86,6 +87,12 @@ function setupMessageListener() {
   process.on('SIGINT', handlers.quit);
 }
 
+function setupMessageSender() {
+  backend.win.on('show', () => {
+    backend.win.webContents.send(IPC_CHANNEL_NAME_FROM_BACKEND_TO_RENDERER, 'MSG_TO_RENDERER_WIN_SHOW');
+  });
+}
+
 /**
  * Initializes Electron backend.
  * The backend has no public interfaces outside this file;
@@ -105,6 +112,7 @@ export async function initBackend(): Promise<void> {
   await initGlobalShortcuts();
   const win = await initWindow(); // this ensures that renderer can not start before above has finished (especially config)
   backend = { config, win }; // exposed for message handlers
+  setupMessageSender();
   setupMessageListener();
   initialized = true;
 }

@@ -14,7 +14,10 @@ export const messages = {
   MSG_CENTER_WINDOW: '',
   MSG_TOGGLE_WINDOW: '',
   MSG_TOGGLE_DEV_TOOLS: '',
+  MSG_TO_RENDERER_WIN_SHOW: '',
 };
+
+export const IPC_CHANNEL_NAME_FROM_BACKEND_TO_RENDERER = 'backend-to-renderer';
 
 export type IMessageKey = keyof typeof messages;
 

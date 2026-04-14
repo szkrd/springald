@@ -18,6 +18,8 @@ import { escapeHtml } from './renderer/utils/string';
 import { getConfig } from './shared/config';
 import { log } from './shared/log';
 import { withoutExt } from './renderer/utils/file';
+import { IMessageKey, IPC_CHANNEL_NAME_FROM_BACKEND_TO_RENDERER } from './backend/messages';
+import { ipcRenderer } from 'electron';
 
 const { MAX_VISIBLE_ITEM_COUNT } = constants;
 
@@ -120,6 +122,14 @@ function onDocumentKey(event: KeyboardEvent) {
   }
 }
 
+function onBackendMessage(messageId: IMessageKey) {
+  if (messageId === 'MSG_TO_RENDERER_WIN_SHOW') {
+    if (config.autoSelectAll) {
+      ($.getById('search') as HTMLInputElement)!.select();
+    }
+  }
+}
+
 function setCurrentAndApp() {
   if (!sharedStore.found.length || !sharedStore.found[sharedStore.current]) {
     return;
@@ -178,6 +188,9 @@ $.getDocument().addEventListener('DOMContentLoaded', () => {
       sharedStore.searchItems = result;
     })
     .catch(runtime.handleError);
+
+  // messages coming FROM the backend
+  ipcRenderer.on(IPC_CHANNEL_NAME_FROM_BACKEND_TO_RENDERER, (_event, ...args) => onBackendMessage(args[0]));
 
   $.getBody().classList.add(`theme-${config.theme}`);
   $.getBody().innerHTML = runtime.renderPage();
