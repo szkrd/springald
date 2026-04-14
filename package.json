@@ -9,7 +9,7 @@
   "scripts": {
     "start": "electron .",
     "watch": "tsc -w",
-    "clean": "rimraf dist",
+    "clean": "node scripts/clean",
     "build": "npm run clean && tsc",
     "dev": "electron . --development",
     "lint": "eslint src",
@@ -24,7 +24,6 @@
     "eslint-config-prettier": "10.1.8",
     "globals": "17.3.0",
     "prettier": "3.8.1",
-    "rimraf": "6.1.3",
     "typescript": "5.9.3",
     "typescript-eslint": "8.56.1"
   }
