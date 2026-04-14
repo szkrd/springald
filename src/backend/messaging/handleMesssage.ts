@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron';
-import { IMessageKey, messages } from '../messages';
+import { IMessageId } from '../messages';
 import { backendEventBus } from './backendEventBus';
 import { IAppConfig } from '../../shared/config.types';
 import { ILogBuffer } from '../../shared/log';
@@ -42,10 +42,7 @@ export interface IMessageHandlers {
 const registered: string[] = [];
 
 /** Handles message from the backend **and** the renderer. */
-export function handleMessage(messageId: IMessageKey, callback: IMessageHandlerAny) {
-  if (!messages[messageId]) {
-    throw new Error('Unknown message id');
-  }
+export function handleMessage(messageId: IMessageId, callback: IMessageHandlerAny) {
   if (registered.includes(messageId)) {
     throw new Error('Message handler already registered');
   }

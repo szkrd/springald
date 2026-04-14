@@ -1,10 +1,12 @@
 - [x] update all deps
-- print memory usage
-- [x] kill cross-env (?)
+- [x] print memory usage
+- shortuct parser and link to list of shortcuts in readme
+- [x] kill cross-env
+- [x] kill rimraf
 - internalize some config defaults
-- plugin system (??) todo, scratchpad, sticky notes, whatever (hey, I have an electron)
+- ~~plugin system (??) todo, scratchpad, sticky notes, whatever (hey, I have an electron)~~
 - vscode tasks.json compatibility (?)
-- alternative to fluxbox menu: launchables in config (`[{ name, command }]`)
+- [x] alternative to fluxbox menu: launchables in config (`[{ name, command }]`)
 - `skipPathParsing` should hide the app input?
 - linux:
   - centering on screen is broken
@@ -18,3 +20,4 @@
   - [x] `dom` and `$`, make it ts friendly (see also: `document.querySelectorAll`)
   - hide `$` and use `appDom`?
   - [x] convert interim to shared where appropriate
+  - [x] use enum or static values for messages

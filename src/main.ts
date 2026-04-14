@@ -18,7 +18,7 @@ import { escapeHtml } from './renderer/utils/string';
 import { getConfig } from './shared/config';
 import { log } from './shared/log';
 import { withoutExt } from './renderer/utils/file';
-import { IMessageKey, IPC_CHANNEL_NAME_FROM_BACKEND_TO_RENDERER } from './backend/messages';
+import { IMessageId, IPC_CHANNEL_NAME_FROM_BACKEND_TO_RENDERER, MSG_TO_RENDERER_WIN_SHOW } from './backend/messages';
 import { ipcRenderer } from 'electron';
 
 const { MAX_VISIBLE_ITEM_COUNT } = constants;
@@ -122,8 +122,8 @@ function onDocumentKey(event: KeyboardEvent) {
   }
 }
 
-function onBackendMessage(messageId: IMessageKey) {
-  if (messageId === 'MSG_TO_RENDERER_WIN_SHOW') {
+function onBackendMessage(messageId: IMessageId) {
+  if (messageId === MSG_TO_RENDERER_WIN_SHOW) {
     if (config.autoSelectAll) {
       ($.getById('search') as HTMLInputElement)!.select();
     }

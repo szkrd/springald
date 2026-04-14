@@ -8,7 +8,17 @@ import { handleMessage, IMessageHandlers, IWidthHeight } from './messaging/handl
 import { isCoord } from './utils/isCoord';
 import { unixSocket } from './messaging/unixSocket';
 import { initTray } from './initTray';
-import { IPC_CHANNEL_NAME_FROM_BACKEND_TO_RENDERER } from './messages';
+import {
+  IPC_CHANNEL_NAME_FROM_BACKEND_TO_RENDERER,
+  MSG_CENTER_WINDOW,
+  MSG_GET_CONFIG,
+  MSG_GET_LOG_BUFFER,
+  MSG_QUIT,
+  MSG_REFRESH_CONFIG,
+  MSG_RESIZE_WINDOW,
+  MSG_TOGGLE_DEV_TOOLS,
+  MSG_TOGGLE_WINDOW,
+} from './messages';
 
 interface IBackend {
   config: IAppConfig;
@@ -75,14 +85,14 @@ function setupMessageListener() {
       backend.win.toggleDevTools();
     },
   };
-  handleMessage('MSG_QUIT', handlers.quit);
-  handleMessage('MSG_GET_CONFIG', handlers.getConfig);
-  handleMessage('MSG_GET_LOG_BUFFER', handlers.getLogBuffer);
-  handleMessage('MSG_REFRESH_CONFIG', handlers.refreshConfig);
-  handleMessage('MSG_RESIZE_WINDOW', handlers.resizeWindow);
-  handleMessage('MSG_TOGGLE_WINDOW', handlers.toggleWindow);
-  handleMessage('MSG_CENTER_WINDOW', handlers.centerWindow);
-  handleMessage('MSG_TOGGLE_DEV_TOOLS', handlers.toggleDevTools);
+  handleMessage(MSG_QUIT, handlers.quit);
+  handleMessage(MSG_GET_CONFIG, handlers.getConfig);
+  handleMessage(MSG_GET_LOG_BUFFER, handlers.getLogBuffer);
+  handleMessage(MSG_REFRESH_CONFIG, handlers.refreshConfig);
+  handleMessage(MSG_RESIZE_WINDOW, handlers.resizeWindow);
+  handleMessage(MSG_TOGGLE_WINDOW, handlers.toggleWindow);
+  handleMessage(MSG_CENTER_WINDOW, handlers.centerWindow);
+  handleMessage(MSG_TOGGLE_DEV_TOOLS, handlers.toggleDevTools);
   unixSocket.create(handlers);
   process.on('SIGINT', handlers.quit);
 }
