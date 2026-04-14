@@ -1,6 +1,8 @@
 - [x] update all deps
 - [x] print memory usage
-- shortuct parser and link to list of shortcuts in readme
+- shortcut parser and link to list of shortcuts in readme
+- item on click
+- [x] add extra config location
 - [x] kill cross-env
 - [x] kill rimraf
 - internalize some config defaults

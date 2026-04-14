@@ -183,6 +183,15 @@ export interface IAppConfig {
    */
   customShortcuts?: ICustomShortcut[];
 
+  /**
+   * Path to a final "extra" config that can be loaded from anywhere;
+   * added this so that I can reference a config from a dropbox/onedrive shared storage.
+   *
+   * This will be loaded last and can be placed in any of the three config files
+   * (internal, .local override, one in the user's home config dir).
+   */
+  extraConfigPath?: string;
+
   // INTERNAL CONFIG VALUES
   // ----------------------
 

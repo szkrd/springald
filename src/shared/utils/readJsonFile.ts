@@ -1,8 +1,10 @@
 import { access, readFile } from 'fs/promises';
 import { log } from '../log';
 import { constants } from 'fs';
+import { fixSlashes, resolveHomeDir } from '../../renderer/utils/file';
 
 export async function readJsonFile(fileName: string, quietIfMissing = false): Promise<Record<string, any> | null> {
+  fileName = resolveHomeDir(fixSlashes(fileName));
   try {
     await access(fileName, constants.F_OK);
   } catch {
